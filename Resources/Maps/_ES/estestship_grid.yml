@@ -4,7 +4,7 @@ meta:
   engineVersion: 263.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/20/2025 03:55:08
+  time: 07/20/2025 04:26:07
   entityCount: 409
 maps: []
 grids:
@@ -396,6 +396,20 @@ entities:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -10.5,-4.5
+      parent: 1
+- proto: AirlockExternalShuttleLocked
+  entities:
+  - uid: 214
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -12.5,1.5
+      parent: 1
+  - uid: 218
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -12.5,-0.5
       parent: 1
 - proto: AirlockGlass
   entities:
@@ -2221,7 +2235,6 @@ entities:
   - uid: 198
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: -8.5,5.5
       parent: 1
   - uid: 199
@@ -2272,12 +2285,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: -2.5,4.5
       parent: 1
-  - uid: 214
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -12.5,-0.5
-      parent: 1
   - uid: 215
     components:
     - type: Transform
@@ -2295,12 +2302,6 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -8.5,-7.5
-      parent: 1
-  - uid: 218
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -12.5,1.5
       parent: 1
   - uid: 219
     components:
