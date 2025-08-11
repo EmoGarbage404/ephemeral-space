@@ -17,10 +17,12 @@
   id: CarpetBlack
   result: FloorCarpetItemBlack
 
-- type: latheRecipe
-  parent: BaseCarpetRecipe
-  id: CarpetPink
-  result: FloorCarpetItemPink
+# ES Start
+#- type: latheRecipe
+#  parent: BaseCarpetRecipe
+#  id: CarpetPink
+#  result: FloorCarpetItemPink
+# ES End
 
 - type: latheRecipe
   parent: BaseCarpetRecipe
@@ -47,7 +49,24 @@
   id: CarpetCyan
   result: FloorCarpetItemCyan
 
+# ES Start
+#- type: latheRecipe
+#  parent: BaseCarpetRecipe
+#  id: CarpetWhite
+#  result: FloorCarpetItemWhite
+
 - type: latheRecipe
   parent: BaseCarpetRecipe
-  id: CarpetWhite
-  result: FloorCarpetItemWhite
+  id: CarpetFancyBlue
+  result: FloorCarpetItemFancyBlue
+
+- type: latheRecipe
+  parent: BaseCarpetRecipe
+  id: CarpetFancyBlack
+  result: FloorCarpetItemFancyBlack
+
+- type: latheRecipe
+  parent: BaseCarpetRecipe
+  id: CarpetFancyRed
+  result: FloorCarpetItemFancyRed
+# ES End
