@@ -102,13 +102,19 @@
 # ES Start
 # mirgrations.yml can only exist in one place, so the most simple solution is to soft-remove the carpets that have no proper sprite equivalent.
 - type: entity
-  parent: FloorCarpetItemCyan # Soft-removed
+  parent: FloorCarpetItemRed
   id: FloorCarpetItemSkyBlue
   suffix: Sky Blue, DO NOT MAP
   categories: [ HideSpawnMenu ]
   components:
+  - type: Sprite
+    state: carpet-skyblue
+  - type: Item
+    heldPrefix: carpet-skyblue
+  - type: Stack
+    stackType: FloorCarpetSkyBlue
   - type: SpawnAfterInteract #Nuke after convert to FloorTile
-    prototype: CarpetCyan
+    prototype: CarpetSBlue
     doAfter: 0.5
     removeOnInteract: true
 # ES End
@@ -131,13 +137,19 @@
 
 # ES Start
 - type: entity
-  parent: FloorCarpetItemPurple # Soft-removed
+  parent: FloorCarpetItemRed
   id: FloorCarpetItemPink
   suffix: Pink, DO NOT MAP
   categories: [ HideSpawnMenu ]
   components:
+  - type: Sprite
+    state: carpet-pink
+  - type: Item
+    heldPrefix: carpet-pink
+  - type: Stack
+    stackType: FloorCarpetPink
   - type: SpawnAfterInteract #Nuke after convert to FloorTile
-    prototype: CarpetPurple
+    prototype: CarpetPink
     doAfter: 0.5
     removeOnInteract: true
 
@@ -158,15 +170,22 @@
     removeOnInteract: true
 
 - type: entity
-  parent: FloorCarpetItemCyan # Soft-removed
+  parent: FloorCarpetItemRed
   id: FloorCarpetItemWhite
   suffix: White, DO NOT MAP
   categories: [ HideSpawnMenu ]
   components:
+  - type: Sprite
+    state: carpet-white
+  - type: Item
+    heldPrefix: carpet-white
+  - type: Stack
+    stackType: FloorCarpetWhite
   - type: SpawnAfterInteract #Nuke after convert to FloorTile
-    prototype: CarpetCyan
+    prototype: CarpetWhite
     doAfter: 0.5
     removeOnInteract: true
+
 
 - type: entity
   parent: FloorCarpetItemES
