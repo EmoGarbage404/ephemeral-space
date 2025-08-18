@@ -1,0 +1,27 @@
+- type: entity
+  parent: BaseItem
+  id: ESBaseSeeds
+  name: seed
+  description: Hope you have a green thumb.
+  suffix: ES
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _ES/Hydroponics/seeds.rsi
+  - type: Item
+    size: Tiny
+  - type: ESSeed
+  #- type: GuideHelp
+  #  guides:
+  - type: StaticPrice
+    price: 25
+
+- type: entity
+  parent: ESBaseSeeds
+  id: ESSeedsTomato
+  name: packet of tomato seeds
+  components:
+  - type: Sprite
+    state: tomato
+  - type: ESSeed
+    plant: ESPlantTomato

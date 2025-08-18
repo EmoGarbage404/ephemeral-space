@@ -1,0 +1,20 @@
+- type: entity
+  id: ESBasePlant
+  name: plant
+  abstract: true
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+  - type: ESPlant
+    wateredReagents: [ Water ]
+
+- type: entity
+  parent: ESBasePlant
+  id: ESPlantTomato
+  name: tomato plant
+  components:
+  - type: Sprite
+    sprite: _ES/Hydroponics/Plants/tomato.rsi
+  - type: ESPlant
+    growthStages: 5
+    growthStageDuration: 120
