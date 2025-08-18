@@ -42,6 +42,8 @@
         state: harvest3
         map: [ "harvest_alert" ]
         visible: false
+      - map: [ "enum.ESPlantHolderVisualLayers.Plant"]
+  - type: ESPlantHolder
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -108,3 +110,103 @@
     nutritionLevel: 0
     # for the lights to update immediately
     updateSpriteAfterUpdate: true
+
+# ES START
+- type: entity
+  id: ESHydroponicsTray
+  name: hydroponics tray
+  description: An interstellar-grade space farmplot allowing for rapid growth and selective breeding of crops. Just... keep in mind the space weeds.
+  suffix: ES
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    noRot: true
+    layers:
+    - sprite: Structures/Hydroponics/containers.rsi
+      state: hydrotray3
+    - sprite: Structures/Hydroponics/overlays.rsi
+      state: lowhealth3
+      map: [ "health_alert" ]
+      visible: false
+    - sprite: Structures/Hydroponics/overlays.rsi
+      state: lowwater3
+      map: [ "water_alert" ]
+      visible: false
+    - sprite: Structures/Hydroponics/overlays.rsi
+      state: lownutri3
+      map: [ "nutri_alert" ]
+      visible: false
+    - sprite: Structures/Hydroponics/overlays.rsi
+      state: alert3
+      map: [ "undefined_alert" ]
+      visible: false
+    - sprite: Structures/Hydroponics/overlays.rsi
+      state: harvest3
+      map: [ "harvest_alert" ]
+      visible: false
+    - map: [ "enum.ESPlantHolderVisualLayers.Plant"]
+  - type: Appearance
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
+  - type: Transform
+    anchored: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.1"
+        density: 190
+        hard: true
+        mask:
+        - MachineMask
+        layer:
+        - BulletImpassable
+  - type: Anchorable
+  - type: Pullable
+  - type: SolutionContainerManager
+    solutions:
+      soil:
+        maxVol: 200
+  - type: RefillableSolution
+    solution: soil
+    maxRefill: 50
+  #- type: Reactive
+  #  reactions:
+  #  - reagents: [ Water ]
+  #    methods: [ Touch, Ingestion, Injection ]
+  #    effects:
+  #    - !type:AddToSolutionReaction
+  #      solution: soil
+  - type: ESPlantHolder
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:ChangeConstructionNodeBehavior
+        node: machineFrame
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: Machine
+    board: HydroponicsTrayMachineCircuitboard
+  - type: WiresPanel
+  - type: AmbientSound
+    volume: -9
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/flowing_water_open.ogg
+  - type: GuideHelp
+    guides:
+    - Botany
+    - Chemicals

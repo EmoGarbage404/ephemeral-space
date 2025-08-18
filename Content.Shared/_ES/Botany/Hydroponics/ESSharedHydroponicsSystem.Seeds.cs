@@ -5,7 +5,7 @@ using Content.Shared.Popups;
 
 namespace Content.Shared._ES.Botany.Hydroponics;
 
-public sealed partial class ESSharedHydroponicsSystem
+public abstract partial class ESSharedHydroponicsSystem
 {
     [Dependency] private readonly SharedPopupSystem _popup = default!;
 
@@ -22,13 +22,8 @@ public sealed partial class ESSharedHydroponicsSystem
         if (!TryComp<ESPlantHolderComponent>(args.Target, out var plantHolderComp))
             return;
 
-        args.Handled = true;
-
-        if (TryPlantSeed(ent.AsNullable(), (args.Target.Value, plantHolderComp), out _, args.User))
-        {
-            // Delete the seed if we successfully plant it
-            PredictedQueueDel(ent.Owner);
-        }
+        TryPlantSeed(ent.AsNullable(), (args.Target.Value, plantHolderComp), out _, args.User);
+        args.Handled = true; // Always handle the event, as we display popups that we don't want to overlap.
     }
 
     public bool TryPlantSeed(Entity<ESSeedComponent?> seed,
@@ -48,18 +43,23 @@ public sealed partial class ESSharedHydroponicsSystem
             return false;
         }
 
-        if (!_container.TryGetContainer(plantHolder, plantHolder.Comp.PlantContainerSlotId, out var container))
+        if (!Container.TryGetContainer(plantHolder, plantHolder.Comp.PlantContainerSlotId, out var container))
             return false;
 
         var plantUid = Spawn(seed.Comp.Plant);
         var plantComp = EnsureComp<ESPlantComponent>(plantUid);
         plant = (plantUid, plantComp);
 
-        _container.Insert(plantUid, container, force: true);
+        Container.Insert(plantUid, container, force: true);
+        Dirty(plantUid, plantComp);
+
+        plantHolder.Comp.LastPlanted = seed.Comp.Plant;
 
         if (user != null)
             _popup.PopupClient(Loc.GetString("es-hydroponics-tray-popup-planted", ("plant", seed.Owner)), user.Value, user);
 
+        // Delete the seed if we successfully plant it
+        PredictedQueueDel(seed.Owner);
         return true;
     }
 }
