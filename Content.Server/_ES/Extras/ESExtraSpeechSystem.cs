@@ -62,7 +62,7 @@ public sealed class ESExtraSpeechSystem : EntitySystem
 
         // Play talk sound effect
         // TODO: associate this with message length
-        _audio.PlayPvs(ent.Comp.SpeakSound, ent);
+        _audio.PlayPvs(ent.Comp.SpeakSound, ent, ent.Comp.SpeakSound?.Params.WithVariation(0.125f));
 
         // Prevent sending next dialogue until the player has approximately read it (anti-spam)
         // Also refresh the counter for resetting the dialogue index.
