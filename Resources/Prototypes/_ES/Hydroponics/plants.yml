@@ -5,6 +5,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
+  - type: Appearance
   - type: ESPlant
     wateredReagents: [ Water ]
 

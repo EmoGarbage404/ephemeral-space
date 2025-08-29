@@ -19,6 +19,7 @@ public sealed class ESHydroponicsSystem : ESSharedHydroponicsSystem
         SubscribeLocalEvent<ESPlantHolderComponent, EntInsertedIntoContainerMessage>(OnHolderEntInsertedIntoContainer);
         SubscribeLocalEvent<ESPlantHolderComponent, EntRemovedFromContainerMessage>(OnHolderEntRemovedFromContainer);
         SubscribeLocalEvent<ESPlantComponent, AfterAutoHandleStateEvent>(OnAfterAutoHandleStateEvent);
+        SubscribeLocalEvent<ESPlantComponent, AppearanceChangeEvent>(OnPlantAppearanceChange);
     }
 
     protected override void OnHolderStartup(Entity<ESPlantHolderComponent> ent, ref ComponentStartup args)
@@ -46,28 +47,35 @@ public sealed class ESHydroponicsSystem : ESSharedHydroponicsSystem
         RefreshHolderSprite(container.Owner);
     }
 
+    private void OnPlantAppearanceChange(Entity<ESPlantComponent> ent, ref AppearanceChangeEvent args)
+    {
+        if (!Container.TryGetContainingContainer(ent.Owner, out var container) ||
+            TerminatingOrDeleted(container.Owner))
+            return;
+        RefreshHolderSprite(container.Owner);
+    }
+
     public void RefreshHolderSprite(Entity<ESPlantHolderComponent?, SpriteComponent?> holder)
     {
         if (!Resolve(holder, ref holder.Comp1, ref holder.Comp2))
             return;
         var (uid, comp, sprite) = holder;
 
-        if (_sprite.LayerMapTryGet((uid, sprite), ESPlantHolderVisualLayers.Plant, out var idx, true))
+        _sprite.LayerSetVisible((uid, sprite), ESPlantHolderVisualLayers.Plant, HolderHasPlant((uid, comp)));
+
+        if (TryGetPlantFromHolder((uid, comp), out var plant))
         {
-            var hasPlant = TryGetPlantFromHolder((uid, comp), out var plant);
-            _sprite.LayerSetVisible((uid, sprite), idx, hasPlant);
+            _sprite.LayerSetRsi((uid, sprite), ESPlantHolderVisualLayers.Plant, CompOrNull<SpriteComponent>(plant.Value)?.BaseRSI);
 
-            if (plant != null)
-            {
-                if (TryComp<SpriteComponent>(plant.Value, out var plantSprite) &&
-                    plantSprite.BaseRSI is { } rsi)
-                {
-                    _sprite.LayerSetRsi((uid, sprite), idx, rsi);
-                }
+            var state = "stage-1";
+            if (Appearance.TryGetData<bool>(plant.Value, ESPlantVisuals.Dead, out var dead) && dead)
+                state = "dead";
+            if (Appearance.TryGetData<bool>(plant.Value, ESPlantVisuals.Harvest, out var harvest) && harvest)
+                state = "harvest";
+            else if (Appearance.TryGetData<int>(plant.Value, ESPlantVisuals.GrowthStage, out var stage))
+                state = $"stage-{stage}";
 
-                var state = $"stage-{plant.Value.Comp.CurrentGrowthStage}";
-                _sprite.LayerSetRsiState((uid, sprite), idx, new RSI.StateId(state));
-            }
+            _sprite.LayerSetRsiState((uid, sprite), ESPlantHolderVisualLayers.Plant, new RSI.StateId(state));
         }
     }
 }

@@ -1,14 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared._ES.Botany.Hydroponics.Components;
 using Content.Shared.Interaction;
-using Content.Shared.Popups;
 
 namespace Content.Shared._ES.Botany.Hydroponics;
 
 public abstract partial class ESSharedHydroponicsSystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-
     public void InitializeSeeds()
     {
         SubscribeLocalEvent<ESSeedComponent, AfterInteractEvent>(OnSeedAfterInteract);

@@ -3,6 +3,7 @@ using System.Linq;
 using Content.Shared._ES.Botany.Hydroponics.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Examine;
+using Content.Shared.Popups;
 using Robust.Shared.Containers;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -13,12 +14,15 @@ public abstract partial class ESSharedHydroponicsSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] protected readonly SharedAppearanceSystem Appearance = default!;
     [Dependency] protected readonly SharedContainerSystem Container = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
     {
+        InitializeHarvest();
         InitializeSeeds();
 
         SubscribeLocalEvent<ESPlantHolderComponent, ComponentStartup>(OnHolderStartup);
@@ -36,7 +40,7 @@ public abstract partial class ESSharedHydroponicsSystem : EntitySystem
     // TODO: prevent solution transfers without plants, i think? idk.
     private void OnHolderSolutionTransferred(Entity<ESPlantHolderComponent> ent, ref SolutionTransferredEvent args)
     {
-        if (!_solutionContainer.TryGetRefillableSolution(ent.Owner, out var solutionEnt, out var solution))
+        if (!_solutionContainer.TryGetRefillableSolution(ent.Owner, out _, out var solution))
             return;
 
         if (!TryGetPlantFromHolder(ent.AsNullable(), out var plant))
@@ -161,6 +165,14 @@ public abstract partial class ESSharedHydroponicsSystem : EntitySystem
         while (plantQuery.MoveNext(out var uid, out var comp))
         {
             UpdatePlant((uid, comp));
+        }
+
+        var harvestableQuery = EntityQueryEnumerator<ESPlantHarvestableComponent, ESPlantComponent, AppearanceComponent>();
+        while (harvestableQuery.MoveNext(out var uid, out var comp1, out var comp2, out var comp3))
+        {
+            if (!HarvestReady((uid, comp2, comp1)))
+                continue;
+            Appearance.SetData(uid, ESPlantVisuals.Harvest, true, comp3);
         }
     }
 }
