@@ -1,12 +1,8 @@
-using System.Linq;
+using Content.Shared._ES.Auditions.Components;
 using Content.Shared._ES.CCVar;
 using Content.Shared.Mind;
-using Content.Shared.Preferences;
-using Content.Shared.Random;
 using Content.Shared.Random.Helpers;
 using Robust.Shared.Configuration;
-using Robust.Shared.GameStates;
-using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -16,41 +12,20 @@ namespace Content.Shared._ES.Auditions;
 /// <summary>
 /// The main system for handling the creation, integration of relations
 /// </summary>
-public abstract class ESSharedAuditionsSystem : EntitySystem
+public abstract partial class ESSharedAuditionsSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly SharedPvsOverrideSystem _pvs = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
-    /// <inheritdoc/>
+    public bool RandomCharactersEnabled;
+
     public override void Initialize()
     {
-        SubscribeLocalEvent<ESProducerComponent, ComponentStartup>(OnStartup);
-    }
+        base.Initialize();
 
-    private void OnStartup(EntityUid uid, ESProducerComponent component, ComponentStartup args)
-    {
-        _pvs.AddGlobalOverride(uid);
-    }
-
-    /// <summary>
-    /// Returns the producer entity singleton, or creates one if it doesn't exist yet
-    /// </summary>
-    public ESProducerComponent GetProducer()
-    {
-        var query = EntityQuery<ESProducerComponent>().ToList();
-        return !query.Any() ? CreateProducerEntity() : query.First();
-    }
-
-    /// <summary>
-    /// Creates the producer entity, intended to be a singleton
-    /// </summary>
-    private ESProducerComponent CreateProducerEntity()
-    {
-        var manager = Spawn(null, MapCoordinates.Nullspace);
-        return EnsureComp<ESProducerComponent>(manager);
+        Subs.CVar(_config, ESCVars.ESRandomCharacters, val => RandomCharactersEnabled = val, true);
     }
 
     /// <summary>
@@ -156,42 +131,13 @@ public abstract class ESSharedAuditionsSystem : EntitySystem
     }
 
     /// <summary>
-    /// Generates a character with randomized name, age, gender and appearance.
-    /// </summary>
-    public Entity<MindComponent, ESCharacterComponent> GenerateCharacter([ForbidLiteral] string randomPrototype = "DefaultBackground", ESProducerComponent? producer = null)
-    {
-        producer ??= GetProducer();
-
-        var profile = HumanoidCharacterProfile.RandomWithSpecies();
-
-        var (ent, mind) = _mind.CreateMind(null, profile.Name);
-        var character = EnsureComp<ESCharacterComponent>(ent);
-
-        var year = _config.GetCVar(ESCVars.InGameYear) - profile.Age;
-        var month = _random.Next(1, 12);
-        var day = _random.Next(1, DateTime.DaysInMonth(year, month));
-        character.DateOfBirth = new DateTime(year, month, day);
-        character.Background = _prototypeManager.Index<WeightedRandomPrototype>(randomPrototype).Pick(_random);
-        character.Profile = profile;
-
-        Dirty(ent, character);
-
-        producer.Characters.Add(ent);
-        producer.UnusedCharacterPool.Add(ent);
-
-        return (ent, mind, character);
-    }
-
-    /// <summary>
     /// Generates a completely empty crew entity.
     /// </summary>
-    public Entity<ESSocialGroupComponent> GenerateEmptySocialGroup(ESProducerComponent? producer = null)
+    public Entity<ESSocialGroupComponent> GenerateEmptySocialGroup(Entity<ESProducerComponent> producer)
     {
-        producer ??= GetProducer();
-
         var newCrew = EntityManager.Spawn();
         var component = EnsureComp<ESSocialGroupComponent>(newCrew);
-        producer.SocialGroups.Add(newCrew);
+        producer.Comp.SocialGroups.Add(newCrew);
 
         return (newCrew, component);
     }

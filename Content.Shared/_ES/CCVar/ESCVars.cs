@@ -16,6 +16,28 @@ public sealed partial class ESCVars : CVars
     /// <summary>
     /// What's the current year?
     /// </summary>
-    public static readonly CVarDef<int> InGameYear =
-        CVarDef.Create("ic.year", 2186, CVar.SERVER);
+    public static readonly CVarDef<int> ESInGameYear =
+        CVarDef.Create("es_ic.year", 2186, CVar.SERVER);
+
+    public static readonly CVarDef<bool> ESRandomCharacters =
+        CVarDef.Create("es_ic.random_characters", true, CVar.SERVER | CVar.REPLICATED);
+
+    // EVAC
+
+    public static readonly CVarDef<float> ESEvacVotePercentage =
+        CVarDef.Create("es_evac.beacon_percentage", 0.665f, CVar.SERVER | CVar.REPLICATED);
+
+    // RESPAWNING
+    public static readonly CVarDef<bool> ESRespawnEnabled =
+        CVarDef.Create("es_respawn.enabled", false, CVar.SERVER | CVar.REPLICATED);
+
+    public static readonly CVarDef<float> ESRespawnDelay =
+        CVarDef.Create("es_respawn.delay", 60f * 10, CVar.SERVER | CVar.REPLICATED);
+
+    // MULTISTATION
+    public static readonly CVarDef<bool> ESMultistationEnabled =
+        CVarDef.Create("es_multistation.enabled", false, CVar.SERVER);
+
+    public static readonly CVarDef<string> ESMultistationCurrentConfig =
+        CVarDef.Create("es_multistation.current_config", "ESDefault", CVar.SERVER);
 }

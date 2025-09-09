@@ -3,7 +3,6 @@ using System.Numerics;
 using Content.Server.Announcements;
 using Content.Server.Discord;
 using Content.Server.GameTicking.Events;
-using Content.Server.Ghost;
 using Content.Server.Maps;
 using Content.Server.Roles;
 using Content.Shared.CCVar;
@@ -12,6 +11,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.Mind;
 using Content.Shared.Players;
 using Content.Shared.Preferences;
+using Content.Shared.Roles.Components;
 using JetBrains.Annotations;
 using Prometheus;
 using Robust.Shared.Asynchronous;
@@ -19,11 +19,13 @@ using Robust.Shared.Audio;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
+// ES START
+using Content.Server._ES.Multistation;
+// ES END
 
 namespace Content.Server.GameTicking
 {
@@ -136,6 +138,10 @@ namespace Content.Server.GameTicking
             {
                 _map.CreateMap(out var mapId, runMapInit: false);
                 DefaultMap = mapId;
+// ES START
+               var esPostEv = new ESPostLoadingMapsEvent(DefaultMap, _map.GetMap(DefaultMap));
+                RaiseLocalEvent(ref esPostEv);
+// ES END
                 return;
             }
 
@@ -331,13 +337,17 @@ namespace Content.Server.GameTicking
             return gridUids;
         }
 
+        // ES START: does not count 'ready to observe' players
         public int ReadyPlayerCount()
         {
             var total = 0;
             foreach (var (userId, status) in _playerGameStatuses)
             {
-                if (LobbyEnabled && status == PlayerGameStatus.NotReadyToPlay)
+                // ES: it seems weird to have this count ingame but the old code did that
+                // so im keeping parity in case its relevant
+                if (LobbyEnabled && status is not (PlayerGameStatus.ReadyToPlay or PlayerGameStatus.JoinedGame))
                     continue;
+                // ES END
 
                 if (!_playerManager.TryGetSessionById(userId, out _))
                     continue;
@@ -371,11 +381,15 @@ namespace Content.Server.GameTicking
             SendServerMessage(Loc.GetString("game-ticker-start-round"));
 
             var readyPlayers = new List<ICommonSession>();
+            // ES START
+            var observing = new List<ICommonSession>();
+            // ES END
             var readyPlayerProfiles = new Dictionary<NetUserId, HumanoidCharacterProfile>();
             var autoDeAdmin = _cfg.GetCVar(CCVars.AdminDeadminOnJoin);
             foreach (var (userId, status) in _playerGameStatuses)
             {
-                if (LobbyEnabled && status != PlayerGameStatus.ReadyToPlay) continue;
+                // ES START
+                if (LobbyEnabled && status is not (PlayerGameStatus.Observing or PlayerGameStatus.ReadyToPlay)) continue;
                 if (!_playerManager.TryGetSessionById(userId, out var session)) continue;
 
                 if (autoDeAdmin && _adminManager.IsAdmin(session))
@@ -385,6 +399,13 @@ namespace Content.Server.GameTicking
 #if DEBUG
                 DebugTools.Assert(_userDb.IsLoadComplete(session), $"Player was readied up but didn't have user DB data loaded yet??");
 #endif
+
+                if (status is PlayerGameStatus.Observing)
+                {
+                    observing.Add(session);
+                    continue;
+                }
+                // ES END
 
                 readyPlayers.Add(session);
                 HumanoidCharacterProfile profile;
@@ -427,6 +448,13 @@ namespace Content.Server.GameTicking
             _map.InitializeMap(DefaultMap);
 
             SpawnPlayers(readyPlayers, readyPlayerProfiles, force);
+
+            // ES START
+            foreach (var player in observing)
+            {
+                JoinAsObserver(player);
+            }
+            // ES END
 
             _roundStartDateTime = DateTime.UtcNow;
             RunLevel = GameRunLevel.InRound;
@@ -677,6 +705,9 @@ namespace Content.Server.GameTicking
 
                 SendStatusToAll();
                 UpdateInfoText();
+                // ES START
+                CreateLobbyWorld();
+                // ES END
 
                 ReqWindowAttentionAll();
             }
@@ -717,6 +748,10 @@ namespace Content.Server.GameTicking
             var ev = new RoundRestartCleanupEvent();
             RaiseLocalEvent(ev);
 
+            // ES START
+            CleanupLobbyWorld();
+            // ES END
+
             // So clients' entity systems can clean up too...
             RaiseNetworkEvent(ev);
 
@@ -725,6 +760,8 @@ namespace Content.Server.GameTicking
             _mapManager.Restart();
 
             _banManager.Restart();
+
+            _bugManager.Restart();
 
             _gameMapManager.ClearSelectedMap();
 

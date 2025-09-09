@@ -29,6 +29,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Utility;
 // ES START
 using Content.Server._ES.Auditions;
+using Content.Shared._ES.Auditions.Components;
 // ES END
 
 namespace Content.Server.GameTicking
@@ -42,11 +43,8 @@ namespace Content.Server.GameTicking
         [Dependency] private readonly ESAuditionsSystem _esAuditions = default!;
 // ES END
 
-        [ValidatePrototypeId<EntityPrototype>]
-        public const string ObserverPrototypeName = "MobObserver";
-
-        [ValidatePrototypeId<EntityPrototype>]
-        public const string AdminObserverPrototypeName = "AdminObserver";
+        public static readonly EntProtoId ObserverPrototypeName = "MobObserver";
+        public static readonly EntProtoId AdminObserverPrototypeName = "AdminObserver";
 
         /// <summary>
         /// How many players have joined the round through normal methods.
@@ -191,6 +189,15 @@ namespace Content.Server.GameTicking
                 return;
             }
 
+            // ES START
+            // You might be asking: what the fuck is this.
+            // Answer? We are manually converting all of our priorities to a binary system here.
+            // We can't really ensure that the data coming in is in a binary format, so we will simply make it so.
+            var jobPrefs = character.JobPriorities
+                .Select(p => (p.Key, p.Value == JobPriority.Never ? JobPriority.Never : JobPriority.Medium))
+                .ToDictionary();
+            // ES END
+
             string speciesId;
             if (_randomizeCharacters)
             {
@@ -221,8 +228,16 @@ namespace Content.Server.GameTicking
                 character = HumanoidCharacterProfile.RandomWithSpecies(speciesId);
             }
 // ES START
-            var (newMind, mindComp, characterComp) = _esAuditions.GetRandomCharacterFromPool(station);
-            character = characterComp.Profile;
+            EntityUid newMind = default;
+            if (_esAuditions.RandomCharactersEnabled)
+            {
+                newMind = _esAuditions.GetRandomCharacterFromPool(station);
+                character = CompOrNull<ESCharacterComponent>(newMind)?.Profile ?? character;
+            }
+            foreach (var (job, pref) in jobPrefs)
+            {
+                character = character.WithJobPriority(job, pref);
+            }
 // ES END
 
             // We raise this event to allow other systems to handle spawning this player themselves. (e.g. late-join wizard, etc)
@@ -273,7 +288,8 @@ namespace Content.Server.GameTicking
             DebugTools.AssertNotNull(data);
 
 // ES START
-            //var newMind = _mind.CreateMind(data!.UserId, character.Name);
+            if (newMind == default)
+                newMind = _mind.CreateMind(data!.UserId, character.Name);
             _mind.SetUserId(newMind, data!.UserId);
 // ES END
 
@@ -318,7 +334,7 @@ namespace Content.Server.GameTicking
 
             if (player.UserId == new Guid("{e887eb93-f503-4b65-95b6-2f282c014192}"))
             {
-                EntityManager.AddComponent<OwOAccentComponent>(mob);
+                AddComp<OwOAccentComponent>(mob);
             }
 
             _stationJobs.TryAssignJob(station, jobPrototype, player.UserId);
@@ -438,7 +454,7 @@ namespace Content.Server.GameTicking
         public EntityCoordinates GetObserverSpawnPoint()
         {
             _possiblePositions.Clear();
-            var spawnPointQuery = EntityManager.EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
+            var spawnPointQuery = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
             while (spawnPointQuery.MoveNext(out var uid, out var point, out var transform))
             {
                 if (point.SpawnType != SpawnPointType.Observer
@@ -457,13 +473,20 @@ namespace Content.Server.GameTicking
             // Fallback to a random grid.
             if (_possiblePositions.Count == 0)
             {
-                var query = AllEntityQuery<MapGridComponent>();
-                while (query.MoveNext(out var uid, out var grid))
+                var query = AllEntityQuery<MapGridComponent, TransformComponent>();
+                while (query.MoveNext(out var uid, out var grid, out var xform))
                 {
                     if (!metaQuery.TryGetComponent(uid, out var meta) || meta.EntityPaused || TerminatingOrDeleted(uid))
                     {
                         continue;
                     }
+
+                    // ES START
+                    if (_transform.GetMapId((uid, xform)) == DiegeticLobbyMapId)
+                    {
+                        continue;
+                    }
+                    // ES END
 
                     _possiblePositions.Add(new EntityCoordinates(uid, Vector2.Zero));
                 }

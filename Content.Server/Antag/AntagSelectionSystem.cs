@@ -34,6 +34,9 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
+// ES START
+using Content.Shared._ES.Lobby.Components;
+// ES END
 
 namespace Content.Server.Antag;
 
@@ -566,6 +569,11 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
         // If the player has not spawned in as any entity (e.g., in the lobby), they can be given an antag role/entity.
         if (entity == null)
             return true;
+
+// ES START
+        if (HasComp<ESTheatergoerMarkerComponent>(entity))
+            return true;
+// ES END
 
         if (HasComp<PendingClockInComponent>(entity))
             return false;

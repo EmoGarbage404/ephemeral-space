@@ -7,6 +7,7 @@ using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Value;
 using Robust.Shared.Timing;
 using Robust.Shared.Audio;
+using Robust.Shared.Player;
 
 namespace Content.Shared.GameTicking
 {
@@ -15,11 +16,16 @@ namespace Content.Shared.GameTicking
         [Dependency] private readonly IReplayRecordingManager _replay = default!;
         [Dependency] private readonly IGameTiming _gameTiming = default!;
 
+        /// <summary>
+        ///     A list storing the start times of all game rules that have been started this round.
+        ///     Game rules can be started and stopped at any time, including midround.
+        /// </summary>
+        public abstract IReadOnlyList<(TimeSpan, string)> AllPreviousGameRules { get; }
+
         // See ideally these would be pulled from the job definition or something.
         // But this is easier, and at least it isn't hardcoded.
         //TODO: Move these, they really belong in StationJobsSystem or a cvar.
-        [ValidatePrototypeId<JobPrototype>]
-        public const string FallbackOverflowJob = "Passenger";
+        public static readonly ProtoId<JobPrototype> FallbackOverflowJob = "Passenger";
 
         public const string FallbackOverflowJobName = "job-name-passenger";
 
@@ -86,27 +92,33 @@ namespace Content.Shared.GameTicking
         }
     }
 
+    // ES START
+    // ready -> enum
     [Serializable, NetSerializable]
     public sealed class TickerLobbyStatusEvent : EntityEventArgs
     {
         public bool IsRoundStarted { get; }
         public string? LobbyBackground { get; }
-        public bool YouAreReady { get; }
+        public PlayerGameStatus ReadyStatus { get; }
         // UTC.
         public TimeSpan StartTime { get; }
         public TimeSpan RoundStartTimeSpan { get; }
         public bool Paused { get; }
 
-        public TickerLobbyStatusEvent(bool isRoundStarted, string? lobbyBackground, bool youAreReady, TimeSpan startTime, TimeSpan preloadTime, TimeSpan roundStartTimeSpan, bool paused)
+        public TickerLobbyStatusEvent(bool isRoundStarted, string? lobbyBackground, PlayerGameStatus readyStatus, TimeSpan startTime, TimeSpan preloadTime, TimeSpan roundStartTimeSpan, bool paused)
         {
             IsRoundStarted = isRoundStarted;
             LobbyBackground = lobbyBackground;
-            YouAreReady = youAreReady;
+            ReadyStatus = readyStatus;
             StartTime = startTime;
             RoundStartTimeSpan = roundStartTimeSpan;
             Paused = paused;
         }
     }
+
+    [ByRefEvent]
+    public readonly record struct ESOnPlayerReadyToggled(ICommonSession Player, PlayerGameStatus GameStatus);
+    // ES END
 
     [Serializable, NetSerializable]
     public sealed class TickerLobbyInfoEvent : EntityEventArgs
@@ -224,5 +236,10 @@ namespace Content.Shared.GameTicking
         NotReadyToPlay = 0,
         ReadyToPlay,
         JoinedGame,
+        // ES START
+        // when the game starts, this player will observe
+        // instead of joining the game
+        Observing,
+        // ES END
     }
 }
