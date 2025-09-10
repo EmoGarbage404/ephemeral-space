@@ -1,0 +1,135 @@
+- type: entity
+  parent: BaseStructure
+  id: ESBaseSuitStorage
+  name: suit storage unit
+  description: A specialty cabinet designed to store EVA gear when not in use.
+  suffix: ES
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _ES/Structures/Storage/suit_storage.rsi
+    layers:
+    - state: base
+    - map: ["tank"]
+    - map: ["mask"]
+    - map: ["helmet"]
+    - map: ["suit"]
+    - state: door
+      map: ["door"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.OpenableVisuals.Opened:
+        door:
+          True: { state: open }
+          False: { state: door }
+  - type: ESItemMapper
+    mappings:
+      "suit":
+      - containerId: suit_slot # no whitelist for base fill state
+        state: fill-suit-base
+      "helmet":
+      - containerId: helmet_slot # no whitelist for base fill state
+        state: fill-helmet-base
+      "tank":
+      - containerId: tank_slot # no whitelist for base fill state
+        state: fill-tank-o2
+      "mask":
+      - containerId: mask_slot # no whitelist for base fill state
+        state: fill-mask-base
+  - type: Anchorable
+    delay: 2
+  - type: Transform
+    noRot: true
+  - type: MovedByPressure
+  - type: DamageOnHighSpeedImpact
+    damage:
+      types:
+        Blunt: 5
+    soundHit:
+      collection: MetalThud
+  - type: InteractionOutline
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.48,0.25,0.48"
+        density: 350
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Openable
+    openOnActivate: true
+    closeable: true
+    sound:
+      path: /Audio/Machines/machine_switch.ogg
+    closeSound:
+      path: /Audio/Machines/machine_switch.ogg
+  - type: ESOpenableSlots
+    slots:
+    - suit_slot
+    - helmet_slot
+    - tank_slot
+    - mask_slot
+  - type: ItemSlots
+    slots:
+      suit_slot:
+        name: es-suit-storage-slot-name-suit
+        priority: 0
+        ejectOnInteract: true
+        whitelist:
+          tags:
+          - SuitEVA
+      helmet_slot:
+        name: es-suit-storage-slot-name-helmet
+        priority: 1
+        ejectOnInteract: true
+        whitelist:
+          tags:
+          - HelmetEVA
+      mask_slot:
+        name: es-suit-storage-slot-name-mask
+        priority: 2
+        ejectOnInteract: true
+        whitelist:
+          components:
+          - BreathMask
+      tank_slot:
+        name: es-suit-storage-slot-name-tank
+        priority: 3
+        ejectOnInteract: true
+        whitelist:
+          components:
+          - GasTank
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+          params:
+            volume: -6
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 1
+            max: 1
+  - type: StaticPrice
+    price: 100

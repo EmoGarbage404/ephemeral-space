@@ -1,0 +1,22 @@
+- type: entity
+  parent: ClothingOuterEVASuitBase
+  id: ESBaseClothingOuterSpaceSuit
+  name: EVA suit
+  suffix: ES
+  abstract: true
+
+- type: entity
+  parent: ESBaseClothingOuterSpaceSuit
+  id: ESClothingOuterSpaceSuitEVA
+  name: EVA suit
+  description: A lightweight space suit with the basic ability to protect the wearer from the vacuum of space during emergencies.
+  components:
+  - type: Sprite
+    sprite: _ES/Clothing/OuterClothing/SpaceSuits/space.rsi
+  - type: Clothing
+    sprite: _ES/Clothing/OuterClothing/SpaceSuits/space.rsi
+  - type: Tag
+    tags:
+    - SuitEVA
+    - MonkeyWearable
+    - WhitelistChameleon

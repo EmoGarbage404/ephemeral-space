@@ -1,0 +1,15 @@
+- type: entity
+  parent: ESBaseSuitStorage
+  id: ESSuitStorageFilledEVA
+  suffix: ES, EVA
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      suit_slot:
+        id: ESClothingOuterSpaceSuitEVA
+      helmet_slot:
+        id: ESClothingHeadHelmetSpace
+      tank_slot:
+        id: OxygenTankFilled
+      mask_slot:
+        id: ClothingMaskBreath
