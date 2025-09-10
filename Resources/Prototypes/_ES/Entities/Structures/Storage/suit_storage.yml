@@ -74,6 +74,12 @@
     - helmet_slot
     - tank_slot
     - mask_slot
+  - type: ContainerContainer
+    containers:
+      suit_slot: !type:ContainerSlot
+      helmet_slot: !type:ContainerSlot
+      mask_slot: !type:ContainerSlot
+      tank_slot: !type:ContainerSlot
   - type: ItemSlots
     slots:
       suit_slot:
