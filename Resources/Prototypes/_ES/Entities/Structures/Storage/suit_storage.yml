@@ -25,16 +25,16 @@
           False: { state: door }
   - type: ESItemMapper
     mappings:
-      "suit":
+      suit:
       - containerId: suit_slot # no whitelist for base fill state
         state: fill-suit-base
-      "helmet":
+      helmet:
       - containerId: helmet_slot # no whitelist for base fill state
         state: fill-helmet-base
-      "tank":
+      tank:
       - containerId: tank_slot # no whitelist for base fill state
         state: fill-tank-o2
-      "mask":
+      mask:
       - containerId: mask_slot # no whitelist for base fill state
         state: fill-mask-base
   - type: Anchorable

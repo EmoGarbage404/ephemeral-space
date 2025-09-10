@@ -19,10 +19,12 @@ public sealed class ESItemMapperSystem : ESSharedItemMapperSystem
     private void OnAppearanceChange(Entity<ESItemMapperComponent> ent, ref AppearanceChangeEvent args)
     {
         if (args.Sprite is not { } sprite)
-            return;
+            throw new Exception($"{ToPrettyString(ent)} is missing {nameof(SpriteComponent)}!");
 
         if (!Appearance.TryGetData(ent, ESItemMapperVisuals.Layers, out Dictionary<string, string?> layers, args.Component))
-            return;
+        {
+            throw new Exception($"Couldn't find the necessary {nameof(ESItemMapperVisuals.Layers)} layer on {ToPrettyString(ent)}.");
+        }
 
         foreach (var (key, state) in layers)
         {

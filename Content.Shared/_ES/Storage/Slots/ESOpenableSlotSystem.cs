@@ -22,28 +22,28 @@ public sealed class ESOpenableSlotSystem : EntitySystem
 
     private void OnMapInit(Entity<ESOpenableSlotsComponent> ent, ref MapInitEvent args)
     {
-        UpdateSlotsLocked(ent);
+        UpdateSlotsLocked((ent, ent));
     }
 
     private void OnOpened(Entity<ESOpenableSlotsComponent> ent, ref OpenableOpenedEvent args)
     {
-        UpdateSlotsLocked(ent);
+        UpdateSlotsLocked((ent, ent));
     }
 
     private void OnClosed(Entity<ESOpenableSlotsComponent> ent, ref OpenableClosedEvent args)
     {
-        UpdateSlotsLocked(ent);
+        UpdateSlotsLocked((ent, ent));
     }
 
-    private void UpdateSlotsLocked(Entity<ESOpenableSlotsComponent> ent)
+    private void UpdateSlotsLocked(Entity<ESOpenableSlotsComponent?, ItemSlotsComponent?> ent)
     {
-        if (!TryComp<ItemSlotsComponent>(ent, out var slots))
+        if (!Resolve(ent, ref ent.Comp1, ref ent.Comp2, logMissing: true))
             return;
 
         var val = !_openable.IsOpen(ent);
-        foreach (var slot in ent.Comp.Slots)
+        foreach (var slot in ent.Comp1.Slots)
         {
-            _itemSlots.SetLock(ent, slot, val, slots);
+            _itemSlots.SetLock(ent, slot, val, ent);
         }
     }
 }

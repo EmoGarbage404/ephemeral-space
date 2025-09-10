@@ -20,32 +20,35 @@ public abstract class ESSharedItemMapperSystem : EntitySystem
 
     private void OnStartup(Entity<ESItemMapperComponent> ent, ref ComponentStartup args)
     {
-        UpdateMappings(ent);
+        UpdateMappings((ent, ent));
     }
 
     private void OnEntInserted(Entity<ESItemMapperComponent> ent, ref EntInsertedIntoContainerMessage args)
     {
-        UpdateMappings(ent);
+        UpdateMappings((ent, ent));
     }
 
     private void OnEntRemoved(Entity<ESItemMapperComponent> ent, ref EntRemovedFromContainerMessage args)
     {
-        UpdateMappings(ent);
+        UpdateMappings((ent, ent));
     }
 
-    public void UpdateMappings(Entity<ESItemMapperComponent> ent)
+    public void UpdateMappings(Entity<ESItemMapperComponent?, ContainerManagerComponent?, AppearanceComponent?> ent)
     {
-        if (!TryComp<ContainerManagerComponent>(ent, out var containerManager))
+        if (!Resolve(ent, ref ent.Comp1, ref ent.Comp2, ref ent.Comp3, logMissing: true))
             return;
+        var comp = ent.Comp1;
+        var containerManager = ent.Comp2;
+        var appearance = ent.Comp3;
 
         var layers = new Dictionary<string, string?>();
 
-        foreach (var (layerKey, mappings) in ent.Comp.Mappings)
+        foreach (var (layerKey, mappings) in comp!.Mappings)
         {
             string? layerState = null;
             foreach (var mapping in mappings)
             {
-                if (!IsMappingSatisfied((ent, ent, containerManager), mapping))
+                if (!IsMappingSatisfied((ent, comp, containerManager), mapping))
                     continue;
                 layerState = mapping.State;
                 break; // Exit on the first valid mapping.
@@ -54,13 +57,15 @@ public abstract class ESSharedItemMapperSystem : EntitySystem
             layers.Add(layerKey, layerState);
         }
 
-        Appearance.SetData(ent, ESItemMapperVisuals.Layers, layers);
+        Appearance.SetData(ent, ESItemMapperVisuals.Layers, layers, appearance);
     }
 
     private bool IsMappingSatisfied(Entity<ESItemMapperComponent, ContainerManagerComponent> ent, ESItemLayerMapping mapping)
     {
         if (!_container.TryGetContainer(ent, mapping.ContainerId, out var container, ent))
-            return false;
+        {
+            throw new Exception($"Couldn't find the container {mapping.ContainerId} for {ToPrettyString(ent)}.");
+        }
 
         var count = 0;
         foreach (var containedEntity in container.ContainedEntities)
