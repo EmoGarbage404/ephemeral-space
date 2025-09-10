@@ -43,9 +43,10 @@ public abstract class ESSharedItemMapperSystem : EntitySystem
 
         var layers = new Dictionary<string, string?>();
 
-        foreach (var (layerKey, mappings) in comp!.Mappings)
+        foreach (var (layerKey, mappings) in comp.Mappings)
         {
-            string? layerState = null;
+            string? layerState = null; // base case: there's no state and we hide the layer on the client.
+            // Iterate mappings in order, stopping at the first one that succeeds.
             foreach (var mapping in mappings)
             {
                 if (!IsMappingSatisfied((ent, comp, containerManager), mapping))
