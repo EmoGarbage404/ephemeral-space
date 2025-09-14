@@ -6,5 +6,5 @@ namespace Content.Shared._ES.Cargo.Storeroom.Components;
 public sealed partial class ESStoreroomStationComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public List<ESStoreroomContainerEntry> Containers = new();
+    public Dictionary<ESStoreroomContainerEntry, int> Stock = new();
 }
