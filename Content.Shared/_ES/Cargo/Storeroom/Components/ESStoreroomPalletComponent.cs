@@ -17,7 +17,7 @@ public sealed partial class ESStoreroomPalletComponent : Component
 public sealed partial class ESStoreroomContainerEntry : IEquatable<ESStoreroomContainerEntry>
 {
     [DataField] public EntProtoId? IconEntity;
-    [DataField] public string Name;
+    [DataField] public string Name = string.Empty;
 
     [DataField] public List<ESStoreroomEntry> Contents = new();
 
@@ -53,7 +53,7 @@ public sealed partial class ESStoreroomContainerEntry : IEquatable<ESStoreroomCo
 public sealed partial class ESStoreroomEntry : IEquatable<ESStoreroomEntry>
 {
     [DataField] public EntProtoId? IconEntity;
-    [DataField] public string Name;
+    [DataField] public string Name = string.Empty;
 
     [DataField] public int Count = 1;
 
