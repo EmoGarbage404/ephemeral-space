@@ -64,8 +64,8 @@
         type: ESWarehouseManifestBui
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface
-  #- type: Computer
-  #  board: ESComputerEvacBeaconCircuitBoard
+  - type: Computer
+    board: ESComputerWarehouseManifestCircuitBoard
   - type: PointLight
     radius: 1.5
     energy: 1.6
