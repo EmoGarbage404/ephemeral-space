@@ -26,6 +26,10 @@ public abstract class ESSharedStoreroomSystem : EntitySystem
     {
         SubscribeLocalEvent<ESStoreroomPalletComponent, StartCollideEvent>(OnStartCollide);
         SubscribeLocalEvent<ESStoreroomPalletComponent, EndCollideEvent>(OnEndCollide);
+
+        SubscribeLocalEvent<ESPalletTrackerComponent, EntityRenamedEvent>(OnEntityRenamed);
+        SubscribeLocalEvent<ESPalletTrackerComponent, StorageAfterOpenEvent>(OnStorageAfterOpen);
+        SubscribeLocalEvent<ESPalletTrackerComponent, StorageAfterCloseEvent>(OnStorageAfterClose);
     }
 
     private void OnStartCollide(Entity<ESStoreroomPalletComponent> ent, ref StartCollideEvent args)
@@ -38,6 +42,7 @@ public abstract class ESSharedStoreroomSystem : EntitySystem
 
         if (_station.GetOwningStation(ent) is not { } station)
             return;
+        EnsureComp<ESPalletTrackerComponent>(args.OtherEntity);
         UpdateStationStock(station);
     }
 
@@ -49,6 +54,28 @@ public abstract class ESSharedStoreroomSystem : EntitySystem
         if (!Transform(ent).Anchored)
             return;
 
+        if (_station.GetOwningStation(ent) is not { } station)
+            return;
+        RemCompDeferred<ESPalletTrackerComponent>(args.OtherEntity);
+        UpdateStationStock(station);
+    }
+
+    private void OnEntityRenamed(Entity<ESPalletTrackerComponent> ent, ref EntityRenamedEvent args)
+    {
+        if (_station.GetOwningStation(ent) is not { } station)
+            return;
+        UpdateStationStock(station);
+    }
+
+    private void OnStorageAfterOpen(Entity<ESPalletTrackerComponent> ent, ref StorageAfterOpenEvent args)
+    {
+        if (_station.GetOwningStation(ent) is not { } station)
+            return;
+        UpdateStationStock(station);
+    }
+
+    private void OnStorageAfterClose(Entity<ESPalletTrackerComponent> ent, ref StorageAfterCloseEvent args)
+    {
         if (_station.GetOwningStation(ent) is not { } station)
             return;
         UpdateStationStock(station);
@@ -84,17 +111,12 @@ public abstract class ESSharedStoreroomSystem : EntitySystem
     public Dictionary<ESStoreroomContainerEntry, int> GetStoreroomStock(EntityUid station)
     {
         var containers = new Dictionary<ESStoreroomContainerEntry, int>();
-        var processed = new HashSet<EntityUid>(); // put on system
+        var processed = new HashSet<EntityUid>();
 
         foreach (var pallet in GetStoreroomPallets(station))
         {
             _palletGoods.Clear();
             _physics.GetContactingEntities(pallet.Owner, _palletGoods);
-
-            // _lookup.GetEntitiesIntersecting(
-            //     pallet,
-            //     _palletGoods,
-            //     LookupFlags.Dynamic | LookupFlags.Sundries);
 
             foreach (var palletGood in _palletGoods)
             {

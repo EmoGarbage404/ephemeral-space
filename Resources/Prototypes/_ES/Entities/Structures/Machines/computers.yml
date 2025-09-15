@@ -41,7 +41,7 @@
   parent: BaseComputerAiAccess
   id: ESComputerWarehouseManifest
   name: warehouse manifest console
-  description: A computer for cataloguing and viewing the stock inside the cargo bay.
+  description: A computer for cataloguing and viewing the goods inside the cargo bay.
   components:
   - type: Sprite
     layers:
