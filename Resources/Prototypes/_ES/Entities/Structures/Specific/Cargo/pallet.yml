@@ -20,7 +20,7 @@
   - type: CollideOnAnchor
     enable: true
   - type: Physics
-    canCollide: false
+    canCollide: true
   - type: Fixtures
     fixtures:
       fix1:
