@@ -20,6 +20,15 @@
       "name": "fill-suit-base"
     },
     {
+      "name": "fill-suit-command"
+    },
+    {
+      "name": "fill-suit-eng"
+    },
+    {
+      "name": "fill-suit-sec"
+    },
+    {
       "name": "fill-helmet-base"
     },
     {
