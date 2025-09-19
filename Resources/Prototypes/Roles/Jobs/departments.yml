@@ -21,6 +21,7 @@
   - Chef
   - Janitor
   - ServiceWorker
+  - Reporter
 # ES END
 
 - type: department
@@ -44,7 +45,7 @@
   - Mime
   - Musician
   - Passenger
-  - Reporter
+#  - Reporter
   - Visitor
   - Zookeeper
 #  - ServiceWorker
@@ -166,7 +167,9 @@
   weight: 10
   roles:
   - Boxer
-  - Reporter
+# ES START
+#  - Reporter
+# ES END
   - Zookeeper
   - Psychologist
   primary: false
