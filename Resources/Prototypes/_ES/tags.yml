@@ -1,4 +1,10 @@
 - type: Tag
+  id: ES357Round
+
+- type: Tag
+  id: ES357SpeedLoader
+
+- type: Tag
   id: ESElectronicsKeypad
 
 - type: Tag

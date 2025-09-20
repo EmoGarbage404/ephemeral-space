@@ -1,0 +1,27 @@
+- type: entity
+  parent: [ BaseCartridge, BaseSecurityContraband ]
+  id: ESBaseRound357
+  name: .357 round
+  description: A standard round for a .357 revolver.
+  abstract: true
+  suffix: ES
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Casings/ammo_casing.rsi
+    layers:
+    - state: base
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Appearance
+  - type: SpentAmmoVisuals
+  - type: CartridgeAmmo
+  - type: Tag
+    tags:
+    - Cartridge
+    - ES357Round
+
+- type: entity
+  parent: ESBaseRound357
+  id: ESRound357
+  components:
+  - type: CartridgeAmmo
+    proto: ESBullet357
