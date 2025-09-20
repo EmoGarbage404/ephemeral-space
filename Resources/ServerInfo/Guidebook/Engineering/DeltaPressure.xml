@@ -41,9 +41,6 @@
     <GuideEntityEmbed Entity="PlasmaWindow" Caption=""/>
     <GuideEntityEmbed Entity="PlasmaWindowDirectional" Caption=""/>
     <GuideEntityEmbed Entity="WindoorPlasma" Caption=""/>
-    <GuideEntityEmbed Entity="UraniumWindow" Caption=""/>
-    <GuideEntityEmbed Entity="UraniumWindowDirectional" Caption=""/>
-    <GuideEntityEmbed Entity="WindoorUranium" Caption=""/>
   </Box>
 
   Plasma glass and uranium glass can withstand a ΔP of up to [color=orange][protodata="PlasmaWindow" comp="DeltaPressure" member="MinPressureDelta"/] kPa[/color] before starting to crack.
@@ -56,9 +53,6 @@
     <GuideEntityEmbed Entity="ReinforcedPlasmaWindow" Caption=""/>
     <GuideEntityEmbed Entity="PlasmaReinforcedWindowDirectional" Caption=""/>
     <GuideEntityEmbed Entity="WindoorSecurePlasma" Caption=""/>
-    <GuideEntityEmbed Entity="ReinforcedUraniumWindow" Caption=""/>
-    <GuideEntityEmbed Entity="UraniumReinforcedWindowDirectional" Caption=""/>
-    <GuideEntityEmbed Entity="WindoorSecureUranium" Caption=""/>
 
   </Box>
 
