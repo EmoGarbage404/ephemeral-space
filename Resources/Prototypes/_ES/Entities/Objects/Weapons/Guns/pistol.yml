@@ -12,8 +12,9 @@
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-0
       map: ["enum.GunVisualLayers.Mag"]
+    - map: ["barrelAttachment"]
   - type: Item
-    storedOffset: 2,-2
+    storedOffset: -2,0
   - type: Clothing
     sprite: _ES/Objects/Weapons/Guns/9mm.rsi
   - type: Gun
@@ -22,6 +23,34 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/mk58.ogg
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+      attachment_barrel: !type:ContainerSlot
+  - type: ESAttachableGun
+    slots:
+    - name: es-gun-attachments-slot-name-barrel
+      containerId: attachment_barrel
+      whitelist:
+        tags:
+        - ESGunAttachmentBallisticBarrel
+  - type: ActivatableUI
+    key: enum.ESAttachableGunUiKey.Key
+    verbOnly: true
+    verbText: es-gun-attachments-verb-text
+  - type: UserInterface
+    interfaces:
+      enum.ESAttachableGunUiKey.Key:
+        type: ESGunAttachmentBui
+  - type: ESItemMapper
+    mappings:
+      barrelAttachment:
+      - containerId: attachment_barrel
+        state: silencer
+        whitelist:
+          tags:
+          - ESSilencer
   - type: ItemSlots
     slots:
       gun_chamber:
@@ -40,3 +69,18 @@
           tags:
           - ES9mmMagazine
         whitelistFailPopup: gun-magazine-whitelist-fail
+      attachment_barrel:
+        priority: 0
+        whitelist:
+          tags:
+          - ESGunAttachmentBallisticBarrel
+
+- type: entity
+  parent: ESWeaponPistol9mm
+  id: ESWeaponPistol9mmSilenced
+  suffix: ES, Silenced
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      attachment_barrel:
+        id: ESGunAttachmentSilencer
