@@ -6,9 +6,9 @@
   suffix: ES
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Revolvers/inspector.rsi
+    sprite: _ES/Objects/Weapons/Guns/357.rsi
   - type: Clothing
-    sprite: Objects/Weapons/Guns/Revolvers/inspector.rsi
+    sprite: _ES/Objects/Weapons/Guns/357.rsi
   - type: Item
     storedOffset: 0,-2
   - type: RevolverAmmoProvider
