@@ -11,6 +11,9 @@
   id: ES9mmMagazine
 
 - type: Tag
+  id: ESComputerTabletop
+
+- type: Tag
   id: ESElectronicsKeypad
 
 - type: Tag

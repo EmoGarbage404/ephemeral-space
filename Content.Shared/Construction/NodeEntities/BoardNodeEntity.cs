@@ -1,6 +1,8 @@
 using Content.Shared.Construction.Components;
+using Content.Shared.Tag;
 using JetBrains.Annotations;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Construction.NodeEntities;
 
@@ -14,6 +16,11 @@ public sealed partial class BoardNodeEntity : IGraphNodeEntity
 {
     [DataField]
     public string Container { get; private set; } = string.Empty;
+
+// ES START
+    [DataField]
+    public ProtoId<TagPrototype>? AlternateComputerTag;
+// ES END
 
     public string? GetId(EntityUid? uid, EntityUid? userUid, GraphNodeEntityArgs args)
     {
@@ -32,8 +39,14 @@ public sealed partial class BoardNodeEntity : IGraphNodeEntity
         if (args.EntityManager.TryGetComponent(board, out MachineBoardComponent? machine))
             return machine.Prototype;
 
+// ES START
         if (args.EntityManager.TryGetComponent(board, out ComputerBoardComponent? computer))
+        {
+            if (AlternateComputerTag is { } tag && computer.AlternatePrototype.TryGetValue(tag, out var proto))
+                return proto;
             return computer.Prototype;
+        }
+// ES END
 
         if (args.EntityManager.TryGetComponent(board, out ElectronicsBoardComponent? electronics))
             return electronics.Prototype;
