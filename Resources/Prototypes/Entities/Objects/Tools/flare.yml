@@ -96,3 +96,21 @@
           Quantity: 2
         - ReagentId: Sulfur
           Quantity: 2
+
+# ES START
+- type: entity
+  parent: Flare
+  id: ESFlareSpent
+  name: spent emergency flare
+  components:
+  - type: SolutionContainerManager
+    solutions: null
+    containers:
+    - flare
+  - type: NameModifier
+    baseName: emergency flare
+  - type: ContainerContainer
+    containers:
+      flare: !type:Container
+      solution@flare: !type:ContainerSlot
+# ES END

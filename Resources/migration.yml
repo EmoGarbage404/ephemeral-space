@@ -53,6 +53,28 @@ ReinforcedUraniumWindowDiagonal: ReinforcedPlasmaWindowDiagonal
 XenoborgWindow: PlastitaniumWindow
 XenoResinWindow: ReinforcedWindow
 
+# 2025-9-26
+# Migrates over some existing weapon-related stuff to their proper ES counterparts. As of writing, these currently still exist in the code, but it's good to have this so that nobody can map them.
+# This is extremely far from being a cohesive list of all of the kinds of things that need to be migrated, and only targets things that have been *directly* replaced by ES items thus far. More will definitely need to be done in the future.
+BoxBeanbag: ESShotgunShellsBoxBeanbag
+BoxLethalshot: ESShotgunShellsBoxBuckshot
+BoxShotgunSlug: ESShotgunShellsBoxSlug
+WeaponPistolMk58: ESWeaponPistol9mm
+WeaponPistolViper: ESWeaponPistol9mm
+WeaponPistolCobra: ESWeaponPistol9mmSilenced
+WeaponRevolverInspector: ESWeaponRevolver357
+WeaponRevolverDeckard: ESWeaponRevolver357
+WeaponRevolverPython: ESWeaponRevolver357
+WeaponRevolverPythonAP: ESWeaponRevolver357
+WeaponShotgunKammerer: ESWeaponShotgun
+WeaponShotgunEnforcer: ESWeaponShotgun
+WeaponShotgunEnforcerRubber: ESWeaponDoubleBarrelShotgunNonlethal
+WeaponShotgunDoubleBarreled: ESWeaponDoubleBarrelShotgun
+WeaponShotgunDoubleBarreledRubber: ESWeaponDoubleBarrelShotgunNonlethal
+WeaponLaserCarbine: ESWeaponEnergyRifle
+WeaponDisabler: ESWeaponHybridTaser
+WeaponTaser: ESWeaponHybridTaser
+
 # ES END
 
 # 2023-07-03

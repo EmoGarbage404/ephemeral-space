@@ -1,0 +1,288 @@
+- type: entity
+  id: ESSpawnerRandomMaintStructure
+  parent: ESSpawnerBase
+  name: Maintenance Structure Spawner
+  components:
+  - type: Sprite
+    layers:
+      - state: crate
+      - state: random
+      - state: maint
+      - state: es
+      - state: c100
+  - type: EntityTableSpawner
+    table:
+      tableId: ESMaintenanceStructures
+
+- type: entityTable
+  id: ESMaintenanceStructures
+  table:
+    group:
+    - group:
+      - id: ClosetMaintenanceFilledRandom
+        weight: 35
+      - id: ESCrateMaintenanceFilledRandom
+        weight: 35
+      - tableId: LowValueCrateTable
+        weight: 15
+      - id: ClosetL3Filled
+        weight: 5
+      - id: Spaceshroom
+        weight: 5
+      - tableId: ESWardrobeTypes
+        weight: 5
+
+- type: entity
+  parent: ESSpawnerBase
+  id: ESSpawnerRandomMaintLootExposed25
+  name: Exposed Maint Loot Spawner
+  suffix: ES, 25
+  components:
+  - type: Sprite
+    layers:
+    - state: box
+    - state: random
+    - state: maint
+    - state: es
+    - state: c25
+  - type: EntityTableSpawner
+    table:
+      tableId: ESMaintLootExposed
+      prob: 0.25
+
+- type: entity
+  parent: ESSpawnerBase
+  id: ESSpawnerRandomMaintLootExposed50
+  name: Exposed Maint Loot Spawner
+  suffix: ES, 50
+  components:
+  - type: Sprite
+    layers:
+    - state: box
+    - state: random
+    - state: maint
+    - state: es
+    - state: c50
+  - type: EntityTableSpawner
+    table:
+      tableId: ESMaintLootExposed
+      prob: 0.50
+
+- type: entity
+  parent: ESSpawnerBase
+  id: ESSpawnerRandomMaintLootExposed75
+  name: Exposed Maint Loot Spawner
+  suffix: ES, 75
+  components:
+  - type: Sprite
+    layers:
+    - state: box
+    - state: random
+    - state: maint
+    - state: es
+    - state: c75
+  - type: EntityTableSpawner
+    table:
+      tableId: ESMaintLootExposed
+      prob: 0.75
+
+- type: entity
+  parent: ESSpawnerBase
+  id: ESSpawnerRandomMaintLootExposed100
+  name: Exposed Maint Loot Spawner
+  suffix: ES, 100
+  components:
+  - type: Sprite
+    layers:
+    - state: box
+    - state: random
+    - state: maint
+    - state: es
+    - state: c100
+  - type: EntityTableSpawner
+    table:
+      tableId: ESMaintLootExposed
+
+- type: entity
+  id: ESSpawnerRandomMaintTank
+  parent: ESSpawnerBase
+  name: Tank Spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: tank
+    - state: random
+    - state: maint
+    - state: es
+    - state: c100
+  - type: EntityTableSpawner
+    table:
+      tableId: ESMaintenanceTanks
+
+- type: entityTable
+  id: ESMaintenanceTanks
+  table:
+    group:
+    - id: WaterTankFull
+    - id: WeldingFuelTankFull
+
+- type: entity
+  id: ESSpawnerRandomMaintCanister
+  parent: ESSpawnerBase
+  name: Maint Canister Spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: canister
+    - state: random
+    - state: maint
+    - state: es
+    - state: c100
+  - type: EntityTableSpawner
+    table:
+      group:
+      - tableId: ESMaintenanceCanisters
+        weight: 95
+      - tableId: ESMaintenanceCanistersBroken
+        weight: 5
+
+- type: entity
+  id: ESSpawnerRandomMaintCanisterBroken
+  parent: ESSpawnerBase
+  name: Maint Broken Canister Spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: canister-broken
+    - state: random
+    - state: maint
+    - state: es
+    - state: c100
+  - type: EntityTableSpawner
+    table:
+      tableId: ESMaintenanceCanistersBroken
+
+- type: entityTable
+  id: ESMaintenanceCanisters
+  table:
+    group:
+    - group:
+      - id: OxygenCanister
+      - id: NitrogenCanister
+      - id: AirCanister
+        weight: 0.5
+      - id: StorageCanister
+        weight: 0.25
+      weight: 90
+    - group:
+      - id: CarbonDioxideCanister
+      - id: WaterVaporCanister
+      - id: NitrousOxideCanister
+      - id: PlasmaCanister
+        weight: 0.25
+      weight: 10
+
+- type: entityTable
+  id: ESMaintenanceCanistersBroken
+  table:
+    group:
+    - group:
+      - id: OxygenCanisterBroken
+      - id: NitrogenCanisterBroken
+      - id: AirCanisterBroken
+        weight: 0.5
+      - id: StorageCanisterBroken
+        weight: 0.25
+      weight: 90
+    - group:
+      - id: CarbonDioxideCanisterBroken
+      - id: WaterVaporCanisterBroken
+      - id: NitrousOxideCanisterBroken
+      - id: PlasmaCanisterBroken
+        weight: 0.25
+      weight: 10
+
+- type: entity
+  parent: ESSpawnerBase
+  id: ESSpawnerRandomMaintDoorVariant
+  name: Maint Door Variant Spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: door
+    - state: random
+    - state: maint
+    - state: es
+    - state: c100
+  - type: EntityTableSpawner
+    table:
+      group:
+      - id: AirlockMaintLocked
+        weight: 1.5
+      - id: ESAirlockMaintLockedWelded
+      - id: ESAirlockMaintLockedBolted
+      - all:
+        - id: AirlockMaintLocked
+        - id: BarricadeBlock
+
+- type: entity
+  parent: ESSpawnerBase
+  id: ESSpawnerRandomMaintDoorVariantImpassable
+  name: Walled Maint Door Variant Spawner
+  description: Can sometimes be a wall.
+  components:
+  - type: Sprite
+    layers:
+    - state: door
+    - state: random
+    - state: maint
+    - state: wall
+      offset: 0, -0.1875
+    - state: es
+    - state: c100
+  - type: EntityTableSpawner
+    table:
+      group:
+      - id: AirlockMaintLocked
+        weight: 1.5
+      - id: ESAirlockMaintLockedWelded
+      - id: ESAirlockMaintLockedBolted
+      - all:
+        - id: AirlockMaintLocked
+        - id: BarricadeBlock
+      - id: WallSolid
+      - id: SolidSecretDoor
+        weight: 0.5
+
+- type: entity
+  id: ESSpawnerRandomMaintClosetsEmergency
+  parent: ESSpawnerBase
+  name: Maint Emergency Closet Spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: emergency
+    - state: random
+    - state: maint
+    - state: es
+    - state: c100
+  - type: EntityTableSpawner
+    table:
+      tableId: ESMaintenanceClosetsEmergency
+
+- type: entityTable
+  id: ESMaintenanceClosetsEmergency
+  table:
+    group:
+    - group:
+      - id: ClosetEmergencyFilledRandom
+        weight: 2
+      - id: ClosetFireFilled
+        weight: 1
+      weight: 95
+    - group:
+      - id: ClosetEmergency
+        weight: 2
+      - id: ClosetFire
+        weight: 1
+      weight: 5

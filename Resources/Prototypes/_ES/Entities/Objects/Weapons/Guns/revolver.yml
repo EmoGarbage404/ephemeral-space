@@ -1,7 +1,7 @@
 - type: entity
   parent: [BaseWeaponRevolver, BaseSecurityContraband]
   id: ESWeaponRevolver357
-  name: .357 Revolver
+  name: .357 revolver
   description: A suspicious revolver. Uses .357 ammo.
   suffix: ES
   components:
