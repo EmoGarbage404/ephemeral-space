@@ -4,8 +4,8 @@ meta:
   engineVersion: 267.2.1
   forkId: ""
   forkVersion: ""
-  time: 10/04/2025 04:19:20
-  entityCount: 12309
+  time: 10/04/2025 04:41:25
+  entityCount: 12325
 maps:
 - 3
 grids:
@@ -3423,7 +3423,7 @@ entities:
       pos: -14.5,-7.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -32745.213
+      secondsUntilStateChange: -32876.41
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -3856,7 +3856,7 @@ entities:
       pos: -32.5,-33.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -57053.02
+      secondsUntilStateChange: -57184.215
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -34393,13 +34393,6 @@ entities:
     - type: Transform
       pos: -18.5,-17.5
       parent: 2
-- proto: ESSpawnerRandomGrille25
-  entities:
-  - uid: 11498
-    components:
-    - type: Transform
-      pos: 5.5,-50.5
-      parent: 2
 - proto: ESSpawnerRandomGrille50
   entities:
   - uid: 8374
@@ -34445,6 +34438,11 @@ entities:
     components:
     - type: Transform
       pos: -31.5,19.5
+      parent: 2
+  - uid: 12325
+    components:
+    - type: Transform
+      pos: 6.5,-50.5
       parent: 2
 - proto: ESSpawnerRandomGrilleBroken50
   entities:
@@ -34597,6 +34595,11 @@ entities:
     components:
     - type: Transform
       pos: -74.5,6.5
+      parent: 2
+  - uid: 10831
+    components:
+    - type: Transform
+      pos: 5.5,-50.5
       parent: 2
   - uid: 11488
     components:
@@ -35769,6 +35772,11 @@ entities:
     - type: Transform
       pos: -7.5,-47.5
       parent: 2
+  - uid: 11498
+    components:
+    - type: Transform
+      pos: -58.5,-38.5
+      parent: 2
   - uid: 11515
     components:
     - type: Transform
@@ -35793,6 +35801,61 @@ entities:
     components:
     - type: Transform
       pos: -15.5,-40.5
+      parent: 2
+  - uid: 12310
+    components:
+    - type: Transform
+      pos: -60.5,-36.5
+      parent: 2
+  - uid: 12311
+    components:
+    - type: Transform
+      pos: -60.5,-37.5
+      parent: 2
+  - uid: 12312
+    components:
+    - type: Transform
+      pos: -59.5,-35.5
+      parent: 2
+  - uid: 12313
+    components:
+    - type: Transform
+      pos: -57.5,-36.5
+      parent: 2
+  - uid: 12314
+    components:
+    - type: Transform
+      pos: -56.5,-38.5
+      parent: 2
+  - uid: 12315
+    components:
+    - type: Transform
+      pos: -56.5,-39.5
+      parent: 2
+  - uid: 12316
+    components:
+    - type: Transform
+      pos: -60.5,-38.5
+      parent: 2
+  - uid: 12317
+    components:
+    - type: Transform
+      pos: -60.5,-39.5
+      parent: 2
+  - uid: 12318
+    components:
+    - type: Transform
+      pos: -59.5,-37.5
+      parent: 2
+  - uid: 12319
+    components:
+    - type: Transform
+      pos: -56.5,-36.5
+      parent: 2
+  - uid: 12320
+    components:
+    - type: Transform
+      pos: -58.5,-36.5
       parent: 2
 - proto: ESSpawnerRandomTrashCombo50
   entities:
@@ -35879,6 +35942,26 @@ entities:
     components:
     - type: Transform
       pos: -50.5,-26.5
+      parent: 2
+  - uid: 12321
+    components:
+    - type: Transform
+      pos: -49.5,-26.5
+      parent: 2
+  - uid: 12322
+    components:
+    - type: Transform
+      pos: -48.5,-25.5
+      parent: 2
+  - uid: 12323
+    components:
+    - type: Transform
+      pos: -48.5,-24.5
+      parent: 2
+  - uid: 12324
+    components:
+    - type: Transform
+      pos: -50.5,-27.5
       parent: 2
 - proto: ESSpawnerRandomTrashFood50
   entities:
@@ -36706,8 +36789,6 @@ entities:
       pos: 0.5,-28.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 11961
       - 11980
@@ -36719,8 +36800,6 @@ entities:
       pos: -0.5,-28.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 11961
       - 11980
@@ -36732,8 +36811,6 @@ entities:
       pos: -1.5,-28.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 11961
       - 11980
@@ -36778,8 +36855,6 @@ entities:
       pos: 15.5,-31.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 11961
       - 12001
@@ -36790,8 +36865,6 @@ entities:
       pos: 15.5,-30.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 11961
       - 12001
@@ -36802,8 +36875,6 @@ entities:
       pos: 15.5,-29.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 11961
       - 12001
@@ -36961,8 +37032,6 @@ entities:
       pos: -5.5,-31.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 11960
       - 11961
@@ -36975,8 +37044,6 @@ entities:
       pos: -5.5,-30.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 11960
       - 11961
@@ -36989,8 +37056,6 @@ entities:
       pos: -5.5,-29.5
       parent: 2
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 11960
       - 11961
@@ -38027,15 +38092,6 @@ entities:
       parent: 2
     - type: AtmosPipeColor
       color: '#990000FF'
-  - uid: 10831
-    components:
-    - type: Transform
-      anchored: False
-      pos: -9.5,-24.5
-      parent: 2
-    - type: Physics
-      canCollide: True
-      bodyType: Dynamic
   - uid: 10843
     components:
     - type: Transform
@@ -75491,7 +75547,7 @@ entities:
       lastSignals:
         DoorStatus: True
     - type: Door
-      secondsUntilStateChange: -4710.8423
+      secondsUntilStateChange: -4842.038
       state: Opening
     - type: Airlock
       autoClose: False
