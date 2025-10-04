@@ -93,6 +93,7 @@ namespace Content.IntegrationTests.Tests
         {
 // ES START
             "ESTestMap",
+            "ESToast",
 // ES END
             "Dev",
             "TestTeg",
