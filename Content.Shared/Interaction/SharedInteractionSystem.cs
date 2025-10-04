@@ -101,6 +101,10 @@ namespace Content.Shared.Interaction
         public const float MaxRaycastRange = 100f;
         public const string RateLimitKey = "Interaction";
 
+        // ES START
+        public const float ESPullRange = 1.0f;
+        // ES END
+
         private static readonly ProtoId<TagPrototype> BypassInteractionRangeChecksTag = "BypassInteractionRangeChecks";
 
         public delegate bool Ignored(EntityUid entity);
@@ -277,8 +281,10 @@ namespace Content.Shared.Interaction
             if (Deleted(uid))
                 return false;
 
-            if (!InRangeUnobstructed(userEntity.Value, uid, popup: true))
+            // ES START
+            if (!InRangeUnobstructed(userEntity.Value, uid, range: ESPullRange, popup: true))
                 return false;
+            // ES END
 
             _pullSystem.TogglePull(uid, userEntity.Value);
             return false;
@@ -522,7 +528,7 @@ namespace Content.Shared.Interaction
             // all interactions should only happen when in range / unobstructed, so no range check is needed
             var message = new InteractHandEvent(user, target);
             RaiseLocalEvent(target, message, true);
-            _adminLogger.Add(LogType.InteractHand, LogImpact.Low, $"{ToPrettyString(user):user} interacted with {ToPrettyString(target):target}");
+            _adminLogger.Add(LogType.InteractHand, LogImpact.Low, $"{user} interacted with {target}");
             DoContactInteraction(user, target, message);
             if (message.Handled)
                 return;
@@ -1317,10 +1323,17 @@ namespace Content.Shared.Interaction
             var ev = new AccessibleOverrideEvent(user, target);
 
             RaiseLocalEvent(user, ref ev);
+            RaiseLocalEvent(target, ref ev);
 
+            // If either has handled it and neither has said we can't access it then we can access it.
             if (ev.Handled)
                 return ev.Accessible;
 
+            return CanAccess(user, target);
+        }
+
+        public bool CanAccess(EntityUid user, EntityUid target)
+        {
             if (_containerSystem.IsInSameOrParentContainer(user, target, out _, out var container))
                 return true;
 
@@ -1525,16 +1538,16 @@ namespace Content.Shared.Interaction
     /// <summary>
     /// Override event raised directed on the user to say the target is accessible.
     /// </summary>
-    /// <param name="User"></param>
-    /// <param name="Target"></param>
+    /// <param name="Target">Entity we're targeting</param>
     [ByRefEvent]
     public record struct AccessibleOverrideEvent(EntityUid User, EntityUid Target)
     {
         public readonly EntityUid User = User;
         public readonly EntityUid Target = Target;
 
+        // We set it to true by default for easier validation later.
         public bool Handled;
-        public bool Accessible = false;
+        public bool Accessible;
     }
 
     /// <summary>

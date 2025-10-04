@@ -2,6 +2,7 @@ using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
 using Content.Shared.Buckle.Components;
+using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Database;
 using Content.Shared.Hands;
@@ -82,10 +83,28 @@ public sealed class PullingSystem : EntitySystem
 
         SubscribeLocalEvent<PullableComponent, StrappedEvent>(OnBuckled);
         SubscribeLocalEvent<PullableComponent, BuckledEvent>(OnGotBuckled);
+        SubscribeLocalEvent<ActivePullerComponent, TargetHandcuffedEvent>(OnTargetHandcuffed);
 
         CommandBinds.Builder
             .Bind(ContentKeyFunctions.ReleasePulledObject, InputCmdHandler.FromDelegate(OnReleasePulledObject, handle: false))
             .Register<PullingSystem>();
+    }
+
+    private void OnTargetHandcuffed(Entity<ActivePullerComponent> ent, ref TargetHandcuffedEvent args)
+    {
+        if (!TryComp<PullerComponent>(ent, out var comp))
+            return;
+
+        if (comp.Pulling == null)
+            return;
+
+        if (CanPull(ent, comp.Pulling.Value, comp))
+            return;
+
+        if (!TryComp<PullableComponent>(comp.Pulling, out var pullableComp))
+            return;
+
+        TryStopPull(comp.Pulling.Value, pullableComp);
     }
 
     private void HandlePullStarted(EntityUid uid, HandsComponent component, PullStartedMessage args)
@@ -541,7 +560,11 @@ public sealed class PullingSystem : EntitySystem
             // This maximum has to be there because if the object is constrained too closely, the clamping goes backwards and asserts.
             // Internally, the joint length has been set to the distance between the pivots.
             // Add an additional 15cm (pretty arbitrary) to the maximum length for the hard limit.
-            joint.MaxLength = joint.Length + 0.15f;
+            // ES START
+            // we want a shorter (and more consistent) maxlength
+            // default to the pull length (which is the max you can pull from anyway)
+            joint.MaxLength = SharedInteractionSystem.ESPullRange;
+            // ES END
             joint.MinLength = 0f;
             // Set the spring stiffness to zero. The joint won't have any effect provided
             // the current length is beteen MinLength and MaxLength. At those limits, the
@@ -579,11 +602,8 @@ public sealed class PullingSystem : EntitySystem
         if (pullerUidNull == null)
             return true;
 
-        if (user != null && !_blocker.CanInteract(user.Value, pullableUid))
-            return false;
-
         var msg = new AttemptStopPullingEvent(user);
-        RaiseLocalEvent(pullableUid, msg, true);
+        RaiseLocalEvent(pullableUid, ref msg, true);
 
         if (msg.Cancelled)
             return false;
