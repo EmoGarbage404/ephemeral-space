@@ -20,3 +20,54 @@
     - SuitEVA
     - MonkeyWearable
     - WhitelistChameleon
+
+- type: entity
+  parent: ESBaseClothingOuterSpaceSuit
+  id: ESClothingOuterSpaceSuitEVAEngineering
+  name: engineering EVA suit
+  description: "An engineer's best friend: a delightfully yellow suit that protects the wearer from low pressure."
+  components:
+  - type: Sprite
+    sprite: _ES/Clothing/OuterClothing/SpaceSuits/eng_space.rsi
+  - type: Clothing
+    sprite: _ES/Clothing/OuterClothing/SpaceSuits/eng_space.rsi
+  - type: Tag
+    tags:
+    - SuitEVA
+    - ESSuitEVAEngi
+    - MonkeyWearable
+    - WhitelistChameleon
+
+- type: entity
+  parent: ESBaseClothingOuterSpaceSuit
+  id: ESClothingOuterSpaceSuitEVASecurity
+  name: security EVA suit
+  description: A lightly armored suit that provides protection from the vacuum of space.
+  components:
+  - type: Sprite
+    sprite: _ES/Clothing/OuterClothing/SpaceSuits/sec_space.rsi
+  - type: Clothing
+    sprite: _ES/Clothing/OuterClothing/SpaceSuits/sec_space.rsi
+  - type: Tag
+    tags:
+    - SuitEVA
+    - ESSuitEVASec
+    - MonkeyWearable
+    - WhitelistChameleon
+
+- type: entity
+  parent: ESBaseClothingOuterSpaceSuit
+  id: ESClothingOuterSpaceSuitEVACaptain
+  name: captain's EVA suit
+  description: A dignified space suit that protects the captain from space. It is slightly armored, despite its appearance.
+  components:
+  - type: Sprite
+    sprite: _ES/Clothing/OuterClothing/SpaceSuits/command_space.rsi
+  - type: Clothing
+    sprite: _ES/Clothing/OuterClothing/SpaceSuits/command_space.rsi
+  - type: Tag
+    tags:
+    - SuitEVA
+    - ESSuitEVACaptain
+    - MonkeyWearable
+    - WhitelistChameleon

@@ -21,6 +21,21 @@
     {
       "name": "inhand-right",
       "directions": 4
+    },
+    {
+      "name": "icon-on"
+    },
+    {
+      "name": "equipped-HELMET-on",
+      "directions": 4
+    },
+    {
+      "name": "inhand-left-on",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right-on",
+      "directions": 4
     }
   ]
 }

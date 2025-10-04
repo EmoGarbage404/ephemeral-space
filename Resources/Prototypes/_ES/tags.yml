@@ -20,7 +20,25 @@
   id: ESGunAttachmentBallisticBarrel
 
 - type: Tag
+  id: ESHelmetEVACaptain
+
+- type: Tag
+  id: ESHelmetEVAEngi
+
+- type: Tag
+  id: ESHelmetEVASec
+
+- type: Tag
   id: ESSilencer
+
+- type: Tag
+  id: ESSuitEVACaptain
+
+- type: Tag
+  id: ESSuitEVAEngi
+
+- type: Tag
+  id: ESSuitEVASec
 
 - type: Tag
   id: ESThrusterEngineGas

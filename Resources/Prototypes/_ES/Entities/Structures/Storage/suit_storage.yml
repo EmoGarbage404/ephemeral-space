@@ -1,5 +1,5 @@
 - type: entity
-  parent: BaseStructure
+  parent: BaseStructureDynamic
   id: ESBaseSuitStorage
   name: suit storage unit
   description: A specialty cabinet designed to store EVA gear when not in use.
@@ -26,9 +26,33 @@
   - type: ESItemMapper
     mappings:
       suit:
+      - containerId: suit_slot
+        state: fill-suit-command
+        whitelist:
+          tags: [ ESSuitEVACaptain ]
+      - containerId: suit_slot
+        state: fill-suit-sec
+        whitelist:
+          tags: [ ESSuitEVASec ]
+      - containerId: suit_slot
+        state: fill-suit-eng
+        whitelist:
+          tags: [ ESSuitEVAEngi ]
       - containerId: suit_slot # no whitelist for base fill state
         state: fill-suit-base
       helmet:
+      - containerId: helmet_slot
+        state: fill-helmet-command
+        whitelist:
+          tags: [ ESHelmetEVACaptain ]
+      - containerId: helmet_slot
+        state: fill-helmet-sec
+        whitelist:
+          tags: [ ESHelmetEVASec ]
+      - containerId: helmet_slot
+        state: fill-helmet-eng
+        whitelist:
+          tags: [ ESHelmetEVAEngi ]
       - containerId: helmet_slot # no whitelist for base fill state
         state: fill-helmet-base
       tank:

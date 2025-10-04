@@ -32,6 +32,15 @@
       "name": "fill-helmet-base"
     },
     {
+      "name": "fill-helmet-command"
+    },
+    {
+      "name": "fill-helmet-eng"
+    },
+    {
+      "name": "fill-helmet-sec"
+    },
+    {
       "name": "fill-tank-o2"
     },
     {

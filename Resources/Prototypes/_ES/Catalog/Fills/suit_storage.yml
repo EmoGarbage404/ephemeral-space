@@ -13,3 +13,51 @@
         id: OxygenTankFilled
       mask_slot:
         id: ClothingMaskBreath
+
+- type: entity
+  parent: ESBaseSuitStorage
+  id: ESSuitStorageFilledEVACaptain
+  suffix: ES, EVA, Captain
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      suit_slot:
+        id: ESClothingOuterSpaceSuitEVACaptain
+      helmet_slot:
+        id: ESClothingHeadHelmetSpaceCaptain
+      tank_slot:
+        id: OxygenTankFilled
+      mask_slot:
+        id: ClothingMaskBreath
+
+- type: entity
+  parent: ESBaseSuitStorage
+  id: ESSuitStorageFilledEVAEngineering
+  suffix: ES, EVA, Engineering
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      suit_slot:
+        id: ESClothingOuterSpaceSuitEVAEngineering
+      helmet_slot:
+        id: ESClothingHeadHelmetSpaceEngineering
+      tank_slot:
+        id: OxygenTankFilled
+      mask_slot:
+        id: ClothingMaskBreath
+
+- type: entity
+  parent: ESBaseSuitStorage
+  id: ESSuitStorageFilledEVASecurity
+  suffix: ES, EVA, Security
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      suit_slot:
+        id: ESClothingOuterSpaceSuitEVASecurity
+      helmet_slot:
+        id: ESClothingHeadHelmetSpaceSecurity
+      tank_slot:
+        id: OxygenTankFilled
+      mask_slot:
+        id: ClothingMaskBreath
