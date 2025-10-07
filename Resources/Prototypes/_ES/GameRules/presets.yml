@@ -6,6 +6,5 @@
   rules:
   - ESTroupeRuleCrew
   - ESTroupeRuleTraitor
-  - BasicStationEventScheduler # TODO: Create new event scheduler with more reasonable events.
-  - MeteorSwarmScheduler
+  - ESSchedulerRuleStationEvent
   - BasicRoundstartVariation

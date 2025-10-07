@@ -1,0 +1,112 @@
+- type: entity
+  parent: BaseGameRule
+  id: ESBaseStationEvent
+  abstract: true
+  components:
+  - type: StationEvent
+    startAudio: /Audio/Announcements/attention.ogg # Station events should always have announcements
+    earliestStart: 0
+    weight: 10
+  - type: GameRule
+    delay:
+      min: 5
+      max: 15
+
+- type: entity # Variant for events which have a delay between announcing and starting effects
+  parent: ESBaseStationEvent
+  id: ESBaseStationEventDelayed
+  abstract: true
+  components:
+  - type: GameRule
+    delay:
+      min: 55
+      max: 65
+
+# Event Prototypes
+- type: entity
+  parent: ESBaseStationEvent
+  id: ESStationEventBreakerFlip
+  components:
+  - type: BreakerFlipRule
+
+- type: entity
+  parent: ESBaseStationEvent
+  id: ESStationEventGasLeak
+  components:
+  - type: StationEvent
+    startAnnouncement: station-event-gas-leak-start-announcement
+    endAnnouncement: station-event-gas-leak-end-announcement
+  - type: GasLeakRule
+
+- type: entity
+  parent: ESBaseStationEvent
+  id: ESStationEventPowerGridCheck
+  components:
+  - type: StationEvent
+    startAnnouncement: station-event-power-grid-check-start-announcement
+    endAnnouncement: station-event-power-grid-check-end-announcement
+    startAudio:
+      path: /Audio/Announcements/power_off.ogg
+      params:
+        volume: -4
+    duration: 60
+    maxDuration: 120
+  - type: PowerGridCheckRule
+
+- type: entity
+  parent: ESBaseStationEvent
+  id: ESStationEventSolarFlare
+  components:
+  - type: StationEvent
+    startAnnouncement: station-event-solar-flare-start-announcement
+    endAnnouncement: station-event-solar-flare-end-announcement
+    duration: 120
+    maxDuration: 240
+  - type: SolarFlareRule
+    onlyJamHeadsets: true
+    affectedChannels:
+    - Common
+    extraChannels:
+    - Command
+    - Engineering
+    - Medical
+    - Science
+    - Security
+    - Service
+    - Supply
+    extraCount: 2
+    lightBreakChancePerSecond: 0.0003
+    doorToggleChancePerSecond: 0.001
+
+- type: entity
+  parent: ESBaseStationEventDelayed
+  id: ESStationEventVentClog
+  components:
+  - type: StationEvent
+    startAnnouncement: station-event-vent-clog-start-announcement
+  - type: VentClogRule
+
+- type: entity
+  parent: ESBaseStationEvent #Delayed
+  id: ESStationEventMeteorSwarm
+  components:
+  - type: MeteorSwarm
+    meteors:
+      ESMeteor: 1
+
+- type: entity
+  parent: ESBaseStationEventDelayed
+  id: ESStationEventSpaceDust
+  components:
+  - type: MeteorSwarm
+    announcement: station-event-space-dust-start-announcement
+    announcementSound: null
+    nonDirectional: true
+    meteors:
+      MeteorSpaceDust: 1
+    waves:
+      min: 2
+      max: 3
+    meteorsPerWave:
+      min: 8
+      max: 12

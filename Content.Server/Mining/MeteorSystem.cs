@@ -6,6 +6,10 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Player;
+// ES START
+using Content.Shared.Maps;
+using Robust.Shared.Random;
+// ES END
 
 namespace Content.Server.Mining;
 
@@ -15,6 +19,11 @@ public sealed class MeteorSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly DestructibleSystem _destructible = default!;
     [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
+// ES START
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly TileSystem _tile = default!;
+    [Dependency] private readonly TurfSystem _turf = default!;
+// ES END
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -62,4 +71,22 @@ public sealed class MeteorSystem : EntitySystem
         if (!TerminatingOrDeleted(args.OtherEntity))
             component.HitList.Add(args.OtherEntity);
     }
+    // ES START
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<MeteorComponent, TransformComponent>();
+        while (query.MoveNext(out _, out var comp, out var xform))
+        {
+            if (!_turf.TryGetTileRef(xform.Coordinates, out var turfRef))
+                continue;
+
+            if (!_random.Prob(comp.TileBreakChance * frameTime))
+                continue;
+
+            _tile.DeconstructTile(turfRef.Value);
+        }
+    }
+    // ES END
 }

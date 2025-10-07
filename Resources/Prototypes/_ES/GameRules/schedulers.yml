@@ -1,0 +1,19 @@
+- type: entity
+  parent: BaseGameRule
+  id: ESSchedulerRuleStationEvent
+  components:
+  - type: BasicStationEventScheduler
+    scheduledGameRules:
+      tableId: ESStationEvents
+
+- type: entityTable
+  id: ESStationEvents
+  table:
+    all:
+    - id: ESStationEventBreakerFlip
+    - id: ESStationEventGasLeak
+    - id: ESStationEventPowerGridCheck
+    - id: ESStationEventSolarFlare
+    - id: ESStationEventVentClog
+    - id: ESStationEventMeteorSwarm
+    - id: ESStationEventSpaceDust

@@ -1,0 +1,43 @@
+- type: entity
+  parent: BaseMeteor
+  id: ESMeteor
+  suffix: ES
+  components:
+  - type: Sprite
+    state: big
+    noRot: true
+  - type: Explosive
+    totalIntensity: 75
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.15
+        density: 100
+        hard: false
+        layer:
+        - LargeMobLayer
+        mask:
+        - Impassable
+        - BulletImpassable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 1250
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:ExplodeBehavior
+  - type: WarpPoint
+    follow: true
+    location: meteor
+    blacklist:
+      tags:
+      - GhostOnlyWarp
+  - type: Tag
+    tags: [ GhostOnlyWarp ]

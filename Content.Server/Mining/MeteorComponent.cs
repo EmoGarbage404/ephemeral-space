@@ -22,4 +22,12 @@ public sealed partial class MeteorComponent : Component
     /// </summary>
     [DataField]
     public HashSet<EntityUid> HitList = new();
+
+// ES START
+    /// <summary>
+    /// Chance to break a tile per second, scaled with frametime.
+    /// </summary>
+    [DataField]
+    public float TileBreakChance = 15f;
+// ES END
 }
