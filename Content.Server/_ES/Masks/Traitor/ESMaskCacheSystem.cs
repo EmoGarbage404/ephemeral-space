@@ -4,7 +4,6 @@ using Content.Shared._ES.Auditions.Components;
 using Content.Shared._ES.Masks.Traitor;
 using Content.Shared._ES.Masks.Traitor.Components;
 using Content.Shared._ES.SpawnRegion;
-using Content.Shared.Physics;
 using Robust.Shared.Utility;
 
 namespace Content.Server._ES.Masks.Traitor;
@@ -28,7 +27,12 @@ public sealed class ESMaskCacheSystem : ESSharedMaskCacheSystem
         if (!TryComp<ESCharacterComponent>(ent, out var character))
             return;
 
-        if (!_spawnRegion.TryGetRandomAreaCoords(ent.Comp.Region, character.Station, out var coords, CollisionGroup.MachineLayer))
+        if (!_spawnRegion.TryGetRandomCoordsInRegion(
+                ent.Comp.Region,
+                character.Station,
+                out var coords,
+                checkPlayerLOS: false,
+                minPlayerDistance: 0f))
         {
             Log.Debug("Failed to find spawn region!");
             return;
