@@ -36,7 +36,7 @@
   - type: StationEvent
     startAnnouncement: station-event-gas-leak-start-announcement
     endAnnouncement: station-event-gas-leak-end-announcement
-  - type: GasLeakRule
+  - type: ESGasLeakRule
 
 - type: entity
   parent: ESBaseStationEvent
@@ -87,7 +87,7 @@
   - type: VentClogRule
 
 - type: entity
-  parent: ESBaseStationEvent #Delayed
+  parent: ESBaseStationEventDelayed
   id: ESStationEventMeteorSwarm
   components:
   - type: MeteorSwarm
