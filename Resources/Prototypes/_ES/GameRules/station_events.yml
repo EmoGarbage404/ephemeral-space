@@ -90,6 +90,9 @@
   parent: ESBaseStationEventDelayed
   id: ESStationEventMeteorSwarm
   components:
+  - type: StationEvent
+    startAudio: null
+    earliestStart: 30
   - type: MeteorSwarm
     meteors:
       ESMeteor: 1
@@ -98,6 +101,9 @@
   parent: ESBaseStationEventDelayed
   id: ESStationEventSpaceDust
   components:
+  - type: StationEvent
+    startAudio: null
+    earliestStart: 30
   - type: MeteorSwarm
     announcement: station-event-space-dust-start-announcement
     announcementSound: null
