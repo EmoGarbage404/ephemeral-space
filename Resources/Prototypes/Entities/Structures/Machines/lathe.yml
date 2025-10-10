@@ -292,6 +292,10 @@
       map: ["enum.PowerDeviceVisualLayers.Powered"]
     - state: panel
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
+# ES Start
+    - state: inserting
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+# ES End
   - type: Machine
     board: CircuitImprinterMachineCircuitboard
   - type: Lathe
