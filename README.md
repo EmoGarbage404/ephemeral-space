@@ -4,7 +4,7 @@
 
 </div>
 
-Ephemeral Space is a fork of [Space Station 14](https://github.com/space-wizards/space-station-14), with a focus on randomized characters, ship gameplay, and a dark atmosphere.
+Ephemeral Space is a fork of [Space Station 14](https://github.com/space-wizards/space-station-14), with a focus on  social deduction, crew-focused conflict, and experimental new systems, set on the stage of an old theater at the end of time.
 
 Space Station 14 is a remake of SS13 that runs on [Robust Toolbox](https://github.com/space-wizards/RobustToolbox), our homegrown engine written in C#.
 
@@ -14,7 +14,7 @@ Space Station 14 is a remake of SS13 that runs on [Robust Toolbox](https://githu
 
 ### Ephemeral Space
 
-[Discord](https://discord.gg/jNFV9ap2nX)
+[Discord](https://discord.gg/jNFV9ap2nX) | [Documentation](https://ephemeralspace.github.io/docs/)
 
 ### Space Station 14
 
