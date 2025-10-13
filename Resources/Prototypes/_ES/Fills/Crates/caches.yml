@@ -1,3 +1,4 @@
+# Base prototype
 - type: entity
   parent: CrateGenericSteel
   id: ESCrateCache
@@ -6,6 +7,49 @@
   suffix: ES
   abstract: true
 
+# Assassin
+- type: entity
+  parent: ESCrateCache
+  id: ESCrateCacheTraitorAssassin
+  suffix: ES, Assassin Cache
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage:
+        tableId: ESTraitorCacheAssassin
+
+- type: entityTable
+  id: ESTraitorCacheAssassin
+  table:
+    all:
+    - id: ESWeaponPistol9mmSilenced
+    - id: ESMagazine9mm
+      amount: 2
+    - id: ESSleepyPen
+      amount: 2
+    - id: EmpGrenade
+
+# Infiltrator
+- type: entity
+  parent: ESCrateCache
+  id: ESCrateCacheTraitorInfiltrator
+  suffix: ES, Infiltrator Cache
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage:
+        tableId: ESTraitorCacheInfiltrator
+
+- type: entityTable
+  id: ESTraitorCacheInfiltrator
+  table:
+    all:
+    - id: ClothingBackpackChameleonFill
+    - id: ESEmag
+    - id: SmokeGrenade
+      amount: 2
+
+# Marauder
 - type: entity
   parent: ESCrateCache
   id: ESCrateCacheTraitorMarauder
@@ -13,13 +57,13 @@
   components:
   - type: EntityTableContainerFill
     containers:
-      entity_storage: !type:NestedSelector
+      entity_storage:
         tableId: ESTraitorCacheMarauder
 
 - type: entityTable
   id: ESTraitorCacheMarauder
-  table: !type:AllSelector
-    children:
+  table:
+    all:
     - id: ESWeaponRevolver357
     - id: ESSpeedLoader357
       amount: 2
