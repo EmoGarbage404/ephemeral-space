@@ -24,7 +24,7 @@ public abstract partial class ESSharedVoteSystem : EntitySystem
     /// <inheritdoc/>
     public override void Initialize()
     {
-        SubscribeLocalEvent<ESVoteComponent, ComponentStartup>(OnVoteStartup);
+        SubscribeLocalEvent<ESVoteComponent, MapInitEvent>(OnVoteMapInit);
 
         SubscribeLocalEvent<ESVoterComponent, PlayerAttachedEvent>(OnVoterPlayerAttached);
         SubscribeLocalEvent<ESVoterComponent, PlayerDetachedEvent>(OnVoterPlayerDetached);
@@ -38,7 +38,7 @@ public abstract partial class ESSharedVoteSystem : EntitySystem
         InitializeResults();
     }
 
-    private void OnVoteStartup(Entity<ESVoteComponent> ent, ref ComponentStartup args)
+    private void OnVoteMapInit(Entity<ESVoteComponent> ent, ref MapInitEvent args)
     {
         ent.Comp.EndTime = _timing.CurTime + ent.Comp.Duration;
 
@@ -97,7 +97,6 @@ public abstract partial class ESSharedVoteSystem : EntitySystem
             return;
         var ev = new ESGetVoteOptionsEvent();
         RaiseLocalEvent(ent, ref ev);
-        DebugTools.Assert(ev.Options.Count > 0, $"Vote {ToPrettyString(ent)} has no options!");
         ent.Comp.Votes = ev.Options.Select(o => (o, new HashSet<NetEntity>())).ToDictionary();
         Dirty(ent);
     }
@@ -115,11 +114,11 @@ public abstract partial class ESSharedVoteSystem : EntitySystem
 
         // Random selection for tiebreak
         var result = _random.Pick(winningOptions);
+        SendVoteResultAnnouncement(ent, result);
 
         var ev = new ESVoteCompletedEvent(result);
         RaiseLocalEvent(ent, ref ev);
 
-        SendVoteResultAnnouncement(ent, result);
         PredictedQueueDel(ent);
     }
 
