@@ -31,4 +31,10 @@ public sealed partial class ESEntityPrototypeVoteOption : ESVoteOption
     {
         return Entity.GetHashCode();
     }
+
+    public ESEntityPrototypeVoteOption(EntityPrototype prototype)
+    {
+        DisplayString = prototype.Name;
+        Entity = prototype;
+    }
 }

@@ -1,6 +1,7 @@
 - type: entity
   parent: BaseGameRule
   id: ESBaseStationEvent
+  name: Unnamed Station Event
   abstract: true
   components:
   - type: StationEvent
@@ -26,12 +27,14 @@
 - type: entity
   parent: ESBaseStationEvent
   id: ESStationEventBreakerFlip
+  name: Breaker Flip
   components:
   - type: BreakerFlipRule
 
 - type: entity
   parent: ESBaseStationEvent
   id: ESStationEventGasLeak
+  name: Gas Leak
   components:
   - type: StationEvent
     startAnnouncement: station-event-gas-leak-start-announcement
@@ -41,6 +44,7 @@
 - type: entity
   parent: ESBaseStationEvent
   id: ESStationEventPowerGridCheck
+  name: Power Grid Check
   components:
   - type: StationEvent
     startAnnouncement: station-event-power-grid-check-start-announcement
@@ -56,6 +60,7 @@
 - type: entity
   parent: ESBaseStationEvent
   id: ESStationEventSolarFlare
+  name: Solar Flare
   components:
   - type: StationEvent
     startAnnouncement: station-event-solar-flare-start-announcement
@@ -81,6 +86,7 @@
 - type: entity
   parent: ESBaseStationEventDelayed
   id: ESStationEventVentClog
+  name: Vent Clog
   components:
   - type: StationEvent
     startAnnouncement: station-event-vent-clog-start-announcement
@@ -89,6 +95,7 @@
 - type: entity
   parent: ESBaseStationEventDelayed
   id: ESStationEventMeteorSwarm
+  name: Meteor Swarm
   components:
   - type: StationEvent
     startAudio: null
@@ -100,6 +107,7 @@
 - type: entity
   parent: ESBaseStationEventDelayed
   id: ESStationEventSpaceDust
+  name: Space Dust
   components:
   - type: StationEvent
     startAudio: null

@@ -42,11 +42,6 @@ public abstract partial class ESSharedVoteSystem : EntitySystem
     {
         ent.Comp.EndTime = _timing.CurTime + ent.Comp.Duration;
 
-        var ev = new ESGetVoteOptionsEvent();
-        RaiseLocalEvent(ent, ref ev);
-        DebugTools.Assert(ev.Options.Count > 0, $"Vote {ToPrettyString(ent)} has no options!");
-        ent.Comp.Votes = ev.Options.Select(o => (o, new HashSet<NetEntity>())).ToDictionary();
-
         // Add a session override for all the present voters
         var query = EntityQueryEnumerator<ESVoterComponent, ActorComponent>();
         while (query.MoveNext(out _, out var actor))
@@ -54,7 +49,7 @@ public abstract partial class ESSharedVoteSystem : EntitySystem
             _pvsOverride.AddSessionOverride(ent, actor.PlayerSession);
         }
 
-        Dirty(ent);
+        RefreshVoteOptions(ent.AsNullable());
     }
 
     private void OnVoterPlayerAttached(Entity<ESVoterComponent> ent, ref PlayerAttachedEvent args)
@@ -94,6 +89,17 @@ public abstract partial class ESSharedVoteSystem : EntitySystem
                 votes.Remove(voteNetEnt);
         }
         Dirty(voteUid.Value, voteComp);
+    }
+
+    public void RefreshVoteOptions(Entity<ESVoteComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return;
+        var ev = new ESGetVoteOptionsEvent();
+        RaiseLocalEvent(ent, ref ev);
+        DebugTools.Assert(ev.Options.Count > 0, $"Vote {ToPrettyString(ent)} has no options!");
+        ent.Comp.Votes = ev.Options.Select(o => (o, new HashSet<NetEntity>())).ToDictionary();
+        Dirty(ent);
     }
 
     public void EndVote(Entity<ESVoteComponent> ent)

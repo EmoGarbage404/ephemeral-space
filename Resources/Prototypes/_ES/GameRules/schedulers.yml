@@ -1,3 +1,4 @@
+# Ready-Made Schedulers
 - type: entity
   parent: BaseGameRule
   id: ESSchedulerRuleStationEvent
@@ -6,6 +7,26 @@
     scheduledGameRules:
       tableId: ESStationEvents
 
+- type: entity
+  parent: BaseGameRule
+  id: ESSchedulerRuleStationEventVote
+  components:
+  - type: ESEventVoteScheduler
+    eventTable:
+      tableId: ESStationEvents
+    votePrototype: ESVoteStationEvent
+
+- type: entity # Vote Entity (for above)
+  id: ESVoteStationEvent
+  name: Next Station Event...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ESVote
+    queryString: es-voter-query-string-station-event
+    duration: 60
+  - type: ESEventVote
+
+# General Tables for Station Events
 - type: entityTable
   id: ESStationEvents
   table:
