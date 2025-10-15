@@ -40,7 +40,7 @@ public sealed class ESEventVoteSchedulerSystem : GameRuleSystem<ESEventVoteSched
     {
         base.ActiveTick(uid, component, gameRule, frameTime);
 
-        if (component.NextEventTime < Timing.CurTime)
+        if (Timing.CurTime < component.NextEventTime)
             return;
         component.NextEventTime += RobustRandom.Next(component.MinEventDelay, component.MaxEventDelay);
 
