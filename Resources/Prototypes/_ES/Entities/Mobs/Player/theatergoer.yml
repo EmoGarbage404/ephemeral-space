@@ -25,6 +25,7 @@
     context: "human"
   - type: Examiner
   - type: ESTheatergoerMarker
+  - type: ESUsernameEntityName
   - type: Buckle
   - type: Hands
     hands:

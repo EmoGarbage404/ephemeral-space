@@ -1,0 +1,75 @@
+- type: entity
+  parent:
+  - Incorporeal
+  - BaseMob
+  id: ESMobStagehand
+  name: stagehand
+  description: Every show needs a loyal crew in the back making it tick. Today, that person is you.
+  components:
+  - type: Sprite
+    sprite: _ES/Mobs/Ghosts/theatergoer.rsi
+    layers:
+    - state: body
+      shader: unshaded
+  - type: ContentEye
+    maxZoom: 1.44,1.44
+  - type: Eye
+    drawFov: false
+  - type: Input
+    context: "ghost"
+  - type: Examiner
+    skipChecks: true
+  - type: ESUsernameEntityName
+  - type: ShowElectrocutionHUD
+  - type: ShowAntagIcons
+  - type: UserInterface
+    interfaces:
+      enum.ESVoterUiKey.Key:
+        type: ESVoterBui
+  - type: IntrinsicUI
+    uis:
+      enum.ESVoterUiKey.Key:
+        toggleAction: ESActionStagehandVote
+  - type: ESVoter
+  - type: ESInherentActions
+    actions:
+    - ESActionStagehandChangeLighting
+  - type: IntrinsicRadioReceiver
+  - type: ActiveRadio
+    receiveAllChannels: true
+    globalReceive: true
+  - type: ESInherentLight
+    lightPrototype: ESMobObserverInherentLight
+    enabled: false
+  - type: Tag
+    tags:
+    - BypassInteractionRangeChecks
+
+- type: entity
+  parent: BaseMentalAction
+  id: ESActionStagehandVote
+  name: Vote
+  description: Control the flow of the round alongside other stagehands.
+  components:
+  - type: Action
+    icon:
+      sprite: _ES/Actions/stagehands.rsi
+      state: ballot
+    checkCanInteract: false
+  - type: InstantAction
+    event: !type:ToggleIntrinsicUIEvent
+      key: enum.ESVoterUiKey.Key
+
+- type: entity
+  parent: BaseMentalAction
+  id: ESActionStagehandChangeLighting
+  name: Change Lighting
+  description: Changes the lighting to help you see in the dark.
+  components:
+  - type: Action
+    icon:
+      sprite: Objects/Power/light_bulb.rsi
+      state: normal
+    clientExclusive: true
+  - type: InstantAction
+    event: !type:ToggleLightingActionEvent
