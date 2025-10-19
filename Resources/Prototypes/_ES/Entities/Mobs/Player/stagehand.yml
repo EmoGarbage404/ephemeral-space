@@ -19,6 +19,7 @@
     context: "ghost"
   - type: Examiner
     skipChecks: true
+  - type: ESStagehand
   - type: ESUsernameEntityName
   - type: ShowElectrocutionHUD
   - type: ShowAntagIcons
@@ -34,6 +35,7 @@
   - type: ESInherentActions
     actions:
     - ESActionStagehandChangeLighting
+    - ESActionStagehandToggleFOV
   - type: IntrinsicRadioReceiver
   - type: ActiveRadio
     receiveAllChannels: true
@@ -73,3 +75,20 @@
     clientExclusive: true
   - type: InstantAction
     event: !type:ToggleLightingActionEvent
+
+- type: entity
+  parent: BaseMentalAction
+  id: ESActionStagehandToggleFOV
+  name: Toggle FoV
+  description: Toggles field-of-view in order to see what players see.
+  components:
+  - type: Action
+    icon:
+      sprite: _ES/Actions/stagehands.rsi
+      state: fov-off
+    iconOn: # BUG: Currently does not work due to network issues with toggling on client
+      sprite: _ES/Actions/stagehands.rsi
+      state: fov-on
+    clientExclusive: true
+  - type: InstantAction
+    event: !type:ToggleFoVActionEvent

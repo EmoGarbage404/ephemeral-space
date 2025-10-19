@@ -8,6 +8,9 @@ using Content.Shared.Movement.Components;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Player;
 using Robust.Shared.Serialization;
+// ES START
+using Content.Shared._ES.Stagehand.Components;
+// ES END
 
 namespace Content.Shared.Movement.Systems;
 
@@ -105,7 +108,9 @@ public abstract class SharedContentEyeSystem : EntitySystem
         if (args.SenderSession.AttachedEntity is not { } player)
             return;
 
-        if (!HasComp<GhostComponent>(player) && !_admin.IsAdmin(player))
+// ES START
+        if (!HasComp<GhostComponent>(player) && !_admin.IsAdmin(player) && !HasComp<ESStagehandComponent>(player))
+// ES END
             return;
 
         if (TryComp<EyeComponent>(player, out var eyeComp))

@@ -9,6 +9,12 @@
   "states": [
     {
       "name": "ballot"
+    },
+    {
+      "name": "fov-on"
+    },
+    {
+      "name": "fov-off"
     }
   ]
 }
