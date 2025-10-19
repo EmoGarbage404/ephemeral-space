@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from tgstation at https://github.com/tgstation/tgstation/pull/69842/commits/d8138946b0ed06fced522729ac8eaa0596864329 edited by Skarletto (github), edited by Emisse for ss14, hamster version edited by Ghagliiarghii (github)",
+  "copyright": "Made by Flareguy for Ephemeral Space, based on sprites from tgstation at commit https://github.com/tgstation/tgstation/commit/6665eec76c98a4f3f89bebcd10b34b47dcc0b8ae",
   "size": {
     "x": 32,
     "y": 32
@@ -9,10 +9,6 @@
   "states": [
     {
       "name": "equipped-HELMET",
-      "directions": 4
-    },
-    {
-      "name": "equipped-HELMET-hamster",
       "directions": 4
     },
     {
