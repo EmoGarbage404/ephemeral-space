@@ -17,6 +17,8 @@
     drawFov: false
   - type: Input
     context: "ghost"
+  - type: Visibility
+    layer: 2 #ghost vis layer
   - type: Examiner
     skipChecks: true
   - type: ESStagehand
