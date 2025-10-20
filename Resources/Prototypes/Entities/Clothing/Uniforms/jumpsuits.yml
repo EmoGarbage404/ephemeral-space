@@ -303,7 +303,9 @@
     sprite: Clothing/Uniforms/Jumpsuit/engineering_hazard.rsi
 
 - type: entity
-  parent: [ClothingUniformBase, BaseCommandContraband, ClothingUniformFoldableBase]
+# ES START - Remove Foldable
+  parent: [ClothingUniformBase, BaseCommandContraband ]
+# ES END
   id: ClothingUniformJumpsuitHoP
   name: head of personnel's jumpsuit
   description: Rather bland and inoffensive. Perfect for vanishing off the face of the universe.
