@@ -1,22 +1,17 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server._ES.Auditions;
-using Content.Server._ES.Masks.Components;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
-using Content.Server.Mind;
 using Content.Server.Objectives;
-using Content.Server.Roles;
 using Content.Server.Roles.Jobs;
 using Content.Shared._ES.Masks;
-using Content.Shared.Administration;
+using Content.Shared._ES.Masks.Components;
 using Content.Shared.Chat;
 using Content.Shared.EntityTable;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind;
-using Content.Shared.Mind.Components;
 using Content.Shared.Random.Helpers;
-using Content.Shared.Verbs;
 using Robust.Server.Player;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -33,9 +28,7 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
     [Dependency] private readonly EntityTableSystem _entityTable = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly JobSystem _job = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly ObjectivesSystem _objectives = default!;
-    [Dependency] private readonly RoleSystem _role = default!;
 
     private static readonly EntProtoId<ESMaskRoleComponent> MindRole = "ESMindRoleMask";
 
@@ -48,7 +41,6 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
 
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawnComplete);
         SubscribeLocalEvent<RulePlayerJobsAssignedEvent>(OnRulePlayerJobsAssigned);
-        SubscribeLocalEvent<GetVerbsEvent<Verb>>(GetVerbs);
     }
 
     private void OnMapInit(Entity<ESTroupeRuleComponent> ent, ref MapInitEvent args)
@@ -56,7 +48,7 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
         var troupe = PrototypeManager.Index(ent.Comp.Troupe);
         var objectives = _entityTable.GetSpawns(troupe.Objectives);
 
-        var dummyMind = _mind.CreateMind(null);
+        var dummyMind = Mind.CreateMind(null);
 
         foreach (var objective in objectives)
         {
@@ -77,49 +69,6 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
     private void OnRulePlayerJobsAssigned(RulePlayerJobsAssignedEvent args)
     {
         AssignPlayersToTroupe(args.Players.ToList());
-    }
-
-    private void GetVerbs(GetVerbsEvent<Verb> args)
-    {
-        if (!TryComp<ActorComponent>(args.User, out var actor))
-            return;
-
-        var player = actor.PlayerSession;
-
-        if (!AdminManager.HasAdminFlag(player, AdminFlags.Fun))
-            return;
-
-        if (!HasComp<MindContainerComponent>(args.Target) ||
-            !TryComp<ActorComponent>(args.Target, out var actorComp))
-            return;
-
-        foreach (var mask in PrototypeManager.EnumeratePrototypes<ESMaskPrototype>())
-        {
-            if (mask.Abstract)
-                continue;
-
-            var verb = new Verb
-            {
-                Category = ESMask,
-                Text = Loc.GetString("es-verb-apply-mask-name",
-                    ("name", Loc.GetString(mask.Name)),
-                    ("troupe", Loc.GetString(PrototypeManager.Index(mask.Troupe).Name))),
-                Message = Loc.GetString("es-verb-apply-mask-desc", ("mask", Loc.GetString(mask.Name))),
-                Priority = HashCode.Combine(mask.Troupe, mask.Name),
-                ConfirmationPopup = true,
-                Act = () =>
-                {
-                    if (!_mind.TryGetMind(actorComp.PlayerSession, out var mind, out var mindComp))
-                        return;
-                    // TODO: We may need to associate these with a troupe rule ent in the future.
-                    // For now, this is just for testing and doesn't need to necessarily support everything
-                    // In a future ideal implementation, every troupe should have an associated "minimum viable rule"
-                    // such that if a given troupe does not have a corresponding rule, one can be created.
-                    ApplyMask((mind, mindComp), mask, null);
-                },
-            };
-            args.Verbs.Add(verb);
-        }
     }
 
     public void AssignPlayersToTroupe(List<ICommonSession> players)
@@ -154,13 +103,13 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
             var player = _random.PickAndTake(filteredPlayers);
             players.Remove(player);
 
-            if (!_mind.TryGetMind(player, out var mind, out var mindComp))
+            if (!Mind.TryGetMind(player, out var mind, out var mindComp))
             {
                 Log.Warning($"Failed to get mind for session {player}");
                 continue;
             }
 
-            if (!TryGetMask((mind, mindComp), troupe, out var mask))
+            if (!TryGetAssignableMaskFromTroupe((mind, mindComp), troupe, out var mask))
             {
                 Log.Warning($"Failed to get mask for session {player} on troupe {troupe.ID} ({ToPrettyString(ent)}");
                 continue;
@@ -196,7 +145,7 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
 
     public bool IsPlayerValid(ESTroupePrototype troupe, ICommonSession player)
     {
-        if (!_mind.TryGetMind(player, out var mind, out _))
+        if (!Mind.TryGetMind(player, out var mind, out _))
             return false;
 
         // BUG: MindTryGetJobId doesn't have a NotNullWhen attribute on the out param.
@@ -209,7 +158,7 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
         return true;
     }
 
-    public bool TryGetMask(Entity<MindComponent> mind, ESTroupePrototype troupe, [NotNullWhen(true)] out ProtoId<ESMaskPrototype>? mask)
+    public bool TryGetAssignableMaskFromTroupe(Entity<MindComponent> mind, ESTroupePrototype troupe, [NotNullWhen(true)] out ProtoId<ESMaskPrototype>? mask)
     {
         mask = null;
 
@@ -232,16 +181,21 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
         return true;
     }
 
-    public void ApplyMask(Entity<MindComponent> mind, ProtoId<ESMaskPrototype> maskId, Entity<ESTroupeRuleComponent>? troupe)
+    public override void ApplyMask(Entity<MindComponent> mind, ProtoId<ESMaskPrototype> maskId, Entity<ESTroupeRuleComponent>? troupe)
     {
         var mask = PrototypeManager.Index(maskId);
 
-        _role.MindAddRole(mind, MindRole, mind, true);
+        // Only exists because the AddRole API does not return the newly added role (why???)
+        Role.MindAddRole(mind, MindRole, mind, true);
+        if (!Role.MindHasRole<ESMaskRoleComponent>(mind.AsNullable(), out var role))
+            throw new Exception($"Failed to add mind role to {Mind.MindOwnerLoggingString(mind)} for mask {maskId}");
+        var roleComp = role.Value.Comp2;
+        roleComp.Mask = maskId;
+        Dirty(role.Value, roleComp);
 
-        var objectives = _entityTable.GetSpawns(mask.Objectives);
-        foreach (var objective in objectives)
+        foreach (var objective in _entityTable.GetSpawns(mask.Objectives))
         {
-            _mind.TryAddObjective(mind, mind, objective);
+            Mind.TryAddObjective(mind, mind, objective);
         }
 
         var msg = Loc.GetString("es-mask-selected-chat-message",
@@ -265,7 +219,7 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
 
         foreach (var objective in troupe.Value.Comp.AssociatedObjectives)
         {
-            _mind.AddObjective(mind, mind, objective);
+            Mind.AddObjective(mind, mind, objective);
         }
     }
 }
