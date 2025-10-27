@@ -4,7 +4,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._ES.Nuke;
 
-public sealed class ESDiskTrackerSystem : EntitySystem
+public sealed class ESCryptoNukeSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _userInterface = default!;
@@ -12,10 +12,10 @@ public sealed class ESDiskTrackerSystem : EntitySystem
     /// <inheritdoc/>
     public override void Initialize()
     {
-        SubscribeLocalEvent<ESDiskTrackerConsoleComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<ESCryptoNukeConsoleComponent, MapInitEvent>(OnMapInit);
     }
 
-    private void OnMapInit(Entity<ESDiskTrackerConsoleComponent> ent, ref MapInitEvent args)
+    private void OnMapInit(Entity<ESCryptoNukeConsoleComponent> ent, ref MapInitEvent args)
     {
         ent.Comp.NextUpdateTime = _timing.CurTime;
     }
@@ -24,21 +24,21 @@ public sealed class ESDiskTrackerSystem : EntitySystem
     {
         base.Update(frameTime);
 
-        var query = EntityQueryEnumerator<ESDiskTrackerConsoleComponent, UserInterfaceComponent>();
+        var query = EntityQueryEnumerator<ESCryptoNukeConsoleComponent, UserInterfaceComponent>();
         while (query.MoveNext(out var uid, out var tracker, out var ui))
         {
             if (_timing.CurTime < tracker.NextUpdateTime)
                 continue;
             tracker.NextUpdateTime += tracker.UpdateRate;
 
-            var state = new ESDiskTrackerConsoleBuiState();
+            var state = new ESCryptoNukeConsoleBuiState();
             var diskQuery = EntityQueryEnumerator<NukeDiskComponent, TransformComponent>();
             while (diskQuery.MoveNext(out _, out _, out var xform))
             {
                 state.DiskLocations.Add(GetNetCoordinates(xform.Coordinates));
             }
 
-            _userInterface.SetUiState((uid, ui), ESDiskTrackerConsoleUiKey.Key, state);
+            _userInterface.SetUiState((uid, ui), ESCryptoNukeConsoleUiKey.Key, state);
         }
     }
 }

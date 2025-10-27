@@ -301,6 +301,12 @@
       state: security_key
     - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
       state: generic_panel_open
-  - type: ESDiskTrackerConsole
+  - type: ESCryptoNukeConsole
   - type: PointLight
     color: "#ff0000"
+  - type: UserInterface
+    interfaces:
+      enum.ESCryptoNukeConsoleUiKey.Key:
+        type: ESCargoRequestConsoleBui # TODO: Placeholder
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
