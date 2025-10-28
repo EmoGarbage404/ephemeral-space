@@ -304,9 +304,11 @@
   - type: ESCryptoNukeConsole
   - type: PointLight
     color: "#ff0000"
+  - type: ActivatableUI
+    key: enum.ESCryptoNukeConsoleUiKey.Key
   - type: UserInterface
     interfaces:
       enum.ESCryptoNukeConsoleUiKey.Key:
-        type: ESCargoRequestConsoleBui # TODO: Placeholder
+        type: ESCryptoNukeConsoleBui
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface
