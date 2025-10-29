@@ -20,14 +20,15 @@ public sealed partial class ESCryptoNukeConsoleWindow : FancyWindow
         NavMap.TileColor = Color.Black;
     }
 
-    public void Update(EntityUid owner, ESCryptoNukeConsoleBuiState state)
+    public void Update(EntityUid owner, ESCryptoNukeConsoleBuiState? state = null)
     {
         NavMap.MapUid = _entityManager.GetComponent<TransformComponent>(owner).GridUid;
-        NavMap.TrackedCoordinates = state.DiskLocations
-            .Select(c => (_entityManager.GetCoordinates(c), (true, Color.White)))
-            .ToDictionary();
 
-        NavMap.ForceNavMapUpdate();
+        if (state != null)
+        {
+            NavMap.TrackedCoordinates = state.DiskLocations
+                .Select(c => (_entityManager.GetCoordinates(c), (true, Color.White)))
+                .ToDictionary();
+        }
     }
 }
-

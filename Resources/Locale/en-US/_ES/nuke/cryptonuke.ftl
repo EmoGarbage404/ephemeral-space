@@ -1,1 +1,1 @@
-es-cryptonuke-ui-window-title = nuclear cryptographic terminal
+es-cryptonuke-ui-window-title = Nuclear Cryptographic Terminal

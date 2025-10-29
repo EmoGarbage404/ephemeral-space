@@ -14,6 +14,7 @@ public sealed class ESCryptoNukeConsoleBui(EntityUid owner, Enum uiKey) : BoundU
         base.Open();
 
         _window = this.CreateWindow<ESCryptoNukeConsoleWindow>();
+        _window.Update(Owner);
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
