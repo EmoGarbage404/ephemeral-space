@@ -1,0 +1,15 @@
+<controls:ESCryptoNukeConsoleWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client._ES.Nuke.Ui"
+    xmlns:ui="clr-namespace:Content.Client.Pinpointer.UI"
+    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    Title="{Loc 'es-cryptonuke-ui-window-title'}">
+    <BoxContainer Orientation="Horizontal" Margin="15" HorizontalExpand="True">
+        <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+            <PanelContainer.PanelOverride>
+                <graphics:StyleBoxFlat BackgroundColor="#000000"/>
+            </PanelContainer.PanelOverride>
+            <ui:NavMapControl Name="NavMap" VerticalExpand="True" HorizontalExpand="True"/>
+        </PanelContainer>
+    </BoxContainer>
+</controls:ESCryptoNukeConsoleWindow>

@@ -1,13 +1,15 @@
-using Content.Shared._ES.Masks;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._ES.Masks.Components;
+namespace Content.Shared._ES.Masks.Components;
 
 /// <summary>
 /// Handles assigning masks to players when they join into the round.
 /// </summary>
+/// <remarks>
+/// Logic only present on server.
+/// </remarks>
 [RegisterComponent]
-[Access(typeof(ESMaskSystem))]
+[Access(typeof(ESSharedMaskSystem))]
 public sealed partial class ESTroupeRuleComponent : Component
 {
     /// <summary>
