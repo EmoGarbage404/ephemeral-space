@@ -95,6 +95,9 @@
   - type: Wires
     boardName: wires-board-name-computer
     layoutId: Computer
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
 
 # Computers
 - type: entity
