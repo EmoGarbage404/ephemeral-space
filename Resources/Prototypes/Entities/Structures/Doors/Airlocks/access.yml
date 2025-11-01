@@ -917,7 +917,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -928,7 +928,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -939,7 +939,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -950,7 +950,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -961,7 +961,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -972,7 +972,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -983,7 +983,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -994,7 +994,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1005,7 +1005,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1016,7 +1016,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1027,7 +1027,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1038,7 +1038,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1049,7 +1049,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1060,7 +1060,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1071,7 +1071,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1082,7 +1082,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1093,7 +1093,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1104,7 +1104,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1115,7 +1115,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1126,7 +1126,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1137,7 +1137,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1148,7 +1148,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1159,7 +1159,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1170,7 +1170,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1181,7 +1181,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1192,7 +1192,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1203,7 +1203,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1214,7 +1214,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1225,7 +1225,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1236,7 +1236,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
@@ -1247,7 +1247,7 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
   - type: Paintable
-    group: null
+    group: ESAirlockHatch
 # ES END
 
 - type: entity
