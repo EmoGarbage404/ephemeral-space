@@ -22,13 +22,29 @@ public sealed partial class ESCryptoNukeConsoleWindow : FancyWindow
 
     public void Update(EntityUid owner, ESCryptoNukeConsoleBuiState? state = null)
     {
+        if (!_entityManager.TryGetComponent<ESCryptoNukeConsoleComponent>(owner, out var comp))
+            return;
+
         NavMap.MapUid = _entityManager.GetComponent<TransformComponent>(owner).GridUid;
+        NavMap.ForceNavMapUpdate();
 
         if (state != null)
         {
+            NavMap.TrackedCoordinates.Clear();
             NavMap.TrackedCoordinates = state.DiskLocations
                 .Select(c => (_entityManager.GetCoordinates(c), (true, Color.White)))
                 .ToDictionary();
+
+            LocationsLabel.Text = string.Join('\n',
+                state.DiskLocations
+                    .Select(c => Loc.GetString("es-cryptonuke-ui-label-disk-fmt", ("x", c.X), ("y", c.Y))));
         }
+
+        CompromisedLabel.Text = Loc.GetString("es-cryptonuke-ui-label-compromised", ("state", comp.Compromised));
+
+        var codes = state?.Codes is { Count: > 0}
+            ? string.Join(",", state.Codes)
+            : Loc.GetString("es-cryptonuke-ui-label-code-placeholder");
+        CodesLabel.Text = Loc.GetString("es-cryptonuke-ui-label-code-header", ("codes", codes));
     }
 }
