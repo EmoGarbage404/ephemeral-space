@@ -4,7 +4,7 @@
     xmlns:ui="clr-namespace:Content.Client.Pinpointer.UI"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     Title="{Loc 'es-cryptonuke-ui-window-title'}"
-    MinSize="900 500">
+    Resizable="False">
     <BoxContainer Orientation="Horizontal" Margin="15" HorizontalExpand="True">
         <PanelContainer HorizontalExpand="True" VerticalExpand="True">
             <PanelContainer.PanelOverride>
