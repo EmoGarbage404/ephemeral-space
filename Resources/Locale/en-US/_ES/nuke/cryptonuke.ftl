@@ -28,8 +28,6 @@ es-cryptonuke-ui-label-flavor = [color=red][font="Monospace"]VERIFYING TRACKING 
     {""}01001100   00001010   01001001
     {""}00001010   01011010   01010110
     {""}01010011   01000101   01000101
-
-
     {""}[/font][/color]
 es-cryptonuke-ui-button-hack = Hack
 
