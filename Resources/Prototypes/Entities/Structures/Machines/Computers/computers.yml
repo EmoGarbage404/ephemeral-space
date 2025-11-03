@@ -683,6 +683,10 @@
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: StructuralMetallicStrong
+# ES START
+  # This is a traitor sabotage objective
+  - type: ESSabotageTarget
+# ES END
 
 - type: entity
   parent: ComputerComms

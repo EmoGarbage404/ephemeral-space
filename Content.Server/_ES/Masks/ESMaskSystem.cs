@@ -26,7 +26,6 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ESAuditionsSystem _esAuditions = default!;
     [Dependency] private readonly EntityTableSystem _entityTable = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly JobSystem _job = default!;
     [Dependency] private readonly ObjectivesSystem _objectives = default!;
 
@@ -120,29 +119,6 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
         return true;
     }
 
-    public List<Entity<ESTroupeRuleComponent>> GetOrderedTroupes()
-    {
-        var troupes = new List<Entity<ESTroupeRuleComponent>>();
-        var query = EntityQueryEnumerator<ESTroupeRuleComponent>();
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            if (!_gameTicker.IsGameRuleActive(uid))
-                continue;
-
-            troupes.Add((uid, comp));
-        }
-
-        troupes.Sort((a, b) =>
-        {
-            var c = a.Comp.Priority.CompareTo(b.Comp.Priority);
-            if (c != 0)
-                return c;
-            return _random.Next() % 2 == 0 ? -1 : 1; // For members of equal priority, sort them randomly.
-        });
-
-        return troupes;
-    }
-
     public bool IsPlayerValid(ESTroupePrototype troupe, ICommonSession player)
     {
         if (!Mind.TryGetMind(player, out var mind, out _))
@@ -181,7 +157,7 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
         return true;
     }
 
-    public override void ApplyMask(Entity<MindComponent> mind, ProtoId<ESMaskPrototype> maskId, Entity<ESTroupeRuleComponent>? troupe)
+    public override void ApplyMask(Entity<MindComponent> mind, ProtoId<ESMaskPrototype> maskId, Entity<ESTroupeRuleComponent> troupe)
     {
         var mask = PrototypeManager.Index(maskId);
 
@@ -211,13 +187,8 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
             EntityManager.AddComponents(ownedEntity, mask.Components);
         EntityManager.AddComponents(mind, mask.MindComponents);
 
-        // TODO: eventually, this should be required.
-        if (troupe == null)
-            return;
-
-        troupe.Value.Comp.TroupeMemberMinds.Add(mind);
-
-        foreach (var objective in troupe.Value.Comp.AssociatedObjectives)
+        troupe.Comp.TroupeMemberMinds.Add(mind);
+        foreach (var objective in troupe.Comp.AssociatedObjectives)
         {
             Mind.AddObjective(mind, mind, objective);
         }

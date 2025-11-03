@@ -1,0 +1,15 @@
+- type: entity
+  parent: ESBaseMaskObjective
+  id: ESMaskObjectiveTraitorSabotageCommunications
+  name: Sabotage the Communications Computer
+  description: You've been tasked with stealing the station trajectory.
+  components:
+  - type: Objective
+    icon: # TODO: proper icon
+      sprite: Objects/Tools/wrench.rsi
+      state: icon
+  - type: ESSabotageCondition
+    whitelist:
+      components:
+      - CommunicationsConsole
+

@@ -3,6 +3,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Doors;
 using Content.Shared.Doors.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._ES.Degradation;
 
@@ -13,6 +14,8 @@ namespace Content.Shared._ES.Degradation;
 public sealed class ESDegradationSystem : EntitySystem
 {
     [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
+
+    private static readonly EntProtoId SparkEffect = "EffectSparks";
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -29,12 +32,13 @@ public sealed class ESDegradationSystem : EntitySystem
 
     public bool Degrade(EntityUid target, EntityUid? user)
     {
-        var ev = new ESUndergoDegradationEvent(target, user);
+        var ev = new ESUndergoDegradationEvent(user);
         RaiseLocalEvent(target, ref ev);
         if (!ev.Handled)
             return false;
 
-        // TODO: Sparks
+        // TODO: Proper Sparks
+        Spawn(SparkEffect, Transform(target).Coordinates);
 
         if (user.HasValue)
         {
@@ -52,4 +56,4 @@ public sealed class ESDegradationSystem : EntitySystem
 }
 
 [ByRefEvent]
-public record struct ESUndergoDegradationEvent(EntityUid Target, EntityUid? User, bool Handled = false);
+public record struct ESUndergoDegradationEvent(EntityUid? User, bool Handled = false);
