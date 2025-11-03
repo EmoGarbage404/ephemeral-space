@@ -94,7 +94,7 @@ public abstract partial class SharedDoorSystem : EntitySystem
         if (!_powerReceiver.IsPowered(ent.Owner) ||
             !TryComp<DoorBoltComponent>(ent.Owner, out var bolt))
             return;
-        TrySetBoltDown((ent, bolt), true, args.User, true);
+        args.Handled = TrySetBoltDown((ent, bolt), true, args.User, true);
     }
 // ES END
 

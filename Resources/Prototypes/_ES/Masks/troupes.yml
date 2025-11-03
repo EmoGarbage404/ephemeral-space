@@ -15,5 +15,11 @@
   - SecurityOfficer
   - Detective
   objectives:
-    all:
-    - id: ESMaskObjectiveTraitorSabotageCommunications
+    amount: 5
+    pick:
+      all:
+      - id: ESObjectiveTraitorSabotageCommunications
+      - id: ESObjectiveTraitorSabotageCrewMonitoring
+      - id: ESObjectiveTraitorSabotageIDComputer
+      - id: ESObjectiveTraitorSabotageCriminalRecords
+      - id: ESObjectiveTraitorSabotageTelecom

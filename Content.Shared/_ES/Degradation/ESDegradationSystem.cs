@@ -38,7 +38,7 @@ public sealed class ESDegradationSystem : EntitySystem
             return false;
 
         // TODO: Proper Sparks
-        Spawn(SparkEffect, Transform(target).Coordinates);
+        PredictedSpawnAtPosition(SparkEffect, Transform(target).Coordinates);
 
         if (user.HasValue)
         {
