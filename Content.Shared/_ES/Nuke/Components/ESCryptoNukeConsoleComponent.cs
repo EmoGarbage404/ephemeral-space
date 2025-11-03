@@ -8,8 +8,8 @@ namespace Content.Shared._ES.Nuke.Components;
 /// <summary>
 /// Console that tracks the nuke disk and can be hacked in order to reveal the nuke codes
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentPause]
-[Access(typeof(ESCryptoNukeSystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[Access(typeof(ESSharedCryptoNukeSystem))]
 public sealed partial class ESCryptoNukeConsoleComponent : Component
 {
     /// <summary>
@@ -23,12 +23,20 @@ public sealed partial class ESCryptoNukeConsoleComponent : Component
     /// </summary>
     [DataField]
     public TimeSpan UpdateRate = TimeSpan.FromSeconds(2.5f);
+
+    /// <summary>
+    /// Whether this console has been hacked and compromised.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Compromised;
 }
 
 [Serializable, NetSerializable]
 public sealed class ESCryptoNukeConsoleBuiState : BoundUserInterfaceState
 {
     public List<NetCoordinates> DiskLocations = new();
+
+    public List<string> Codes = new();
 }
 
 [Serializable, NetSerializable]
