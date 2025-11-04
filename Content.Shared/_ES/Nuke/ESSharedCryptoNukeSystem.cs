@@ -3,6 +3,7 @@ using Content.Shared._ES.Masks;
 using Content.Shared._ES.Nuke.Components;
 using Content.Shared.Examine;
 using Content.Shared.Mind;
+using Content.Shared.Objectives.Components;
 using Content.Shared.Objectives.Systems;
 using Content.Shared.Station;
 using Robust.Shared.Prototypes;
@@ -25,6 +26,19 @@ public abstract class ESSharedCryptoNukeSystem : EntitySystem
     {
         SubscribeLocalEvent<ESCryptoNukeConsoleComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<ESCryptoNukeConsoleComponent, ExaminedEvent>(OnExamined);
+
+        SubscribeLocalEvent<ESCryptoNukeHackObjectiveComponent, ObjectiveGetProgressEvent>(OnGetProgress);
+
+        Subs.BuiEvents<ESCryptoNukeConsoleComponent>(ESCryptoNukeConsoleUiKey.Key,
+            subs =>
+            {
+                subs.Event<ESHackCryptoNukeConsoleBuiMessage>(OnHackMessage);
+            });
+    }
+
+    private void OnMapInit(Entity<ESCryptoNukeConsoleComponent> ent, ref MapInitEvent args)
+    {
+        ent.Comp.NextUpdateTime = Timing.CurTime;
     }
 
     private void OnExamined(Entity<ESCryptoNukeConsoleComponent> ent, ref ExaminedEvent args)
@@ -34,9 +48,30 @@ public abstract class ESSharedCryptoNukeSystem : EntitySystem
         args.PushMarkup(Loc.GetString("es-cryptonuke-examine-compromised"));
     }
 
-    private void OnMapInit(Entity<ESCryptoNukeConsoleComponent> ent, ref MapInitEvent args)
+    private void OnGetProgress(Entity<ESCryptoNukeHackObjectiveComponent> ent, ref ObjectiveGetProgressEvent args)
     {
-        ent.Comp.NextUpdateTime = Timing.CurTime;
+        args.Progress = GetCompromisedTerminalPercent();
+    }
+
+    private void OnHackMessage(Entity<ESCryptoNukeConsoleComponent> ent, ref ESHackCryptoNukeConsoleBuiMessage args)
+    {
+        if (ent.Comp.Compromised)
+            return;
+
+        if (_mask.GetTroupeOrNull(args.Actor) != TraitorTroupe)
+            return;
+
+        if (!ArePreRequisiteObjectivesDone())
+            return;
+
+        ent.Comp.Compromised = true;
+        Dirty(ent);
+        UpdateUiState((ent, ent, Comp<UserInterfaceComponent>(ent)));
+    }
+
+    protected virtual void UpdateUiState(Entity<ESCryptoNukeConsoleComponent, UserInterfaceComponent> ent)
+    {
+
     }
 
     /// <summary>
@@ -47,18 +82,34 @@ public abstract class ESSharedCryptoNukeSystem : EntitySystem
         if (station is null)
             return false;
 
+        return MathHelper.CloseTo(GetCompromisedTerminalPercent(station), 1f);
+    }
+
+    public float GetCompromisedTerminalPercent(EntityUid? station = null)
+    {
+        var total = 0;
+        var compromised = 0;
+
         var query = EntityQueryEnumerator<ESCryptoNukeConsoleComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var comp, out var xform))
         {
-            if (Station.GetOwningStation(uid, xform) != station)
-                continue;
+            if (station != null)
+            {
+                if (Station.GetOwningStation(uid, xform) != station)
+                    continue;
+            }
 
+            total += 1;
             // Exit early if we find a single compromised consoles.
-            if (!comp.Compromised)
-                return false;
+            if (comp.Compromised)
+                compromised += 1;
         }
 
-        return true;
+        // If we have no consoles, assume that they're all destroyed.
+        if (total == 0)
+            return 1f;
+
+        return (float) compromised / total;
     }
 
     /// <summary>

@@ -16,12 +16,16 @@ public sealed partial class ESCryptoNukeConsoleWindow : FancyWindow
     [Dependency] private readonly IPlayerManager _player = default!;
     private readonly ESSharedMaskSystem _mask;
 
+    public event Action? OnHackButtonPressed;
+
     public ESCryptoNukeConsoleWindow()
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
         _mask = _entityManager.System<ESSharedMaskSystem>();
+
+        HackButton.OnPressed += _ => OnHackButtonPressed?.Invoke();
 
         NavMap.WallColor = Color.Red;
         NavMap.TileColor = Color.Black;
@@ -49,7 +53,7 @@ public sealed partial class ESCryptoNukeConsoleWindow : FancyWindow
                 state.DiskLocations
                     .Select(c => Loc.GetString("es-cryptonuke-ui-label-disk-fmt", ("x", c.X), ("y", c.Y))));
 
-            HackButton.Disabled = !state.CanHack;
+            HackButton.Disabled = !state.CanHack || comp.Compromised;
         }
 
         CompromisedLabel.Text = Loc.GetString("es-cryptonuke-ui-label-compromised", ("state", comp.Compromised));

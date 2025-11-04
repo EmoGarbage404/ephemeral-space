@@ -84,3 +84,15 @@
     whitelist:
       components:
       - TelecomServer
+
+- type: entity
+  parent: ESBaseTraitorObjective
+  id: ESObjectiveTraitorHackCryptoNukeConsoles
+  name: Hack the Nuclear Cryptographic Terminals
+  description: These 3 terminals hold the code to the station nuke. Hack all of them to unlock the code.
+  components:
+  - type: Objective
+    icon: # TODO: proper icon
+      sprite: Objects/Tools/wrench.rsi
+      state: icon
+  - type: ESCryptoNukeHackObjective

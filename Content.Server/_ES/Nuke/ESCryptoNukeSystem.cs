@@ -8,7 +8,7 @@ namespace Content.Server._ES.Nuke;
 /// <inheritdoc/>
 public sealed class ESCryptoNukeSystem : ESSharedCryptoNukeSystem
 {
-    private void UpdateUiState(Entity<ESCryptoNukeConsoleComponent, UserInterfaceComponent> ent)
+    protected override void UpdateUiState(Entity<ESCryptoNukeConsoleComponent, UserInterfaceComponent> ent)
     {
         var state = new ESCryptoNukeConsoleBuiState();
 
