@@ -3,6 +3,8 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Doors;
 using Content.Shared.Doors.Components;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._ES.Degradation;
@@ -14,8 +16,10 @@ namespace Content.Shared._ES.Degradation;
 public sealed class ESDegradationSystem : EntitySystem
 {
     [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     private static readonly EntProtoId SparkEffect = "EffectSparks";
+    private static readonly  SoundSpecifier SparkSound = new SoundCollectionSpecifier("sparks");
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -38,6 +42,7 @@ public sealed class ESDegradationSystem : EntitySystem
             return false;
 
         // TODO: Proper Sparks
+        _audio.PlayPredicted(SparkSound, target, user);
         PredictedSpawnAtPosition(SparkEffect, Transform(target).Coordinates);
 
         if (user.HasValue)
