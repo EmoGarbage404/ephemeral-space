@@ -26,6 +26,7 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ESAuditionsSystem _esAuditions = default!;
     [Dependency] private readonly EntityTableSystem _entityTable = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly JobSystem _job = default!;
     [Dependency] private readonly ObjectivesSystem _objectives = default!;
 
@@ -44,22 +45,8 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
 
     private void OnMapInit(Entity<ESTroupeRuleComponent> ent, ref MapInitEvent args)
     {
-        var troupe = PrototypeManager.Index(ent.Comp.Troupe);
-        var objectives = _entityTable.GetSpawns(troupe.Objectives).ToList();
-        if (objectives.Count == 0)
-            return;
-        // Yes. This sucks. Yell at me when objectives aren't dogshit
-        EnsureComp<MindComponent>(ent);
-
-        var dummyMind = Mind.CreateMind(null);
-
-        foreach (var objective in objectives)
-        {
-            if (!_objectives.TryCreateObjective(dummyMind, objective, out var objectiveUid))
-                continue;
-            ent.Comp.AssociatedObjectives.Add(objectiveUid.Value);
-        }
-        Del(dummyMind);
+        if (_gameTicker.RunLevel == GameRunLevel.InRound)
+            InitializeTroupeObjectives(ent);
     }
 
     private void OnPlayerSpawnComplete(PlayerSpawnCompleteEvent ev)
@@ -72,6 +59,7 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
     private void OnRulePlayerJobsAssigned(RulePlayerJobsAssignedEvent args)
     {
         AssignPlayersToTroupe(args.Players.ToList());
+        InitializeTroupeObjectives();
     }
 
     public void AssignPlayersToTroupe(List<ICommonSession> players)
@@ -87,6 +75,41 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
         {
             Log.Warning($"Failed to assign all players to troupes! Leftover count: {players.Count}");
         }
+    }
+
+    public void InitializeTroupeObjectives()
+    {
+        var query = EntityQueryEnumerator<ESTroupeRuleComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            InitializeTroupeObjectives((uid, comp));
+        }
+    }
+
+    public void InitializeTroupeObjectives(Entity<ESTroupeRuleComponent> rule)
+    {
+        var (uid, comp) = rule;
+        var troupe = PrototypeManager.Index(comp.Troupe);
+        var objectives = _entityTable.GetSpawns(troupe.Objectives).ToList();
+        if (objectives.Count == 0)
+            return;
+        // Yes. This sucks. Yell at me when objectives aren't dogshit
+        EnsureComp<MindComponent>(uid);
+
+        var dummyMind = Mind.CreateMind(null);
+
+        foreach (var objective in objectives)
+        {
+            if (!_objectives.TryCreateObjective(dummyMind, objective, out var objectiveUid))
+                continue;
+            comp.AssociatedObjectives.Add(objectiveUid.Value);
+            foreach (var mind in comp.TroupeMemberMinds)
+            {
+                var mindComp = Comp<MindComponent>(mind);
+                Mind.AddObjective(mind, mindComp, objectiveUid.Value);
+            }
+        }
+        Del(dummyMind);
     }
 
     public bool TryAssignToTroupe(Entity<ESTroupeRuleComponent> ent, ref List<ICommonSession> players)

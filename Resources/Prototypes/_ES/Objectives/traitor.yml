@@ -12,6 +12,33 @@
 
 - type: entity
   parent: ESBaseTraitorObjectiveMinor
+  id: ESObjectiveTraitorKillRandom
+  description: The syndicate needs to make sure they don't interfere with our plans.
+  components:
+  - type: Objective
+    icon:
+      sprite: Objects/Weapons/Melee/kitchen_knife.rsi
+      state: icon
+  - type: TargetObjective
+    title: es-objective-condition-crewmember-kill-title
+  - type: PickRandomPerson
+    filters:
+    # You can only get kill objectives for people on your station.
+    - !type:ESShareStationFilter
+    # Must not be a syndie
+    - !type:ESHasTroupeFilter
+      troupe: ESTraitor
+      inverted: true
+    # Can't have multiple objectives to kill the same person.
+    - !type:TargetObjectiveMindFilter
+      blacklist:
+        components:
+        - KillPersonCondition
+  - type: KillPersonCondition
+    requireDead: true
+
+- type: entity
+  parent: ESBaseTraitorObjectiveMinor
   id: ESObjectiveTraitorSabotageCommunications
   name: Sabotage the Communications Computer
   description: You've been tasked with stealing the station trajectory. It can be extracted from the communications computer.

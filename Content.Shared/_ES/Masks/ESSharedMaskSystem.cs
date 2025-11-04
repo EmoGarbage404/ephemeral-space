@@ -189,6 +189,15 @@ public abstract class ESSharedMaskSystem : EntitySystem
         return troupe;
     }
 
+    /// <summary>
+    /// Variant of <see cref="TryGetTroupe(Robust.Shared.GameObjects.EntityUid,out Robust.Shared.Prototypes.ProtoId{Content.Shared._ES.Masks.ESTroupePrototype}?)"/>
+    /// </summary>
+    public ProtoId<ESTroupePrototype>? GetTroupeOrNull(Entity<MindComponent?> mind)
+    {
+        TryGetTroupe(mind, out var troupe);
+        return troupe;
+    }
+
     public List<Entity<ESTroupeRuleComponent>> GetOrderedTroupes()
     {
         var troupes = new List<Entity<ESTroupeRuleComponent>>();
