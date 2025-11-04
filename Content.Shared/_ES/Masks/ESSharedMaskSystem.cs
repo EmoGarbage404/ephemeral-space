@@ -13,7 +13,6 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Utility;
 
 namespace Content.Shared._ES.Masks;
 
@@ -67,9 +66,7 @@ public abstract class ESSharedMaskSystem : EntitySystem
             if (mask.Abstract)
                 continue;
 
-            var troupe = GetOrderedTroupes()
-                .Where(e => e.Comp.Troupe == mask.Troupe)
-                .FirstOrNull();
+            TryGetTroupeEntity(mask.Troupe, out var troupe);
 
             var verb = new Verb
             {
@@ -205,6 +202,22 @@ public abstract class ESSharedMaskSystem : EntitySystem
             .OrderBy(t => t.Comp.Priority)
             .ThenBy(t => t.Comp.PlayersPerTargetMember)
             .ToList();
+    }
+
+    public bool TryGetTroupeEntity(ProtoId<ESTroupePrototype> proto,
+        [NotNullWhen(true)] out Entity<ESTroupeRuleComponent>? troupe)
+    {
+        troupe = null;
+        var query = EntityQueryEnumerator<ESTroupeRuleComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (comp.Troupe != proto)
+                continue;
+            troupe = (uid, comp);
+            break;
+        }
+
+        return troupe != null;
     }
 
     public virtual void ApplyMask(Entity<MindComponent> mind,

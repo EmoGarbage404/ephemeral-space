@@ -15,7 +15,7 @@
   - SecurityOfficer
   - Detective
   objectives:
-    amount: 5
+    amount: 1
     pick:
       all:
       - id: ESObjectiveTraitorSabotageCommunications

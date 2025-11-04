@@ -37,6 +37,8 @@ public sealed class ESCryptoNukeConsoleBuiState : BoundUserInterfaceState
     public List<NetCoordinates> DiskLocations = new();
 
     public List<string> Codes = new();
+
+    public bool CanHack;
 }
 
 [Serializable, NetSerializable]

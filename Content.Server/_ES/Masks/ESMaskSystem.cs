@@ -45,7 +45,11 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
     private void OnMapInit(Entity<ESTroupeRuleComponent> ent, ref MapInitEvent args)
     {
         var troupe = PrototypeManager.Index(ent.Comp.Troupe);
-        var objectives = _entityTable.GetSpawns(troupe.Objectives);
+        var objectives = _entityTable.GetSpawns(troupe.Objectives).ToList();
+        if (objectives.Count == 0)
+            return;
+        // Yes. This sucks. Yell at me when objectives aren't dogshit
+        EnsureComp<MindComponent>(ent);
 
         var dummyMind = Mind.CreateMind(null);
 

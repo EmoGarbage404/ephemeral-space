@@ -29,6 +29,8 @@ public sealed class ESCryptoNukeSystem : ESSharedCryptoNukeSystem
             }
         }
 
+        state.CanHack = ArePreRequisiteObjectivesDone();
+
         UserInterface.SetUiState((ent, ent), ESCryptoNukeConsoleUiKey.Key, state);
     }
 

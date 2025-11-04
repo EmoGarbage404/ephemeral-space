@@ -7,6 +7,8 @@
   parent: ESBaseTraitorObjective
   id: ESBaseTraitorObjectiveMinor # Minor objectives must be completed before the m
   abstract: true
+  components:
+  - type: ESNukePrereqObjective
 
 - type: entity
   parent: ESBaseTraitorObjectiveMinor
