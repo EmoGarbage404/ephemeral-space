@@ -56,6 +56,7 @@ public sealed partial class ESCryptoNukeConsoleWindow : FancyWindow
             HackButton.Disabled = !state.CanHack || comp.Compromised;
         }
 
+        HackButton.ToolTip = HackButton.Disabled ? Loc.GetString("es-cryptonuke-ui-button-hack-tooltip") : null;
         CompromisedLabel.Text = Loc.GetString("es-cryptonuke-ui-label-compromised", ("state", comp.Compromised));
 
         var codes = state?.Codes is { Count: > 0}
