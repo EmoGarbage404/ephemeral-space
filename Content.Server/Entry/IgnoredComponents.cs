@@ -14,6 +14,7 @@ namespace Content.Server.Entry
             // ES START
             "ESInherentLight",
             "ESGenericPointLightVisualizer",
+            "ESTimedDespawnLightFade",
             "ESPoster",
             // ES END
             "ConstructionGhost",
