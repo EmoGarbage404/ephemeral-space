@@ -21,7 +21,6 @@
           radius: 0.25
         hard: true
         restitution: 0.0
-        mass: 10
         density: 100
         mask:
         - Impassable
