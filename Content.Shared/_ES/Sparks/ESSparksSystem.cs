@@ -16,19 +16,19 @@ public sealed class ESSparksSystem : EntitySystem
 
     public static readonly EntProtoId DefaultSparks = "ESEffectSparks";
 
-    public void DoSparks(EntityUid source, int number, EntProtoId? sparksPrototype = null)
+    public void DoSparks(EntityUid source, int number = 4, EntProtoId? sparksPrototype = null)
     {
         var coords = _transform.GetMapCoordinates(source);
         DoSparks(coords, number, sparksPrototype, source);
     }
 
-    public void DoSparks(EntityCoordinates coordinates, int number, EntProtoId? sparksPrototype = null, EntityUid? ignored = null)
+    public void DoSparks(EntityCoordinates coordinates, int number = 4, EntProtoId? sparksPrototype = null, EntityUid? ignored = null)
     {
         var mapCoordinates = _transform.ToMapCoordinates(coordinates);
         DoSparks(mapCoordinates, number, sparksPrototype, ignored);
     }
 
-    public void DoSparks(MapCoordinates coordinates, int number, EntProtoId? sparksPrototype = null, EntityUid? ignored = null)
+    public void DoSparks(MapCoordinates coordinates, int number = 4, EntProtoId? sparksPrototype = null, EntityUid? ignored = null)
     {
         if (_net.IsClient)
             return;

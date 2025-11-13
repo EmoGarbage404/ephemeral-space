@@ -26,7 +26,7 @@
         mask:
         - Impassable
   - type: ESTimedDespawn
-    lifetime: 1.0
+    lifetime: 1.1
   - type: EmitSoundOnSpawn
     positional: true
     sound:
