@@ -8,21 +8,25 @@
     drawdepth: Effects
     noRot: true
     loop: false
-  - type: TimedDespawn
-    lifetime: 3
+  - type: Appearance
+  - type: ESTimedDespawn
+    lifetime: 2.0
   - type: EmitSoundOnSpawn
+    positional: true
     sound:
       path: /Audio/_ES/Effects/teleport.ogg
       params:
         variation: 0.05
-# This will persist throughout the entire time the entity is spawned, BUT, sound cannot play in full if the entity get despawned by TimedDespawn before it is finished.
-# TODO: Either make the sound not tied to the entity, or add a timed pointlight.
-#  - type: PointLight
-#    radius: 3
-#    energy: 2.5
-#    falloff: 10
-#    curveFactor: 0.5
-#    color: "#aaff7a"
+  - type: ESTimedDespawnLightFade
+    fadeTime: 1.5
+  - type: AnimationPlayer
+  - type: PointLight
+    radius: 3
+    energy: 2.5
+    falloff: 10
+    curveFactor: 0.5
+    color: "#aaff7a"
+    netsync: false
   - type: Tag
     tags:
     - HideContextMenu
@@ -39,5 +43,5 @@
     - state: teleport_gray_electric
       color: "#ff5555"
     - state: teleport_gray_center
-#  - type: PointLight
-#    color: "#fa2a00"
+  - type: PointLight
+    color: "#fa2a00"
