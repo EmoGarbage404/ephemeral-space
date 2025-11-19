@@ -38,6 +38,9 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+// ES START
+using Content.Shared.Players;
+// ES END
 
 namespace Content.Server.Ghost
 {
@@ -549,6 +552,18 @@ namespace Content.Server.Ghost
             {
                 _mind.UnVisit(mindId, mind: mind);
             }
+
+// ES START
+            // Handle sending people back to the theater.
+            if (mind.UserId.HasValue &&
+                _player.TryGetPlayerData(mind.UserId.Value, out var playerData) &&
+                playerData.ContentData() is { } contentData &&
+                Exists(contentData.LobbyEntity))
+            {
+                _minds.TransferTo(mindId, contentData.LobbyEntity, mind: mind);
+                return true;
+            }
+// ES END
 
             var position = Exists(playerEntity)
                 ? Transform(playerEntity.Value).Coordinates

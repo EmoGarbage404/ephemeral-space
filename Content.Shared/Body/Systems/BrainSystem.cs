@@ -29,8 +29,10 @@ public sealed class BrainSystem : EntitySystem
         EnsureComp<MindContainerComponent>(newEntity);
         EnsureComp<MindContainerComponent>(oldEntity);
 
-        var ghostOnMove = EnsureComp<GhostOnMoveComponent>(newEntity);
-        ghostOnMove.MustBeDead = HasComp<MobStateComponent>(newEntity); // Don't ghost living players out of their bodies.
+// ES START
+        // Set MustBeDead before we add the component so we don't ghost living players out of their bodies.
+        AddComp(newEntity, new GhostOnMoveComponent { MustBeDead = HasComp<MobStateComponent>(newEntity) }, true);
+// ES END
 
         if (!_mindSystem.TryGetMind(oldEntity, out var mindId, out var mind))
             return;
