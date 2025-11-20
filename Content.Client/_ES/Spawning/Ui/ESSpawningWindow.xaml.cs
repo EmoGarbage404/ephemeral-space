@@ -78,6 +78,9 @@ public sealed partial class ESSpawningWindow : FancyWindow
 
     private void RebuildJobLists()
     {
+        if (Disposed)
+            return;
+
         _jobButtons.Clear();
         JobContainer.Children.Clear();
         JobContainer2.Children.Clear();

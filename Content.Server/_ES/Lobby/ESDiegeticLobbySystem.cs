@@ -1,4 +1,5 @@
 using Content.Server.GameTicking;
+using Content.Server.GameTicking.Events;
 using Content.Server.Preferences.Managers;
 using Content.Shared._ES.Lobby;
 using Content.Shared._ES.Lobby.Components;
@@ -36,6 +37,7 @@ public sealed class ESDiegeticLobbySystem : ESSharedDiegeticLobbySystem
         base.Initialize();
 
         SubscribeLocalEvent<ESTheatergoerMarkerComponent, ComponentInit>(OnTheatergoerInit);
+        SubscribeLocalEvent<RoundStartingEvent>(OnRoundStarting);
         // buckling (to observe) is handled on the client
         // opens the observe window, which just calls the observe command if u click yes
         // and then the actual behavior is just in that command.
@@ -124,5 +126,14 @@ public sealed class ESDiegeticLobbySystem : ESSharedDiegeticLobbySystem
     {
         if (_ticker.RunLevel is GameRunLevel.PreRoundLobby)
             _alerts.ShowAlert(ent.Owner, NotReadiedAlert);
+    }
+
+    private void OnRoundStarting(RoundStartingEvent ev)
+    {
+        var query = EntityQueryEnumerator<ESTheatergoerMarkerComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            Actions.RemoveAction(uid, comp.ConfigurePrefsActionEntity);
+        }
     }
 }

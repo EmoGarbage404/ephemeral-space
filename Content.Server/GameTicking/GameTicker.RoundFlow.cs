@@ -391,8 +391,13 @@ namespace Content.Server.GameTicking
             foreach (var (userId, status) in _playerGameStatuses)
             {
                 // ES START
-                if (LobbyEnabled && status is not (PlayerGameStatus.Observing or PlayerGameStatus.ReadyToPlay)) continue;
-                if (!_playerManager.TryGetSessionById(userId, out var session)) continue;
+                if (!_playerManager.TryGetSessionById(userId, out var session))
+                    continue;
+
+                ClearReadyStatusAlert(session);
+
+                if (LobbyEnabled && status is not (PlayerGameStatus.Observing or PlayerGameStatus.ReadyToPlay))
+                    continue;
 
                 if (autoDeAdmin && _adminManager.IsAdmin(session))
                 {

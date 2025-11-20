@@ -12,7 +12,7 @@ namespace Content.Shared._ES.Lobby;
 // see client/server
 public abstract class ESSharedDiegeticLobbySystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] protected readonly SharedActionsSystem Actions = default!;
 
     public override void Initialize()
     {
@@ -33,11 +33,11 @@ public abstract class ESSharedDiegeticLobbySystem : EntitySystem
         var ready = ev.GameStatus == PlayerGameStatus.ReadyToPlay;
         if (ready)
         {
-            _actions.AddAction(entity, ref theaterGoer.ConfigurePrefsActionEntity, theaterGoer.ConfigurePrefsAction);
+            Actions.AddAction(entity, ref theaterGoer.ConfigurePrefsActionEntity, theaterGoer.ConfigurePrefsAction);
         }
         else
         {
-            _actions.RemoveAction(entity, theaterGoer.ConfigurePrefsActionEntity);
+            Actions.RemoveAction(entity, theaterGoer.ConfigurePrefsActionEntity);
             theaterGoer.ConfigurePrefsActionEntity = null;
         }
         Dirty(entity, theaterGoer);
