@@ -4,7 +4,6 @@ using Content.Server.Preferences.Managers;
 using Content.Shared._ES.Lobby;
 using Content.Shared._ES.Lobby.Components;
 using Content.Shared.Alert;
-using Content.Shared.Buckle.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
@@ -110,15 +109,6 @@ public sealed class ESDiegeticLobbySystem : ESSharedDiegeticLobbySystem
             case GameRunLevel.PostRound:
                 break;
         }
-    }
-
-    protected override void OnTheatergoerUnbuckled(Entity<ESTheatergoerMarkerComponent> ent, ref UnbuckledEvent args)
-    {
-        if (!HasComp<ESObserverChairComponent>(args.Strap.Owner)
-            || !TryComp<ActorComponent>(ent.Owner, out var actor))
-            return;
-
-        _ticker.ToggleReady(actor.PlayerSession, PlayerGameStatus.NotReadyToPlay);
     }
 
     // add unreadied alert by default

@@ -3,6 +3,6 @@
   description: You're always allowed to just sit and watch the play from afar.
   id: ESChairTheater
   parent: ChairWood
-  components:
-  - type: ESObserverChair
+  # Currently no behavior. Re-add once we have protagonism
+  #components:
   # todo custom sprites

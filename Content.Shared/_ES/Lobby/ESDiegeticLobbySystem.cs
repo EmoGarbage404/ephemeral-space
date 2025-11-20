@@ -1,6 +1,5 @@
 using Content.Shared._ES.Lobby.Components;
 using Content.Shared.Actions;
-using Content.Shared.Buckle.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Roles;
 using Robust.Shared.Physics.Events;
@@ -19,7 +18,6 @@ public abstract class ESSharedDiegeticLobbySystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<ESReadyTriggerMarkerComponent, StartCollideEvent>(OnTriggerCollided);
-        SubscribeLocalEvent<ESTheatergoerMarkerComponent, UnbuckledEvent>(OnTheatergoerUnbuckled);
         SubscribeLocalEvent<ESOnPlayerReadyToggled>(OnPlayerReadyToggled);
     }
 
@@ -42,8 +40,6 @@ public abstract class ESSharedDiegeticLobbySystem : EntitySystem
         }
         Dirty(entity, theaterGoer);
     }
-
-    protected abstract void OnTheatergoerUnbuckled(Entity<ESTheatergoerMarkerComponent> ent, ref UnbuckledEvent args);
 
     protected abstract void OnTriggerCollided(Entity<ESReadyTriggerMarkerComponent> ent, ref StartCollideEvent args);
 }
