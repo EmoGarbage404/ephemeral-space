@@ -205,11 +205,11 @@ namespace Content.Server.GameTicking
             RaiseNetworkEvent(new TickerJoinGameEvent(), session.Channel);
         }
 
-        public void PlayerJoinLobby(ICommonSession session)
-        {
 // ES START
+        public bool PlayerJoinLobby(ICommonSession session)
+        {
             if (!LobbyEnabled)
-                return;
+                return false;
             AttachPlayerToLobbyCharacter(session);
 // ES END
 
@@ -221,6 +221,9 @@ namespace Content.Server.GameTicking
             RaiseNetworkEvent(GetStatusMsg(session), client);
             RaiseNetworkEvent(GetInfoMsg(), client);
             RaiseLocalEvent(new PlayerJoinedLobbyEvent(session));
+// ES START
+            return true;
+// ES END
         }
 
         private void ReqWindowAttentionAll()
