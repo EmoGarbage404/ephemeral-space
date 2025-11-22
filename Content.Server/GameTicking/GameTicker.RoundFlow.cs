@@ -690,7 +690,9 @@ namespace Content.Server.GameTicking
             SendServerMessage(Loc.GetString("game-ticker-restart-round"));
 
             RoundNumberMetric.Inc();
-
+// ES START
+            _joinedPlayers.Clear();
+// ES END
             PlayersJoinedRoundNormally = 0;
 
             RunLevel = GameRunLevel.PreRoundLobby;

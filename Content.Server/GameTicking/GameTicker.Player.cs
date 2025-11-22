@@ -187,7 +187,9 @@ namespace Content.Server.GameTicking
         {
             if (!silent)
                 _chatManager.DispatchServerMessage(session, Loc.GetString("game-ticker-player-join-game-message"));
-
+// ES START
+            _joinedPlayers.Add(session.UserId);
+// ES SEND
             _playerGameStatuses[session.UserId] = PlayerGameStatus.JoinedGame;
             _db.AddRoundPlayers(RoundId, session.UserId);
 

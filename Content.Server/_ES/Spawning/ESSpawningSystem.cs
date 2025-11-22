@@ -38,6 +38,10 @@ public sealed class ESSpawningSystem : ESSharedSpawningSystem
         if (_gameTicker.RunLevel == GameRunLevel.PreRoundLobby)
             return;
 
+        // TODO: communicate this in the ui
+        if (_gameTicker.JoinedPlayers.Contains(args.SenderSession.UserId))
+            return;
+
         var jobPrototype = _prototype.Index(msg.JobId);
 
         var selectedStations = msg.Stations.Select(GetEntity);

@@ -21,6 +21,10 @@ namespace Content.Server.GameTicking
         [ViewVariables]
         private readonly Dictionary<NetUserId, PlayerGameStatus> _playerGameStatuses = new();
 
+// ES START
+        private readonly HashSet<NetUserId> _joinedPlayers = new();
+        public IReadOnlyCollection<NetUserId> JoinedPlayers => _joinedPlayers;
+// ES END
         [ViewVariables]
         private TimeSpan _roundStartTime;
 
