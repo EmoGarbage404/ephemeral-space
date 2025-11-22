@@ -88,7 +88,7 @@ namespace Content.Server.GameTicking
                     {
                         if (LobbyEnabled)
                         {
-                            PlayerJoinLobby(session);
+                            PlayerJoinLobby(session, true);
                         }
                         else
                             SpawnWaitDb();
@@ -206,11 +206,13 @@ namespace Content.Server.GameTicking
         }
 
 // ES START
-        public bool PlayerJoinLobby(ICommonSession session)
+        public bool PlayerJoinLobby(ICommonSession session, bool attachCharacter = false)
         {
             if (!LobbyEnabled)
                 return false;
-            AttachPlayerToLobbyCharacter(session);
+
+            if (attachCharacter)
+                AttachPlayerToLobbyCharacter(session);
 // ES END
 
             _playerGameStatuses[session.UserId] = LobbyEnabled ? PlayerGameStatus.NotReadyToPlay : PlayerGameStatus.ReadyToPlay;
