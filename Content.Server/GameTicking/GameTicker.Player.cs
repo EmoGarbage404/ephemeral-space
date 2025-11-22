@@ -89,9 +89,6 @@ namespace Content.Server.GameTicking
                         if (LobbyEnabled)
                         {
                             PlayerJoinLobby(session);
-                            // ES START
-                            AttachPlayerToLobbyCharacter(session);
-                            // ES END
                         }
                         else
                             SpawnWaitDb();
@@ -206,8 +203,14 @@ namespace Content.Server.GameTicking
             RaiseNetworkEvent(new TickerJoinGameEvent(), session.Channel);
         }
 
-        private void PlayerJoinLobby(ICommonSession session)
+        public void PlayerJoinLobby(ICommonSession session)
         {
+// ES START
+            if (!LobbyEnabled)
+                return;
+            AttachPlayerToLobbyCharacter(session);
+// ES END
+
             _playerGameStatuses[session.UserId] = LobbyEnabled ? PlayerGameStatus.NotReadyToPlay : PlayerGameStatus.ReadyToPlay;
             _db.AddRoundPlayers(RoundId, session.UserId);
 

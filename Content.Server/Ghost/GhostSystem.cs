@@ -555,12 +555,9 @@ namespace Content.Server.Ghost
 
 // ES START
             // Handle sending people back to the theater.
-            if (mind.UserId.HasValue &&
-                _player.TryGetPlayerData(mind.UserId.Value, out var playerData) &&
-                playerData.ContentData() is { } contentData &&
-                Exists(contentData.LobbyEntity))
+            if (_player.TryGetSessionById(mind.UserId, out var player))
             {
-                _minds.TransferTo(mindId, contentData.LobbyEntity, mind: mind);
+                _gameTicker.PlayerJoinLobby(player);
                 return true;
             }
 // ES END

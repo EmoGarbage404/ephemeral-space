@@ -96,7 +96,7 @@ namespace Content.Server.GameTicking
             if (session.ContentData() is not { } data)
                 return;
 
-            if (data.LobbyEntity != null)
+            if (Exists(data.LobbyEntity))
             {
                 _sawmill.Info($"Attaching {session.Name} to existing lobby character");
                 _playerManager.SetAttachedEntity(session, data.LobbyEntity.Value, true);
@@ -332,7 +332,6 @@ namespace Content.Server.GameTicking
             _alerts.ShowAlert(player.AttachedEntity.Value, alert);
         }
 
-        // TODO clear alerts on theatergoers when evry1 goes ingame
         private void ClearReadyStatusAlert(ICommonSession player)
         {
             if (player.AttachedEntity == null)
