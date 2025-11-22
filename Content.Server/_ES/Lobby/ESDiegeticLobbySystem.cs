@@ -124,6 +124,7 @@ public sealed class ESDiegeticLobbySystem : ESSharedDiegeticLobbySystem
         while (query.MoveNext(out var uid, out var comp))
         {
             Actions.RemoveAction(uid, comp.ConfigurePrefsActionEntity);
+            comp.ConfigurePrefsActionEntity = null;
         }
     }
 }
