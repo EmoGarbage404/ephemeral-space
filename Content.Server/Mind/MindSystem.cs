@@ -72,7 +72,10 @@ public sealed class MindSystem : SharedMindSystem
             return;
 
 // ES START
-        if (_ghosts.OnGhostAttempt(mindId, false, forced: true, mind: mind))
+        var success = _gameTicker.LobbyEnabled
+            ? _ghosts.OnGhostAttempt(mindId, false, forced: true, mind: mind)
+            : _ghosts.SpawnGhost((mindId, mind), uid) != null;
+        if (success)
             // Log these to make sure they're not causing the GameTicker round restart bugs...
             Log.Debug($"Entity \"{ToPrettyString(uid)}\" for {mind.CharacterName} was deleted, spawned ghost.");
 // ES END
