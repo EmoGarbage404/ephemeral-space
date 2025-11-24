@@ -71,10 +71,11 @@ public sealed class MindSystem : SharedMindSystem
         if (!component.GhostOnShutdown || _gameTicker.RunLevel == GameRunLevel.PreRoundLobby)
             return;
 
-        var ghost = _ghosts.SpawnGhost((mindId, mind), uid);
-        if (ghost != null)
+// ES START
+        if (_ghosts.OnGhostAttempt(mindId, false, forced: true, mind: mind))
             // Log these to make sure they're not causing the GameTicker round restart bugs...
-            Log.Debug($"Entity \"{ToPrettyString(uid)}\" for {mind.CharacterName} was deleted, spawned \"{ToPrettyString(ghost)}\".");
+            Log.Debug($"Entity \"{ToPrettyString(uid)}\" for {mind.CharacterName} was deleted, spawned \"{ToPrettyString(mind.OwnedEntity)}\".");
+// ES END
         else
             // This should be an error, if it didn't cause tests to start erroring when they delete a player.
             Log.Warning($"Entity \"{ToPrettyString(uid)}\" for {mind.CharacterName} was deleted, and no applicable spawn location is available.");
