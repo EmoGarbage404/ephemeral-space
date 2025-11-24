@@ -74,7 +74,7 @@ public sealed class MindSystem : SharedMindSystem
 // ES START
         if (_ghosts.OnGhostAttempt(mindId, false, forced: true, mind: mind))
             // Log these to make sure they're not causing the GameTicker round restart bugs...
-            Log.Debug($"Entity \"{ToPrettyString(uid)}\" for {mind.CharacterName} was deleted, spawned \"{ToPrettyString(mind.OwnedEntity)}\".");
+            Log.Debug($"Entity \"{ToPrettyString(uid)}\" for {mind.CharacterName} was deleted, spawned ghost.");
 // ES END
         else
             // This should be an error, if it didn't cause tests to start erroring when they delete a player.
