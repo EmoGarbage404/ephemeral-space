@@ -10,6 +10,11 @@ z_offset = -2
 [ambience]
 range = 10 # APCs
 
+[game]
+map_pool = "ESMapPool"
+defaultpreset = "ESTraitors"
+fallbackpreset = "ESTraitors,ESExtended"
+
 # No mob crawling + mob push tweaks
 [movement]
 crawling = false

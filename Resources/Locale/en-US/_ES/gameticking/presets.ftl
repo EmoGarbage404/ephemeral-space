@@ -1,2 +1,8 @@
+es-preset-sandbox-title = Sandbox
+es-preset-sandbox-desc = No stress, no goals, just having fun!
+
+es-preset-extended-title = Extended
+es-preset-extended-desc = Work with your crew members to save the station.
+
 es-preset-traitor-title = Traitors
-es-preset-traitor-desc = Uncover the traitors among the crew and stop them from destroying the station and everyone on it.
+es-preset-traitor-desc = Race against the clock and complete your goals while traitors try and destroy the station.

@@ -119,7 +119,10 @@
     - secret
     - sekrit
   name: secret-title
-  showInVote: true
+# ES START
+  # Disable upstream modes
+  #showInVote: true
+# ES END
   description: secret-description
   rules:
     - Secret
@@ -160,7 +163,10 @@
   name: death-match-title
   description: death-match-description
   maxPlayers: 15
-  showInVote: true
+# ES START
+  # Disable upstream modes
+  #showInVote: true
+# ES END
   supportedMaps: DeathMatchMapPool
   rules:
     - DeathMatch31

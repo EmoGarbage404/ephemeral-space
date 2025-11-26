@@ -96,7 +96,10 @@ public sealed partial class GameTicker
 
     private void InitializeGamePreset()
     {
-        SetGamePreset(LobbyEnabled ? _cfg.GetCVar(CCVars.GameLobbyDefaultPreset) : "sandbox");
+// ES START
+        // todo: Dogshit hardcoding
+        SetGamePreset(LobbyEnabled ? _cfg.GetCVar(CCVars.GameLobbyDefaultPreset) : "ESSandbox");
+// ES END
     }
 
     public void SetGamePreset(GamePresetPrototype? preset, bool force = false, GamePresetPrototype? decoy = null, int? resetDelay = null)

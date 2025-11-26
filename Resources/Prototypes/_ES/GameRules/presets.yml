@@ -1,10 +1,33 @@
+# Standard modes
+
+- type: gamePreset
+  id: ESExtended
+  name: es-preset-extended-title
+  description: es-preset-extended-desc
+  rules:
+  - ESTroupeRuleCrew
+  - ESSchedulerRuleStationEventVote
+  - ESBasicRoundstartVariation
+
 - type: gamePreset
   id: ESTraitors
   name: es-preset-traitor-title
   description: es-preset-traitor-desc
-  showInVote: true
+  showInVote: true # votable until a second antagonist is implemented
   rules:
   - ESTroupeRuleCrew
   - ESTroupeRuleTraitor
   - ESSchedulerRuleStationEventVote
   - ESBasicRoundstartVariation
+
+# Nonstandard modes
+
+- type: gamePreset
+  id: ESSandbox
+  name: es-preset-extended-title
+  description: es-preset-extended-desc
+  showInVote: false
+  maxPlayers: 5
+  rules:
+  - Sandbox
+  - ESBasicRoundstartVariation # included since it determines important features

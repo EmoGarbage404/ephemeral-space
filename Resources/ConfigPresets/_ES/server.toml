@@ -1,7 +1,7 @@
 # Base config for Ephemeral Space Servers
 
 [game]
-desc             = "Testing Server for Ephemral Space."
+desc             = "Engage in treachery and social deduction on stage in the Ephemeral Space theater!"
 soft_max_players = 50
 lobbyenabled     = true
 lobbyduration    = 300 # 5 minutes lobby timer
