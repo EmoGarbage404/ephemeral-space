@@ -1,0 +1,30 @@
+
+- type: entity
+  id: ESBasicDecalDirtVariationPass
+  parent: BaseVariationPass
+  components:
+  - type: EntitySpawnVariationPass
+    tilesPerEntityAverage: 80
+    tilesPerEntityStdDev: 5
+    entities:
+    - id: DecalSpawnerDirtWide
+
+- type: entity
+  id: ESBasicDecalGraffitiVariationPass
+  parent: BaseVariationPass
+  components:
+  - type: EntitySpawnVariationPass
+    tilesPerEntityAverage: 280
+    tilesPerEntityStdDev: 30
+    entities:
+    - id: DecalSpawnerGraffiti
+
+- type: entity
+  id: ESBasicDecalDirtMonospaceVariationPass
+  parent: BaseVariationPass
+  components:
+  - type: EntitySpawnVariationPass
+    tilesPerEntityAverage: 80
+    tilesPerEntityStdDev: 10
+    entities:
+    - id: DecalSpawnerDirtMonospace
