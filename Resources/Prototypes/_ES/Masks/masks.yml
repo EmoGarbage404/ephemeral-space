@@ -1,4 +1,12 @@
 # Crew masks
+
+- type: esMask
+  id: ESFruitVendor
+  name: es-mask-fruit-vendor-name
+  troupe: ESCrew
+  description: es-mask-fruit-vendor-desc
+  weight: 1
+
 - type: esMask
   id: ESMercenary
   name: es-mask-mercenary-name
