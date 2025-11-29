@@ -6,6 +6,10 @@
   troupe: ESCrew
   description: es-mask-fruit-vendor-desc
   weight: 1
+  components:
+  - type: ActionGrant
+    actions:
+    - ESActionMaskSpawnFruit
 
 - type: esMask
   id: ESMercenary
