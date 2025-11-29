@@ -29,6 +29,14 @@ public sealed class ESDegradationSystem : EntitySystem
         Degrade(ent.Owner, null);
     }
 
+    public bool TryDegrade(Entity<ESQueuedDegradationComponent?> ent, EntityUid? user)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return false;
+
+        return Degrade(ent, user);
+    }
+
     public bool Degrade(EntityUid target, EntityUid? user)
     {
         var ev = new ESUndergoDegradationEvent(user);

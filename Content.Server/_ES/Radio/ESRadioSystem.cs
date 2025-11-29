@@ -1,6 +1,7 @@
 using System.Text;
 using Content.Server._ES.Radio.Components;
 using Content.Server.Radio;
+using Content.Shared.Dataset;
 using Content.Shared.Whitelist;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
@@ -59,7 +60,14 @@ public sealed class ESRadioSystem : EntitySystem
         if (distortion < 0) // only distort if we're in the range.
             return msg;
 
-        var muffleChance = MathHelper.Lerp(0.05f, 0.4f, distortion);
+        return DistortRadioMessage(msg, distortion, _prototypeManager, _random, Loc);
+    }
+
+    private static readonly ProtoId<LocalizedDatasetPrototype> FalloffInterjectionDataset = "ESRadioFalloffInterjections";
+
+    public static string DistortRadioMessage(string msg, float a, IPrototypeManager protoMan, IRobustRandom random, ILocalizationManager loc)
+    {
+        var muffleChance = MathHelper.Lerp(0.05f, 0.4f, a);
 
         var outputMsg = new StringBuilder();
         foreach (var letter in msg.AsSpan())
@@ -70,7 +78,7 @@ public sealed class ESRadioSystem : EntitySystem
                 continue;
             }
 
-            if (_random.Prob(muffleChance))
+            if (random.Prob(muffleChance))
                 outputMsg.Append('~');
             else
                 outputMsg.Append(letter);
@@ -79,13 +87,13 @@ public sealed class ESRadioSystem : EntitySystem
         msg = outputMsg.ToString();
         outputMsg.Clear();
 
-        var interjectionChance = Math.Clamp(MathHelper.Lerp(-0.1f, 0.5f, distortion), 0, 1);
-        var interjection = _prototypeManager.Index(receiver.Comp.FalloffInterjectionDataset);
+        var interjectionChance = Math.Clamp(MathHelper.Lerp(-0.1f, 0.5f, a), 0, 1);
+        var interjection = protoMan.Index(FalloffInterjectionDataset);
         foreach (var word in msg.Split(' '))
         {
-            if (_random.Prob(interjectionChance))
+            if (random.Prob(interjectionChance))
             {
-                outputMsg.Append(Loc.GetString(_random.Pick(interjection.Values)));
+                outputMsg.Append(loc.GetString(random.Pick(interjection.Values)));
                 outputMsg.Append(' ');
             }
 

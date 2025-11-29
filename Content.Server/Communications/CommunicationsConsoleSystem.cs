@@ -19,11 +19,26 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Popups;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
+// ES START
+using Content.Server._ES.Radio;
+using Content.Shared._ES.Degradation;
+using Content.Shared.Dataset;
+using Content.Shared.Random.Helpers;
+using Robust.Shared.Audio;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
+using Robust.Shared.Utility;
+// ES END
 
 namespace Content.Server.Communications
 {
     public sealed class CommunicationsConsoleSystem : EntitySystem
     {
+// ES START
+        [Dependency] private readonly IPrototypeManager _prototype = default!;
+        [Dependency] private readonly IRobustRandom _random = default!;
+        [Dependency] private readonly ESDegradationSystem _degradation = default!;
+// ES END
         [Dependency] private readonly AccessReaderSystem _accessReaderSystem = default!;
         [Dependency] private readonly AlertLevelSystem _alertLevelSystem = default!;
         [Dependency] private readonly ChatSystem _chatSystem = default!;
@@ -54,6 +69,9 @@ namespace Content.Server.Communications
 
             // On console init, set cooldown
             SubscribeLocalEvent<CommunicationsConsoleComponent, MapInitEvent>(OnCommunicationsConsoleMapInit);
+// ES START
+            SubscribeLocalEvent<CommunicationsConsoleComponent, ESUndergoDegradationEvent>(OnUndergoDegradation);
+// ES END
         }
 
         public override void Update(float frameTime)
@@ -86,6 +104,37 @@ namespace Content.Server.Communications
             comp.AnnouncementCooldownRemaining = comp.InitialDelay;
             UpdateCommsConsoleInterface(uid, comp);
         }
+// ES START
+        private static readonly SoundSpecifier DegradationSoundEffect = new SoundPathSpecifier("/Audio/_ES/announcements/announcementdegraded.ogg");
+
+        private static readonly ProtoId<LocalizedDatasetPrototype> DegradationAnnouncements = "ESCommunicationConsoleDegradationAnnouncement";
+
+        private void OnUndergoDegradation(Entity<CommunicationsConsoleComponent> ent, ref ESUndergoDegradationEvent args)
+        {
+            var dataset = _prototype.Index(DegradationAnnouncements);
+            var msg = Loc.GetString(_random.Pick(dataset));
+
+            // Fuzz up the message
+            msg = FormattedMessage.RemoveMarkupPermissive(ESRadioSystem.DistortRadioMessage(msg, 0.33f, _prototype, _random, Loc));
+
+            var author = Loc.GetString("comms-console-announcement-unknown-sender");
+
+            ent.Comp.AnnouncementCooldownRemaining = ent.Comp.Delay;
+            UpdateCommsConsoleInterface(ent, ent);
+
+            var ev = new CommunicationConsoleAnnouncementEvent(ent, ent, msg, null);
+            RaiseLocalEvent(ref ev);
+
+            Loc.TryGetString(ent.Comp.Title, out var title);
+            title ??= ent.Comp.Title;
+
+            msg += "\n" + Loc.GetString("comms-console-announcement-sent-by") + " " + author;
+
+            _chatSystem.DispatchStationAnnouncement(ent, msg, title, announcementSound: DegradationSoundEffect, colorOverride: Color.DarkGray);
+
+            args.Handled = true;
+        }
+// ES END
 
         /// <summary>
         /// Update the UI of every comms console.
@@ -228,6 +277,10 @@ namespace Content.Server.Communications
         private void OnAnnounceMessage(EntityUid uid, CommunicationsConsoleComponent comp,
             CommunicationsConsoleAnnounceMessage message)
         {
+// ES START
+            if (_degradation.TryDegrade(uid, message.Actor))
+                return;
+// ES END
             var maxLength = _cfg.GetCVar(CCVars.ChatMaxAnnouncementLength);
             var msg = SharedChatSystem.SanitizeAnnouncement(message.Message, maxLength);
             var author = Loc.GetString("comms-console-announcement-unknown-sender");

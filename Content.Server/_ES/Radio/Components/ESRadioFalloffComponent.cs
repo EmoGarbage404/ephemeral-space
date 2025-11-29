@@ -1,6 +1,3 @@
-using Content.Shared.Dataset;
-using Robust.Shared.Prototypes;
-
 namespace Content.Server._ES.Radio.Components;
 
 [RegisterComponent]
@@ -12,7 +9,4 @@ public sealed partial class ESRadioFalloffComponent : Component
 
     [DataField]
     public float MaxSendDistance = 50f;
-
-    [DataField]
-    public ProtoId<LocalizedDatasetPrototype> FalloffInterjectionDataset = "ESRadioFalloffInterjections";
 }
