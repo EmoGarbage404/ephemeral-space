@@ -83,6 +83,7 @@
   - type: Appearance
   - type: HumanoidAppearance
     species: Human
+  - type: ESBlinker
   - type: SlowOnDamage
     speedModifierThresholds:
       60: 0.7

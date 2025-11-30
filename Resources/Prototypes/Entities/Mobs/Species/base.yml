@@ -211,6 +211,9 @@
     - FootstepSound
     - DoorBumpOpener
     - AnomalyHost
+# ES START
+  - type: ESBlinker
+# ES END
 
 - type: entity
   save: false
