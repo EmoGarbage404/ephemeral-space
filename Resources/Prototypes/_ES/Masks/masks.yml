@@ -6,6 +6,8 @@
   troupe: ESCrew
   description: es-mask-fruit-vendor-desc
   weight: 1
+  objectives:
+    id: ESObjectiveEatSummonedFruit
   components:
   - type: ActionGrant
     actions:
