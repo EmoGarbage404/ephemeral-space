@@ -11,7 +11,7 @@
     iconOn:
       sprite: _ES/Actions/masks/extract.rsi
       state: fruit-vendor-on
-    useDelay: 5
+    useDelay: 2.5m
   - type: TargetAction
   - type: EntityTargetAction
     whitelist: # TODO: this should show interaction outlines, but it currently doesn't work here.
