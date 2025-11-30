@@ -14,6 +14,15 @@
     - ESActionMaskSpawnFruit
 
 - type: esMask
+  id: ESCitizen
+  name: es-mask-citizen-name
+  troupe: ESCrew
+  description: es-mask-citizen-desc
+  weight: 0.25
+  gear:
+    id: ESItemCardCitizenship
+
+- type: esMask
   id: ESMercenary
   name: es-mask-mercenary-name
   troupe: ESCrew
