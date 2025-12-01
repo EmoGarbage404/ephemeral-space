@@ -21,16 +21,11 @@
       examineString: es-summonable-examine-arms-dealer
       table:
         group:
-        - group:
-          - id: ESWeaponPistol9mm
-          - id: ESWeaponRevolver357
-          weight: 5
-        - group:
-          - id: ESWeaponShotgun
-            weight: 2
-          - id: ESWeaponDoubleBarrelShotgun
-            weight: 1
-          weight: 3
-        - group:
-          - id: ESWeaponEnergyRifle
-          weight: 2
+        - id: ESWeaponPistol9mm
+          weight: 8
+        - id: ESWeaponPistol9mmSilenced
+          weight: 8
+        - id: ESWeaponRevolver357
+          weight: 8
+        - id: ESWeaponDoubleBarrelShotgun
+          weight: 1
