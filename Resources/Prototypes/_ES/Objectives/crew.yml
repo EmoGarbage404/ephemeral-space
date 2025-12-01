@@ -12,3 +12,18 @@
     title: es-fruit-vendor-objective-title
     min: 10
     max: 15
+
+- type: entity
+  parent: ESBaseMaskObjective
+  id: ESObjectiveHoldSummonedGuns
+  description: Use your ability to summon firearms and make sure crew members hold onto them until the end of the shift.
+  components:
+  - type: Objective
+    icon:
+      sprite: _ES/Objects/Weapons/Guns/shotgun.rsi
+      state: icon
+  - type: ESHoldSummonableObjective
+  - type: NumberObjective
+    title: es-arms-dealer-objective-title
+    min: 7
+    max: 10
