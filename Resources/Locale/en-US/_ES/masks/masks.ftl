@@ -2,6 +2,9 @@
 es-mask-crewmember-name = Crewmember
 es-mask-crewmember-desc = Work with your other crewmembers to complete the station objective.
 
+es-mask-arms-dealer-name = Arms Dealer
+es-mask-arms-dealer-desc = Help the crew complete the station objective by handing out guns, but make sure they don't kill anyone.
+
 es-mask-citizen-name = Citizen
 es-mask-citizen-desc = Confirm your innocence with the assistance of your fancy citizenship card. Help your crewmembers complete the station objective.
 
@@ -10,7 +13,6 @@ es-mask-fruit-vendor-desc = Dispense delicious fruits to aid in the completion o
 
 es-mask-mercenary-name = Mercenary
 es-mask-mercenary-desc = Utilize your dubiously-legal gear to aid in the completion of the station's objective.
-
 
 # Traitor masks
 es-mask-troupe-traitor-examine = They're a fellow [bold][color=red]Traitor[/color][/bold] and a member of the [bold][color=red]Syndicate[/color][/bold]. Work together to complete the objectives.

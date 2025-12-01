@@ -1,0 +1,36 @@
+- type: entity
+  parent: BaseAction
+  id: ESActionMaskSummonGun
+  name: Summon Gun
+  description: Use this on a closed container to summon a [color=crimson][bold]dangerous firearm![/bold][/color]
+  components:
+  - type: Action
+    icon:
+      sprite: _ES/Actions/masks/extract.rsi
+      state: arms-dealer
+    iconOn:
+      sprite: _ES/Actions/masks/extract.rsi
+      state: arms-dealer-on
+    useDelay: 5m
+  - type: TargetAction
+  - type: EntityTargetAction
+    whitelist: # TODO: this should show interaction outlines, but it currently doesn't work here.
+      components:
+      - EntityStorage
+    event: !type:ESContainerSummonActionEvent
+      examineString: es-summonable-examine-arms-dealer
+      table:
+        group:
+        - group:
+          - id: ESWeaponPistol9mm
+          - id: ESWeaponRevolver357
+          weight: 5
+        - group:
+          - id: ESWeaponShotgun
+            weight: 2
+          - id: ESWeaponDoubleBarrelShotgun
+            weight: 1
+          weight: 3
+        - group:
+          - id: ESWeaponEnergyRifle
+          weight: 2

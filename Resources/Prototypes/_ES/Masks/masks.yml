@@ -1,6 +1,28 @@
 # Crew masks
 
 - type: esMask
+  id: ESArmsDealer
+  name: es-mask-arms-dealer-name
+  troupe: ESCrew
+  description: es-mask-arms-dealer-desc
+  weight: 1
+  #objectives:
+  #  id: ESObjectiveEatSummonedFruit
+  components:
+  - type: ActionGrant
+    actions:
+    - ESActionMaskSummonGun
+
+- type: esMask
+  id: ESCitizen
+  name: es-mask-citizen-name
+  troupe: ESCrew
+  description: es-mask-citizen-desc
+  weight: 0.25
+  gear:
+    id: ESItemCardCitizenship
+
+- type: esMask
   id: ESFruitVendor
   name: es-mask-fruit-vendor-name
   troupe: ESCrew
@@ -12,15 +34,6 @@
   - type: ActionGrant
     actions:
     - ESActionMaskSpawnFruit
-
-- type: esMask
-  id: ESCitizen
-  name: es-mask-citizen-name
-  troupe: ESCrew
-  description: es-mask-citizen-desc
-  weight: 0.25
-  gear:
-    id: ESItemCardCitizenship
 
 - type: esMask
   id: ESMercenary
