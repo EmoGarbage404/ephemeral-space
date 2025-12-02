@@ -7,3 +7,5 @@
   - type: ESViewcone
   - type: ESViewconeOccludable
   - type: ESHoldToFace
+  - type: KillTracker # used for masks
+    killState: Dead

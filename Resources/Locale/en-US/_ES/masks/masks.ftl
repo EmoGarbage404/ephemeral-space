@@ -14,6 +14,9 @@ es-mask-fruit-vendor-desc = Dispense delicious fruits to aid in the completion o
 es-mask-mercenary-name = Mercenary
 es-mask-mercenary-desc = Utilize your dubiously-legal gear to aid in the completion of the station's objective.
 
+es-mask-veteran-name = Veteran
+es-mask-veteran-desc = Help the station by using your trusty sidearm to take care of anybody who isn't aligned with the crew.
+
 # Traitor masks
 es-mask-troupe-traitor-examine = They're a fellow [bold][color=red]Traitor[/color][/bold] and a member of the [bold][color=red]Syndicate[/color][/bold]. Work together to complete the objectives.
 

@@ -71,3 +71,30 @@
     - id: ClothingOuterArmorBasic
     - id: ExGrenade
       amount: 2
+
+# Veteran
+- type: entity
+  parent: ESCrateCache
+  id: ESCrateCacheCrewVeteran
+  suffix: ES, Veteran Cache
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage:
+        tableId: ESCrewCacheVeteran
+
+- type: entityTable
+  id: ESCrewCacheVeteran
+  table:
+    group:
+    - all:
+      - id: ESWeaponRevolver357
+      - id: ESSpeedLoader357
+        amount: 3
+    - all:
+      - group:
+        - id: ESWeaponPistol9mm
+          weight: 2
+        - id: ESWeaponPistol9mmSilenced
+      - id: ESMagazine9mm
+        amount: 3
