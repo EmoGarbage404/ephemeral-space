@@ -1,0 +1,30 @@
+using Content.Shared._ES.Masks;
+using Robust.Shared.Prototypes;
+
+namespace Content.Server._ES.Masks.Objectives.Components;
+
+/// <summary>
+/// Objective for killing a member of a given troupe.
+/// </summary>
+[RegisterComponent]
+[Access(typeof(ESKillTroupeObjectiveSystem))]
+public sealed partial class ESKillTroupeObjectiveComponent : Component
+{
+    /// <summary>
+    /// Number of kills accumulated
+    /// </summary>
+    [DataField]
+    public int Kills;
+
+    /// <summary>
+    /// The troupe the victim must be a part of
+    /// </summary>
+    [DataField]
+    public ProtoId<ESTroupePrototype> Troupe;
+
+    /// <summary>
+    /// If true, kills will count if the victim is NOT part of <see cref="Troupe"/>
+    /// </summary>
+    [DataField]
+    public bool Invert;
+}

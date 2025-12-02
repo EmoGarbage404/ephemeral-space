@@ -51,6 +51,8 @@
   troupe: ESCrew
   description: es-mask-veteran-desc
   weight: 1
+  objectives:
+    id: ESObjectiveKillNonCrew
   mindComponents:
   - type: ESMaskCacheSpawner
     cacheProto: ESCrateCacheCrewVeteran
