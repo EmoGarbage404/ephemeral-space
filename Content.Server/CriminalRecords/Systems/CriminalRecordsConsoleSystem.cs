@@ -15,6 +15,9 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Security.Components;
 using System.Linq;
 using Content.Shared.Roles.Jobs;
+// ES START
+using Content.Shared._ES.Degradation;
+// ES END
 
 namespace Content.Server.CriminalRecords.Systems;
 
@@ -30,6 +33,9 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
     [Dependency] private readonly StationRecordsSystem _records = default!;
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
+// ES START
+    [Dependency] private readonly ESDegradationSystem _esDegradation = default!;
+// ES END
 
     public override void Initialize()
     {
@@ -96,6 +102,9 @@ public sealed class CriminalRecordsConsoleSystem : SharedCriminalRecordsConsoleS
 
         if (!_records.TryGetRecord<CriminalRecord>(key.Value, out var record) || record.Status == msg.Status)
             return;
+// ES START
+        _esDegradation.TryDegrade(ent.Owner, msg.Actor);
+// ES END
 
         // validate the reason
         string? reason = null;
