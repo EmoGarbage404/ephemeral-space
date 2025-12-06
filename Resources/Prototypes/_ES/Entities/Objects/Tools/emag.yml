@@ -1,8 +1,9 @@
 - type: entity
-  parent: AccessBreaker # doesnt have the magic hacking properties of the classic "combined" emag...
+  parent: [BaseItem, BaseSyndicateContraband]
   id: ESEmag
-  name: cryptographic sequencer #...but uses the original sprites and name.
+  name: cryptographic sequencer
   description: The all-in-one hacking solution. Friend of any syndicate. The iconic EMAG.
+  suffix: ES, Limited
   components:
   - type: Sprite
     sprite: Objects/Tools/emag.rsi
@@ -10,3 +11,6 @@
   - type: Item
     sprite: Objects/Tools/emag.rsi
     storedRotation: -90
+  - type: ESEmag
+  - type: LimitedCharges
+  - type: AutoRecharge
