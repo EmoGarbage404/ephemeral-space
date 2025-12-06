@@ -17,7 +17,6 @@ using Content.Shared.Dataset;
 using Content.Shared.Random.Helpers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-
 // ES END
 
 namespace Content.Server.CriminalRecords.Systems;
