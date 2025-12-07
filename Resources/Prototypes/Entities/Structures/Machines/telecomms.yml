@@ -117,7 +117,7 @@
   - type: ParrotListener
   - type: ParrotMemory
     learnChance: 1.0
-    learnCooldown: 1s
+    learnCooldown: 1m
   - type: ActiveRadio
 # ES END
 
