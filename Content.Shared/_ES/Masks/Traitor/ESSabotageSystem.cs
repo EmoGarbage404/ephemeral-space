@@ -27,7 +27,7 @@ public sealed class ESSabotageSystem : EntitySystem
     private void OnGetVerbs(Entity<ESSabotageTargetComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
         if (_mask.GetTroupeOrNull(args.User) != ent.Comp.SabotageTroupe
-            || !_admin.HasAdminFlag(args.User, AdminFlags.Debug))
+            && !_admin.HasAdminFlag(args.User, AdminFlags.Debug))
             return;
 
         var user = args.User;
