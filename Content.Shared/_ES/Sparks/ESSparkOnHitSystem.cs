@@ -35,11 +35,9 @@ public sealed class ESSparkOnHitSystem : EntitySystem
             return;
 
         SharedApcPowerReceiverComponent? powerReceiver = null;
-        if (_powerReceiver.ResolveApc(ent, ref powerReceiver))
-        {
-            if (!_powerReceiver.IsPowered((ent, powerReceiver)) || powerReceiver.Load <= 0)
-                return;
-        }
+        if (_powerReceiver.ResolveApc(ent, ref powerReceiver) &&
+            (!_powerReceiver.IsPowered((ent, powerReceiver)) || powerReceiver.Load <= 0))
+            return;
 
         _sparks.DoSparks(ent, ent.Comp.Count, ent.Comp.SparkPrototype);
         ent.Comp.LastSparkTime = _timing.CurTime;
