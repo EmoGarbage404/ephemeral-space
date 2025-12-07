@@ -139,7 +139,7 @@
       - EncryptionKeyCommand
   # ES START
   - type: ActiveRadio
-    receiveAllChannels: true
+    channels: [ Common, Cargo, Engineering, Medical, Science, Security, Service, Command ]
   # ES END
 
 
