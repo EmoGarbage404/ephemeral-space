@@ -100,7 +100,7 @@ public sealed class ESEmagSystem : EntitySystem
                 PopupType.Medium);
         }
 
-        _sparks.DoSparks(target, 3);
+        _sparks.DoSparks(target);
 
         _adminLog.Add(LogType.Emag, LogImpact.High, $"{ToPrettyString(user):player} emagged {ToPrettyString(target):target}");
         return true;
