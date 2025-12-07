@@ -36,7 +36,6 @@ public sealed class RadioSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
 // ES START
-    [Dependency] private ILocalizationManager _loc = default!;
     [Dependency] private readonly ESRadioSystem _esRadio = default!;
 // ES END
 
