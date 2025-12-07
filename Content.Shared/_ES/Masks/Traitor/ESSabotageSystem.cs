@@ -1,5 +1,7 @@
 using Content.Shared._ES.Degradation;
 using Content.Shared._ES.Masks.Traitor.Components;
+using Content.Shared.Administration;
+using Content.Shared.Administration.Managers;
 using Content.Shared.DoAfter;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
@@ -9,6 +11,7 @@ namespace Content.Shared._ES.Masks.Traitor;
 
 public sealed class ESSabotageSystem : EntitySystem
 {
+    [Dependency] private readonly ISharedAdminManager _admin = default!;
     [Dependency] private readonly ESDegradationSystem _degradation = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly ESSharedMaskSystem _mask = default!;
@@ -23,7 +26,8 @@ public sealed class ESSabotageSystem : EntitySystem
 
     private void OnGetVerbs(Entity<ESSabotageTargetComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
-        if (_mask.GetTroupeOrNull(args.User) != ent.Comp.SabotageTroupe)
+        if (_mask.GetTroupeOrNull(args.User) != ent.Comp.SabotageTroupe
+            || !_admin.HasAdminFlag(args.User, AdminFlags.Debug))
             return;
 
         var user = args.User;
