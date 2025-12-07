@@ -139,7 +139,7 @@
       - EncryptionKeyCommand
   # ES START
   - type: ActiveRadio
-    channels: [ Common, Cargo, Engineering, Medical, Science, Security, Service, Command ]
+    channels: [ Common, Supply, Engineering, Medical, Science, Security, Service, Command ]
   # ES END
 
 
@@ -168,7 +168,7 @@
       - EncryptionKeyCargo
   # ES START
   - type: ActiveRadio
-    channels: [ Cargo ]
+    channels: [ Supply ]
   # ES END
 
 - type: entity
