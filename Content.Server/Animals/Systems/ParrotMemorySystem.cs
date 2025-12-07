@@ -44,6 +44,7 @@ public sealed partial class ParrotMemorySystem : SharedParrotMemorySystem
         // removed mapinit event (useless)
         // + event for regular radio relay
         SubscribeLocalEvent<ParrotListenerComponent, RadioReceiveEvent>(OnRadioReceive);
+        // ES END
         SubscribeLocalEvent<ParrotListenerComponent, ListenEvent>(OnListen);
         SubscribeLocalEvent<ParrotListenerComponent, HeadsetRadioReceiveRelayEvent>(OnHeadsetReceive);
 
@@ -75,7 +76,6 @@ public sealed partial class ParrotMemorySystem : SharedParrotMemorySystem
         TryLearn((ent.Owner, null, ent.Comp), args.Message, args.MessageSource);
     }
     // ES END
-
 
     /// <summary>
     /// Called when an entity with a ParrotMemoryComponent tries to vocalize.
@@ -166,7 +166,10 @@ public sealed partial class ParrotMemorySystem : SharedParrotMemorySystem
             sourceNetUserId = mind.UserId;
         }
 
+        // ES START
+        // add name
         var newMemory = new SpeechMemory(sourceNetUserId, message, Name(source));
+        // ES END
 
         // add a new message if there is space in the memory
         if (entity.Comp.SpeechMemories.Count < entity.Comp.MaxSpeechMemory)
