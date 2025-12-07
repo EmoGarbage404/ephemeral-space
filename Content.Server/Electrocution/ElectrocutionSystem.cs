@@ -360,6 +360,10 @@ public sealed class ElectrocutionSystem : SharedElectrocutionSystem
 
     private bool DoCommonElectrocutionAttempt(EntityUid uid, EntityUid? sourceUid, ref float siemensCoefficient, bool ignoreInsulation = false)
     {
+// ES START
+        if (sourceUid.HasValue)
+            _esSparks.DoSparks(sourceUid.Value);
+// ES END
 
         var attemptEvent = new ElectrocutionAttemptEvent(uid, sourceUid, siemensCoefficient,
             ignoreInsulation ? SlotFlags.NONE : ~SlotFlags.POCKET);
@@ -407,9 +411,7 @@ public sealed class ElectrocutionSystem : SharedElectrocutionSystem
         }
 
 
-// ES START
-        _esSparks.DoSparks(uid);
-// ES END
+        // TODO: Sparks here.
 
         if (shockDamage is { } dmg)
         {
