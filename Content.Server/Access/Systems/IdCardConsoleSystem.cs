@@ -262,9 +262,6 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
         var ids = new HashSet<Entity<IdCardComponent>>();
         _entityLookup.GetGridEntities(grid, ids);
 
-        if (ids.Count == 0)
-            return;
-
         // Get icons only for valid jobs
         var icons = _prototype.EnumeratePrototypes<JobPrototype>()
             .Where(j => j.OverrideConsoleVisibility ?? j.SetPreference)
