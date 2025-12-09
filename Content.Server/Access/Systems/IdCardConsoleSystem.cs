@@ -152,7 +152,7 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
         if (component.TargetIdSlot.Item is not { Valid: true } targetId || !PrivilegedIdIsAuthorized(uid, component, out var privilegedId))
             return;
 // ES START
-        _degradation.Degrade(uid, player);
+        _degradation.TryDegrade(uid, player);
 // ES END
 
         _idCard.TryChangeFullName(targetId, newFullName, player: player);
