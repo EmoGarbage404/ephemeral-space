@@ -163,7 +163,7 @@
     - id: ClothingHeadHatCone
 
     - group:
-      - id: GlowstickBase
+      - id: GlowstickGreen
       - id: GlowstickBlue
       - id: GlowstickPurple
       - id: GlowstickRed
