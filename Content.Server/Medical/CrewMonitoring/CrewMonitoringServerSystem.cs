@@ -135,7 +135,12 @@ public sealed class CrewMonitoringServerSystem : EntitySystem
 
         foreach (var sensor in sensors)
         {
+            // Don't change the sensor of clothing that doesn't support having it changed back
             if (sensor.Comp.ControlsLocked)
+                continue;
+
+            // Don't enable disabled sensors. First because it'll expose stealthy people and dead bodies, second because it doesnt make sense.
+            if (sensor.Comp.Mode == SuitSensorMode.SensorOff)
                 continue;
             _sensors.SetSensor(sensor.AsNullable(), _random.Pick(statuses));
         }
