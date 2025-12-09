@@ -62,6 +62,8 @@
   - type: ESDegradationEvent
     component: TelecomServer
     degradeImmediately: true # Doesn't react to anything
+  - type: StationEvent
+    weight: 20
 
 - type: entity
   parent: ESBaseDegradationEvent
