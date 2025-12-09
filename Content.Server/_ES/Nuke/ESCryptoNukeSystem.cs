@@ -1,13 +1,18 @@
+using System.Numerics;
 using Content.Server.Nuke;
 using Content.Shared._ES.Nuke;
 using Content.Shared._ES.Nuke.Components;
 using Content.Shared.Nuke;
+using Robust.Server.GameObjects;
+using Robust.Shared.Map;
 
 namespace Content.Server._ES.Nuke;
 
 /// <inheritdoc/>
 public sealed class ESCryptoNukeSystem : ESSharedCryptoNukeSystem
 {
+    [Dependency] private readonly TransformSystem _transform = default!;
+
     protected override void UpdateUiState(Entity<ESCryptoNukeConsoleComponent, UserInterfaceComponent> ent)
     {
         var state = new ESCryptoNukeConsoleBuiState();
@@ -15,7 +20,22 @@ public sealed class ESCryptoNukeSystem : ESSharedCryptoNukeSystem
         var diskQuery = EntityQueryEnumerator<NukeDiskComponent, TransformComponent>();
         while (diskQuery.MoveNext(out _, out _, out var xform))
         {
-            state.DiskLocations.Add(GetNetCoordinates(xform.Coordinates));
+            EntityCoordinates coordinates;
+            if (xform.GridUid != null)
+            {
+                coordinates = new EntityCoordinates(xform.GridUid.Value,
+                    Vector2.Transform(_transform.GetWorldPosition(xform),
+                        _transform.GetInvWorldMatrix(xform.GridUid.Value)));
+            }
+            else if (xform.MapUid != null)
+            {
+                coordinates = new EntityCoordinates(xform.MapUid.Value, _transform.GetWorldPosition(xform));
+            }
+            else
+            {
+                coordinates = EntityCoordinates.Invalid;
+            }
+            state.DiskLocations.Add(GetNetCoordinates(coordinates));
         }
 
         var station = Station.GetOwningStation(ent);
