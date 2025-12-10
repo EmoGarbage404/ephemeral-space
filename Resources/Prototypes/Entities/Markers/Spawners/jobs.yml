@@ -92,7 +92,7 @@
   id: SpawnPointPassenger
   parent: SpawnPointJobBase
 # ES START
-  name: passenger
+  name: assistant
 # ES END
   components:
   - type: SpawnPoint
