@@ -303,8 +303,10 @@
   parent: JobIcon
   id: JobIconReporter
   icon:
-    sprite: *icon-rsi
-    state: Reporter
+# ES START
+    sprite: /Textures/_ES/Interface/Misc/ES_job_icons.rsi
+    state: reporter
+# ES END
   jobName: job-name-reporter
 
 - type: jobIcon

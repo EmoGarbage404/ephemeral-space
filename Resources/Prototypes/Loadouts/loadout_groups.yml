@@ -118,7 +118,6 @@
 - type: loadoutGroup
   id: CaptainHead
   name: loadout-group-captain-head
-  minLimit: 0
   loadouts:
   - CaptainHead
   - CaptainCap
@@ -166,7 +165,6 @@
 - type: loadoutGroup
   id: HoPHead
   name: loadout-group-hop-head
-  minLimit: 0
   loadouts:
   - HoPHead
 
@@ -272,7 +270,6 @@
 - type: loadoutGroup
   id: BartenderHead
   name: loadout-group-bartender-head
-  minLimit: 0
   loadouts:
   - BartenderHead
   - BartenderBowler
@@ -288,7 +285,6 @@
 - type: loadoutGroup
   id: BartenderOuterClothing
   name: loadout-group-bartender-outerclothing
-  minLimit: 0
   loadouts:
   - BartenderVest
   - BartenderApron
@@ -312,7 +308,6 @@
 - type: loadoutGroup
   id: ChefHead
   name: loadout-group-chef-head
-  minLimit: 0
   loadouts:
   - ChefHead
 
@@ -333,10 +328,12 @@
 - type: loadoutGroup
   id: ChefOuterClothing
   name: loadout-group-chef-outerclothing
-  minLimit: 0
+# ES END
+  #minLimit: 0
   loadouts:
-  - ChefApron
   - ChefJacket
+  - ChefApron
+# ES START
   - ChefWintercoat
 
 - type: loadoutGroup
@@ -457,7 +454,6 @@
 - type: loadoutGroup
   id: JanitorHead
   name: loadout-group-janitor-head
-  minLimit: 0
   loadouts:
   - JanitorHead
 
@@ -525,7 +521,6 @@
 - type: loadoutGroup
   id: BotanistOuterClothing
   name: loadout-group-botanist-outerclothing
-  minLimit: 0
   loadouts:
   - BotanistApron
   - BotanistWintercoat
@@ -765,7 +760,6 @@
 - type: loadoutGroup
   id: CargoTechnicianHead
   name: loadout-group-cargo-technician-head
-  minLimit: 0
   loadouts:
   - CargoTechnicianHead
 
@@ -905,7 +899,6 @@
 - type: loadoutGroup
   id: StationEngineerHead
   name: loadout-group-station-engineer-head
-  minLimit: 0
   loadouts:
   - StationEngineerHardhatYellow
   - StationEngineerHardhatOrange
@@ -933,7 +926,6 @@
 - type: loadoutGroup
   id: StationEngineerOuterClothing
   name: loadout-group-station-engineer-outerclothing
-  minLimit: 0
   loadouts:
   - StationEngineerOuterVest
   - StationEngineerWintercoat
@@ -942,6 +934,9 @@
   id: StationEngineerShoes
   name: loadout-group-station-engineer-shoes
   loadouts:
+# ES START
+  - ESEngineerShoes
+# ES END
   - WorkBoots
   - EngineeringWinterBoots
 
@@ -1089,7 +1084,6 @@
 - type: loadoutGroup
   id: ScientistOuterClothing
   name: loadout-group-scientist-outerclothing
-  minLimit: 0
   loadouts:
   - RegularLabCoat
   - ScienceLabCoat
@@ -1147,7 +1141,6 @@
 - type: loadoutGroup
   id: HeadofSecurityHead
   name: loadout-group-head-of-security-head
-  minLimit: 0
   loadouts:
   - HeadofSecurityHead
   - HeadofSecurityBeret
@@ -1188,7 +1181,6 @@
 - type: loadoutGroup
   id: WardenHead
   name: loadout-group-warden-head
-  minLimit: 0
   loadouts:
   - WardenHead
   - WardenBeret
@@ -1217,7 +1209,6 @@
 - type: loadoutGroup
   id: SecurityHead
   name: loadout-group-security-head
-  minLimit: 0
   loadouts:
   - SecurityHelmet
   - SecurityBeret
@@ -1283,7 +1274,6 @@
 - type: loadoutGroup
   id: DetectiveHead
   name: loadout-group-detective-head
-  minLimit: 0
   loadouts:
   - DetectiveFedora
   - DetectiveFedoraGrey
@@ -1291,7 +1281,6 @@
 - type: loadoutGroup
   id: DetectiveNeck
   name: loadout-group-detective-neck
-  minLimit: 0
   loadouts:
   - DetectiveTie
 
@@ -1426,7 +1415,6 @@
 - type: loadoutGroup
   id: MedicalDoctorOuterClothing
   name: loadout-group-medical-doctor-outerclothing
-  minLimit: 0
   loadouts:
   - RegularLabCoat
   - MedicalDoctorWintercoat
@@ -1457,7 +1445,6 @@
 - type: loadoutGroup
   id: MedicalGloves
   name: loadout-group-medical-gloves
-  minLimit: 0
   loadouts:
   - LatexGloves
   - NitrileGloves
@@ -1500,10 +1487,11 @@
 - type: loadoutGroup
   id: ChemistOuterClothing
   name: loadout-group-chemist-outerclothing
-  minLimit: 0
+# ES START
   loadouts:
-  - RegularLabCoat
   - ChemistLabCoat
+  - RegularLabCoat
+# ES END
   - ChemistWintercoat
 
 - type: loadoutGroup

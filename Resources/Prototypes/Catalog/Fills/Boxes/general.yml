@@ -152,7 +152,9 @@
   name: headset box
   parent: BoxCardboard
   id: BoxHeadset
-  description: A box of spare passenger headsets.
+# ES START
+  description: A box of spare assistant headsets.
+# ES END
   components:
   - type: StorageFill
     contents:
@@ -275,7 +277,9 @@
       - state: trashbag
 
 - type: entity
-  name: passenger encryption key box
+# ES START
+  name: assistant encryption key box
+# ES END
   parent: BoxCardboard
   id: BoxEncryptionKeyPassenger
   description: A box of spare encryption keys.

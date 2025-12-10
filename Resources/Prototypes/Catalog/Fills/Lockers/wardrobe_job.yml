@@ -383,6 +383,8 @@
     - id: ClothingHeadHatHardhatYellow
     - id: ClothingUniformJumpsuitEngineering
     - id: ClothingBackpackEngineering
-    - id: ClothingShoesBootsWork
+# ES START
+    - id: ClothingShoesColorOrange
+# ES END
     - id: ClothingOuterVestHazard
     - id: ClothingUniformJumpskirtEngineering

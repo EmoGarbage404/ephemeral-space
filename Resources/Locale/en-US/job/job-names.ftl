@@ -33,7 +33,9 @@ job-name-janitor = Janitor
 job-name-chaplain = Chaplain
 job-name-botanist = Botanist
 job-name-bartender = Bartender
-job-name-passenger = Passenger
+# ES START
+job-name-passenger = Assistant
+# ES END
 job-name-salvagespec = Salvage Specialist
 job-name-station-ai = Station AI
 job-name-qm = Quartermaster
@@ -101,7 +103,9 @@ JobMedicalIntern = Medical intern
 JobMime = Mime
 JobMusician = Musician
 JobParamedic = Paramedic
-JobPassenger = Passenger
+# ES START
+JobPassenger = Assistant
+# ES END
 JobPsychologist = Psychologist
 JobQuartermaster = Quartermaster
 JobReporter = Reporter

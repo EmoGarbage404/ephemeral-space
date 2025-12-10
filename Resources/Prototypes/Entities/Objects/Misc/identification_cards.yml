@@ -31,7 +31,9 @@
 - type: entity
   parent: IDCardStandard
   id: PassengerIDCard
-  name: passenger ID card
+# ES START
+  name: assistant ID card
+# ES END
   components:
   - type: Sprite
     layers:
@@ -923,7 +925,9 @@
 #Antags
 
 - type: entity
-  name: passenger ID card
+# ES START
+  name: assistant ID card
+# ES END
   parent: [IDCardStandard, BaseChameleon]
   id: AgentIDCard
   suffix: Agent
@@ -960,7 +964,9 @@
         type: ChameleonBoundUserInterface
 
 - type: entity
-  name: passenger ID card
+# ES START
+  name: assistant ID card
+# ES END
   parent: AgentIDCard
   id: NukieAgentIDCard
   suffix: Nukie

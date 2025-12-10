@@ -63,10 +63,11 @@
   equipment:
     shoes: ClothingShoesColorBrown
     id: HoPPDA
-    gloves: ClothingHandsGlovesHop
     ears: ClothingHeadsetAltCommand
     belt: BoxFolderClipboardThreePapers
-    eyes: ClothingEyesHudCommand
+# ES START
+    eyes: ClothingEyesHudSecurity
+# ES END
   storage:
     back:
     - Flash

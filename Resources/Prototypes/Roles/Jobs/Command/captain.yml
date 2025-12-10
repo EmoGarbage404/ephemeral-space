@@ -37,8 +37,10 @@
 - type: startingGear
   id: CaptainGear
   equipment:
-    shoes: ClothingShoesBootsLaceup
-    eyes: ClothingEyesGlassesCommand
+# ES START
+    shoes: ClothingShoesColorBrown
+    eyes: ClothingEyesGlassesSecurity
+# ES END
     gloves: ClothingHandsGlovesCaptain
     id: CaptainPDA
     ears: ClothingHeadsetAltCommand

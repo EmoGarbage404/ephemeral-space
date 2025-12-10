@@ -147,7 +147,9 @@
   parent: PosterBase
   id: PosterContrabandGreyTide
   name: "Grey Tide"
-  description: "A rebellious poster symbolizing passenger solidarity."
+# ES START
+  description: "A rebellious poster symbolizing assistant solidarity."
+# ES END
   components:
   - type: ESPoster
     state: poster8_contraband

@@ -91,7 +91,9 @@
 - type: entity
   id: SpawnPointPassenger
   parent: SpawnPointJobBase
+# ES START
   name: passenger
+# ES END
   components:
   - type: SpawnPoint
     job_id: Passenger

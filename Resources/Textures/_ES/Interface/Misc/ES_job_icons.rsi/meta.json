@@ -1,12 +1,15 @@
 {
     "version": 1,
     "license": "CC-BY-SA-3.0",
-    "copyright": "Soviet by K-Dynamic (github).",
+    "copyright": "Soviet by K-Dynamic (github), reporter by EmoGarbage404 (github).",
     "size": {
         "x": 8,
         "y": 8
     },
     "states": [
+        {
+            "name": "reporter"
+        },
         {
             "name": "Soviet"
         }

@@ -173,7 +173,9 @@
 - type: entity
   parent: BasePDA
   id: PassengerPDA
-  name: passenger PDA
+# ES START
+  name: assistant PDA
+# ES END
   description: Why isn't it gray?
   components:
   - type: Pda
@@ -900,7 +902,9 @@
   parent: BaseSecurityPDA
   id: SecurityPDA
   name: security PDA
-  description: Red to hide the stains of passenger blood.
+# ES START
+  description: Red to hide the stains of assistant blood.
+# ES END
   components:
   - type: Pda
     id: SecurityIDCard
@@ -1519,7 +1523,9 @@
 - type: entity
   parent: [BasePDA, SelectableLock]
   id: ChameleonPDA
-  name: passenger PDA
+# ES START
+  name: assistant PDA
+# ES END
   description: Why isn't it gray?
   suffix: Chameleon
   components:

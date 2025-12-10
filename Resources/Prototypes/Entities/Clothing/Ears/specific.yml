@@ -1,7 +1,9 @@
 ﻿- type: entity
   parent: [ClothingHeadsetGrey, BaseChameleon]
   id: ClothingHeadsetChameleon
-  name: passenger headset
+# ES START
+  name: assistant headset
+# ES END
   description: An updated, modular intercom that fits over the head. Takes encryption keys.
   suffix: Chameleon
   components:
