@@ -18,10 +18,32 @@
 
 - type: entity # Vote Entity (for above)
   id: ESVoteStationEvent
-  name: Next Station Event...
+  name: Next station event...
   categories: [ HideSpawnMenu ]
   components:
   - type: ESVote
     queryString: es-voter-query-string-station-event
+    duration: 60
+  - type: ESEventVote
+
+- type: entity
+  parent: BaseGameRule
+  id: ESSchedulerRuleDegradationEventVote
+  components:
+  - type: ESEventVoteScheduler
+    eventTable:
+      tableId: ESDegradationEvents
+    votePrototype: ESVoteDegradationEvent
+    voteOptions: 2
+    minEventDelay: 5m
+    maxEventDelay: 15m
+
+- type: entity
+  id: ESVoteDegradationEvent
+  name: Next degradation event...
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ESVote
+    queryString: es-voter-query-string-degradation-event
     duration: 60
   - type: ESEventVote

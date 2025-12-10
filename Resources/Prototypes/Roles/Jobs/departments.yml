@@ -35,7 +35,6 @@
 #  - Botanist
 #  - Chef
 #  - Janitor
-  - Boxer
   - Chaplain
   - Clown
   - HeadOfPersonnel
@@ -46,7 +45,6 @@
   - Passenger
   - Reporter
   - Visitor
-  - Zookeeper
 #  - ServiceWorker
 # ES END
 
@@ -165,10 +163,8 @@
   color: "#9FED58"
   weight: 10
   roles:
-  - Boxer
 # ES START
 #  - Reporter
 # ES END
-  - Zookeeper
   - Psychologist
   primary: false

@@ -786,8 +786,6 @@
     - sprite: *icon-rsi
       offset: *icon-offset
       state: Boxer
-  - type: PresetIdCard
-    job: Boxer
 
 - type: entity
   parent: IDCardStandard
@@ -804,8 +802,6 @@
     - sprite: *icon-rsi
       offset: *icon-offset
       state: Zookeeper
-  - type: PresetIdCard
-    job: Zookeeper
 
 #Supply
 
@@ -925,25 +921,14 @@
 #Antags
 
 - type: entity
-# ES START
-  name: assistant ID card
-# ES END
-  parent: [IDCardStandard, BaseChameleon]
+  parent: [PassengerIDCard, BaseChameleon]
   id: AgentIDCard
   suffix: Agent
   components:
-  - type: PresetIdCard
-    job: Passenger
   - type: Access
     tags:
     - Maintenance
     - SyndicateAgent
-  - type: Sprite
-    layers:
-    - state: default
-    - sprite: *icon-rsi
-      offset: *icon-offset
-      state: Passenger
   - type: AgentIDCard
   - type: UIRequiresLock
   - type: ActivatableUI
@@ -964,9 +949,6 @@
         type: ChameleonBoundUserInterface
 
 - type: entity
-# ES START
-  name: assistant ID card
-# ES END
   parent: AgentIDCard
   id: NukieAgentIDCard
   suffix: Nukie

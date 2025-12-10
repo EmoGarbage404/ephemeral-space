@@ -7,6 +7,7 @@
   rules:
   - ESTroupeRuleCrew
   - ESSchedulerRuleStationEventVote
+  - ESSchedulerRuleDegradationEventVote
   - ESBasicRoundstartVariation
 
 - type: gamePreset
@@ -18,6 +19,7 @@
   - ESTroupeRuleCrew
   - ESTroupeRuleTraitor
   - ESSchedulerRuleStationEventVote
+  - ESSchedulerRuleDegradationEventVote
   - ESBasicRoundstartVariation
 
 # Nonstandard modes

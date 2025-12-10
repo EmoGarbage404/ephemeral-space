@@ -289,6 +289,9 @@ namespace Content.Server.GameTicking
             DebugTools.AssertNotNull(data);
 
 // ES START
+// ES NOTE: during merge, this got replaced with DoSpawn below upstream
+// but we have special logic, so i didnt replace this with that function
+// so it might be unused rn
             if (newMind == default)
                 newMind = _mind.CreateMind(data!.UserId, character.Name);
             _mind.SetUserId(newMind, data!.UserId);
@@ -377,6 +380,43 @@ namespace Content.Server.GameTicking
                 station,
                 character);
             RaiseLocalEvent(mob, aev, true);
+        }
+
+        /// <summary>
+        /// Creates a mob on the specified station, creates the new mind, equips job-specific starting gear and loadout
+        /// </summary>
+        public void DoSpawn(
+            ICommonSession player,
+            HumanoidCharacterProfile character,
+            EntityUid station,
+            string jobId,
+            bool silent,
+            out EntityUid mob,
+            out JobPrototype jobPrototype,
+            out string jobName)
+        {
+            PlayerJoinGame(player, silent);
+
+            var data = player.ContentData();
+
+            DebugTools.AssertNotNull(data);
+
+            var newMind = _mind.CreateMind(data!.UserId, character.Name);
+            _mind.SetUserId(newMind, data.UserId);
+
+            jobPrototype = _prototypeManager.Index<JobPrototype>(jobId);
+
+            _playTimeTrackings.PlayerRolesChanged(player);
+
+            var mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(station, jobId, character);
+            DebugTools.AssertNotNull(mobMaybe);
+            mob = mobMaybe!.Value;
+
+            _mind.TransferTo(newMind, mob);
+
+            _roles.MindAddJobRole(newMind, silent: silent, jobPrototype: jobId);
+            jobName = _jobs.MindTryGetJobName(newMind);
+            _admin.UpdatePlayerList(player);
         }
 
         public void Respawn(ICommonSession player)

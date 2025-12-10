@@ -141,23 +141,23 @@ public abstract class ESSharedStoreroomSystem : EntitySystem
         var container = new ESStoreroomContainerEntry(meta.EntityPrototype?.ID, meta.EntityName);
 
         EntityStorageComponent? entityStorage = null;
-        if (_entityStorage.ResolveStorage(palletGood, ref entityStorage))
+        if (!Resolve(palletGood, ref entityStorage))
+            return container;
+
+        foreach (var content in entityStorage.Contents.ContainedEntities)
         {
-            foreach (var content in entityStorage.Contents.ContainedEntities)
+            var contentMeta = MetaData(content);
+            if (container.Contents.FirstOrDefault(e =>
+                    e.Name.Equals(contentMeta.EntityName, StringComparison.InvariantCultureIgnoreCase))
+                is { } existingEntry)
             {
-                var contentMeta = MetaData(content);
-                if (container.Contents.FirstOrDefault(e =>
-                        e.Name.Equals(contentMeta.EntityName, StringComparison.InvariantCultureIgnoreCase))
-                    is { } existingEntry)
-                {
-                    existingEntry.Count += _stack.GetCount(content);
-                }
-                else
-                {
-                    var entry = new ESStoreroomEntry(contentMeta.EntityPrototype?.ID, contentMeta.EntityName);
-                    entry.Count = _stack.GetCount(content);
-                    container.Contents.Add(entry);
-                }
+                existingEntry.Count += _stack.GetCount(content);
+            }
+            else
+            {
+                var entry = new ESStoreroomEntry(contentMeta.EntityPrototype?.ID, contentMeta.EntityName);
+                entry.Count = _stack.GetCount(content);
+                container.Contents.Add(entry);
             }
         }
 

@@ -29,7 +29,7 @@
     spread: 0.6
 
 - type: entity
-  parent: [ESWeaponShotgun, BaseSecurityBartenderZookeeperContraband]
+  parent: [ESWeaponShotgun, BaseSecurityBartenderContraband]
   id: ESWeaponDoubleBarrelShotgun
   name: double-barrel shotgun
   description: An immortal classic. Uses shotgun shells as ammo.

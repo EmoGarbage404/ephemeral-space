@@ -22,6 +22,9 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+// ES START
+using Content.Shared._ES.Degradation;
+// ES END
 
 namespace Content.Server.Access.Systems;
 
@@ -39,7 +42,10 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
-
+// ES START
+    [Dependency] private readonly ESDegradationSystem _degradation = default!;
+    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
+// ES END
     public override void Initialize()
     {
         base.Initialize();
@@ -55,6 +61,9 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
         // Intercept the event before anyone can do anything with it!
         SubscribeLocalEvent<IdCardConsoleComponent, MachineDeconstructedEvent>(OnMachineDeconstructed,
             before: [typeof(EmptyOnMachineDeconstructSystem), typeof(ItemSlotsSystem)]);
+// ES START
+        SubscribeLocalEvent<IdCardConsoleComponent, ESUndergoDegradationEvent>(OnUndergoDegradation);
+// ES END
     }
 
     private void OnWriteToTargetIdMessage(EntityUid uid, IdCardConsoleComponent component, WriteToTargetIdMessage args)
@@ -142,6 +151,9 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
 
         if (component.TargetIdSlot.Item is not { Valid: true } targetId || !PrivilegedIdIsAuthorized(uid, component, out var privilegedId))
             return;
+// ES START
+        _degradation.TryDegrade(uid, player);
+// ES END
 
         _idCard.TryChangeFullName(targetId, newFullName, player: player);
         _idCard.TryChangeJobTitle(targetId, newJobTitle, player: player);
@@ -240,6 +252,35 @@ public sealed class IdCardConsoleSystem : SharedIdCardConsoleSystem
         if (TryDropAndThrowIds(entity.AsNullable()))
             _chat.TrySendInGameICMessage(entity, Loc.GetString("id-card-console-damaged"), InGameICChatType.Speak, true);
     }
+
+// ES START
+    private void OnUndergoDegradation(Entity<IdCardConsoleComponent> ent, ref ESUndergoDegradationEvent args)
+    {
+        if (Transform(ent).GridUid is not { } grid)
+            return;
+
+        var ids = new HashSet<Entity<IdCardComponent>>();
+        _entityLookup.GetGridEntities(grid, ids);
+
+        // Get icons only for valid jobs
+        var icons = _prototype.EnumeratePrototypes<JobPrototype>()
+            .Where(j => j.OverrideConsoleVisibility ?? j.SetPreference)
+            .Select(j => _prototype.Index(j.Icon))
+            .ToList();
+
+        // Hardcoded because it really doesn't matter very much.
+        var count = Math.Max(_random.NextFloat(0.1f, 0.25f) * ids.Count, 1);
+        for (var i = 0; i < count; i++)
+        {
+            // scramble the icons
+            var id = _random.PickAndTake(ids.ToList());
+            var icon = _random.Pick(icons.Except([_prototype.Index(id.Comp.JobIcon)]).ToList());
+            _idCard.TryChangeJobIcon(id, icon, id);
+        }
+
+        args.Handled = true;
+    }
+// ES END
 
     #region PublicAPI
 
