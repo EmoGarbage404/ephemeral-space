@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server._ES.Auditions;
-using Content.Server._ES.Objectives;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Roles.Jobs;
@@ -29,7 +28,6 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
     [Dependency] private readonly EntityTableSystem _entityTable = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly JobSystem _job = default!;
-    [Dependency] private readonly ESObjectiveSystem _objective = default!;
 
     private static readonly EntProtoId<ESMaskRoleComponent> MindRole = "ESMindRoleMask";
 
@@ -90,7 +88,7 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
     public void InitializeTroupeObjectives(Entity<ESTroupeRuleComponent> rule)
     {
         var troupe = PrototypeManager.Index(rule.Comp.Troupe);
-        _objective.TryAddObjective(rule.Owner, troupe.Objectives);
+        Objective.TryAddObjective(rule.Owner, troupe.Objectives);
     }
 
     public bool TryAssignToTroupe(Entity<ESTroupeRuleComponent> ent, ref List<ICommonSession> players)
@@ -180,7 +178,7 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
         roleComp.Mask = maskId;
         Dirty(role.Value, roleComp);
 
-        _objective.TryAddObjective(mind.Owner, mask.Objectives);
+        Objective.TryAddObjective(mind.Owner, mask.Objectives);
 
         var msg = Loc.GetString("es-mask-selected-chat-message",
             ("role", Loc.GetString(mask.Name)),
@@ -199,5 +197,6 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
         EntityManager.AddComponents(mind, mask.MindComponents);
 
         troupe.Comp.TroupeMemberMinds.Add(mind);
+        Objective.RefreshObjectives(mind.Owner);
     }
 }

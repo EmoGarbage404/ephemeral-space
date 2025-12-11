@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared._ES.Masks.Components;
+using Content.Shared._ES.Objectives;
+using Content.Shared._ES.Objectives.Components;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Managers;
 using Content.Shared.Antag;
@@ -22,6 +24,7 @@ public abstract class ESSharedMaskSystem : EntitySystem
     [Dependency] private readonly INetManager _netManager = default!;
     [Dependency] protected readonly IPrototypeManager PrototypeManager = default!;
     [Dependency] protected readonly SharedMindSystem Mind = default!;
+    [Dependency] protected readonly ESSharedObjectiveSystem Objective = default!;
     [Dependency] protected readonly SharedRoleSystem Role = default!;
 
     protected static readonly VerbCategory ESMask =
@@ -33,8 +36,12 @@ public abstract class ESSharedMaskSystem : EntitySystem
 
         SubscribeLocalEvent<GetVerbsEvent<Verb>>(GetVerbs);
 
+        SubscribeLocalEvent<ESTroupeRuleComponent, ESObjectivesChangedEvent>(OnObjectivesChanged);
+
         SubscribeLocalEvent<ESTroupeFactionIconComponent, ComponentGetStateAttemptEvent>(OnComponentGetStateAttempt);
         SubscribeLocalEvent<ESTroupeFactionIconComponent, ExaminedEvent>(OnExaminedEvent);
+
+        SubscribeLocalEvent<MindComponent, ESGetAdditionalObjectivesEvent>(OnMindGetObjectives);
     }
 
     private void GetVerbs(GetVerbsEvent<Verb> args)
@@ -93,6 +100,14 @@ public abstract class ESSharedMaskSystem : EntitySystem
         }
     }
 
+    private void OnObjectivesChanged(Entity<ESTroupeRuleComponent> ent, ref ESObjectivesChangedEvent args)
+    {
+        foreach (var mind in ent.Comp.TroupeMemberMinds)
+        {
+            Objective.RefreshObjectives(mind);
+        }
+    }
+
     private void OnComponentGetStateAttempt(Entity<ESTroupeFactionIconComponent> ent, ref ComponentGetStateAttemptEvent args)
     {
         args.Cancelled = true;
@@ -127,6 +142,14 @@ public abstract class ESSharedMaskSystem : EntitySystem
             return;
 
         args.PushMarkup(Loc.GetString(str));
+    }
+
+    private void OnMindGetObjectives(Entity<MindComponent> ent, ref ESGetAdditionalObjectivesEvent args)
+    {
+        if (!TryGetTroupe(ent.AsNullable(), out var troupe) ||
+            !TryGetTroupeEntity(troupe.Value, out var troupeEntity))
+            return;
+        args.Objectives.AddRange(Objective.GetObjectives(troupeEntity.Value.Owner));
     }
 
     /// <summary>

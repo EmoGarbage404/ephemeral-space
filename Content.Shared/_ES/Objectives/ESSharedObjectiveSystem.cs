@@ -35,12 +35,24 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
         var ev = new ESGetObjectiveProgressEvent();
         RaiseLocalEvent(ent, ref ev);
 
-        ent.Comp.Progress = Math.Clamp(ev.Progress, 0, 1);
+        var oldProgress = ent.Comp.Progress;
+        var newProgress = Math.Clamp(ev.Progress, 0, 1);
+
+        // If they are unchanged, then don't update anything.
+        if (MathHelper.CloseTo(oldProgress, newProgress))
+            return;
+
+        ent.Comp.Progress = newProgress;
+
+        var afterEv = new ESObjectiveProgressChangedEvent((ent, ent.Comp), oldProgress, newProgress);
+        RaiseLocalEvent(ent, ref afterEv);
+
         Dirty(ent);
     }
 
     /// <summary>
-    /// Gets the current progress of an objective on [0, 1]
+    /// Gets the cached progress of an objective on [0, 1]
+    /// If you need to update the progress, use <see cref="RefreshObjectiveProgress"/>
     /// </summary>
     public float GetProgress(Entity<ESObjectiveComponent?> ent)
     {
@@ -55,6 +67,36 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
     public bool IsCompleted(Entity<ESObjectiveComponent?> ent)
     {
         return GetProgress(ent) >= 1;
+    }
+
+    public void RefreshObjectives(Entity<ESObjectiveHolderComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        var oldObjectives = new List<EntityUid>(ent.Comp.Objectives);
+        var newObjectives = new List<EntityUid>();
+
+        var ev = new ESGetAdditionalObjectivesEvent((ent, ent.Comp), []);
+        RaiseLocalEvent(ent, ref ev);
+
+        newObjectives.AddRange(ev.Objectives.Select(e => e.Owner));
+        newObjectives.AddRange(ent.Comp.OwnedObjectives);
+
+        var added = newObjectives.Except(oldObjectives).ToList();
+        var removed = oldObjectives.Except(newObjectives).ToList();
+
+        // Exit early if nothing has changed
+        if (added.Count == 0 && removed.Count == 0)
+            return;
+
+        var changedEv = new ESObjectivesChangedEvent(newObjectives, added, removed);
+        RaiseLocalEvent(ent, ref changedEv);
+
+        // TODO: ensure new objectives are networked to the client, remove old objectives
+
+        ent.Comp.Objectives = newObjectives;
+        Dirty(ent);
     }
 
     /// <summary>
@@ -75,6 +117,7 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
             return [];
 
         var objectives = new List<Entity<T>>();
+
         foreach (var objective in ent.Comp.Objectives)
         {
             if (!TryComp<T>(objective, out var comp))
@@ -83,7 +126,21 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
             objectives.Add((objective, comp));
         }
 
-        // TODO: eventify.
+        return objectives;
+    }
+
+    /// <summary>
+    /// Returns all objectives which have a given component
+    /// </summary>
+    public List<Entity<T>> GetObjectives<T>() where T : Component
+    {
+        var query = EntityQueryEnumerator<T, ESObjectiveComponent>();
+
+        var objectives = new List<Entity<T>>();
+        while (query.MoveNext(out var uid, out var comp, out _))
+        {
+            objectives.Add((uid, comp));
+        }
 
         return objectives;
     }
@@ -116,21 +173,25 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
     }
 
     /// <summary>
-    /// <inheritdoc cref="TryAddObjective(Robust.Shared.GameObjects.Entity{Content.Shared._ES.Objectives.Components.ESObjectiveHolderComponent?},Robust.Shared.Prototypes.EntProtoId,out Robust.Shared.GameObjects.Entity{Content.Shared._ES.Objectives.Components.ESObjectiveComponent}?)"/>
+    /// <inheritdoc cref="TryAddObjective(Robust.Shared.GameObjects.Entity{Content.Shared._ES.Objectives.Components.ESObjectiveHolderComponent?},Robust.Shared.Prototypes.EntProtoId,out Robust.Shared.GameObjects.Entity{Content.Shared._ES.Objectives.Components.ESObjectiveComponent}?,bool)"/>
     /// </summary>
-    public bool TryAddObjective(Entity<ESObjectiveHolderComponent?> ent, EntProtoId protoId)
+    public bool TryAddObjective(Entity<ESObjectiveHolderComponent?> ent, EntProtoId protoId, bool refreshObjectives = true)
     {
-        return TryAddObjective(ent, protoId, out _);
+        return TryAddObjective(ent, protoId, out _, refreshObjectives: refreshObjectives);
     }
 
     /// <summary>
     /// Attempts to create and add multiple objectives
     /// </summary>
     /// <returns>Returns true if all objectives succeed</returns>
-    public bool TryAddObjective(Entity<ESObjectiveHolderComponent?> ent, EntityTableSelector table)
+    public bool TryAddObjective(Entity<ESObjectiveHolderComponent?> ent, EntityTableSelector table, bool refreshObjectives = true)
     {
         var spawns = _entityTable.GetSpawns(table);
-        return spawns.All(e => TryAddObjective(ent, e));
+
+        var val = spawns.All(e => TryAddObjective(ent, e, false));
+        if (refreshObjectives)
+            RefreshObjectives(ent);
+        return val;
     }
 
     /// <summary>
@@ -139,10 +200,12 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
     /// <param name="ent">The entity that will be assigned the objective</param>
     /// <param name="protoId">Prototype for the objective</param>
     /// <param name="objective">The newly created objective entity</param>
+    /// <param name="refreshObjectives"></param>
     public bool TryAddObjective(
         Entity<ESObjectiveHolderComponent?> ent,
         EntProtoId protoId,
-        [NotNullWhen(true)] out Entity<ESObjectiveComponent>? objective)
+        [NotNullWhen(true)] out Entity<ESObjectiveComponent>? objective,
+        bool refreshObjectives = true)
     {
         objective = null;
 
@@ -159,7 +222,9 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
             return false;
         }
 
-        ent.Comp.Objectives.Add(objective.Value);
+        ent.Comp.OwnedObjectives.Add(objective.Value);
+        if (refreshObjectives)
+            RefreshObjectives(ent);
         RefreshObjectiveProgress(objective.Value.AsNullable());
         return true;
     }
