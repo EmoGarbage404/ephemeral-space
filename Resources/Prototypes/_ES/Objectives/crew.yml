@@ -3,7 +3,7 @@
   id: ESObjectiveEatSummonedFruit
   description: Use your ability to manifest delicious fruits and feed them to the people on the station.
   components:
-  - type: Objective
+  - type: ESObjective
     icon:
       sprite: Objects/Specific/Hydroponics/apple.rsi
       state: produce
@@ -18,7 +18,7 @@
   id: ESObjectiveHoldSummonedGuns
   description: Use your ability to summon firearms and make sure crew members hold onto them until the end of the shift.
   components:
-  - type: Objective
+  - type: ESObjective
     icon:
       sprite: _ES/Objects/Weapons/Guns/shotgun.rsi
       state: icon
@@ -34,7 +34,7 @@
   name: Kill a bad guy
   description: Use your trusty weapon to kill a non-crew person on the station.
   components:
-  - type: Objective
+  - type: ESObjective
     icon:
       sprite: _ES/Objects/Weapons/Guns/357.rsi
       state: icon
@@ -51,7 +51,7 @@
   name: Guzzle
   description: Consume as much liquid as you can, from anywhere you can get it!
   components:
-  - type: Objective
+  - type: ESObjective
     icon:
       sprite: Objects/Tools/bucket.rsi
       state: icon
@@ -67,7 +67,7 @@
   name: Guzzle Special Interest
   description: Consume as much of your Special Interest as you can!
   components:
-  - type: Objective
+  - type: ESObjective
     icon:
       sprite: Objects/Tools/bucket.rsi
       state: icon
@@ -103,7 +103,7 @@
   name: Guzzle
   description: Consume as many unique liquids as you can, from anywhere you can get them!
   components:
-  - type: Objective
+  - type: ESObjective
     icon:
       sprite: Objects/Consumable/Drinks/shaker.rsi
       state: icon
