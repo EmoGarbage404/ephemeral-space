@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared._ES.Objectives.Components;
-using Content.Shared.FixedPoint;
+using JetBrains.Annotations;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -19,57 +19,67 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
     /// <inheritdoc/>
     public override void Initialize()
     {
-        SubscribeLocalEvent<ESObjectiveComponent, MapInitEvent>(OnMapInit);
+        InitializeCounter();
     }
 
-    private void OnMapInit(Entity<ESObjectiveComponent> ent, ref MapInitEvent args)
+    /// <summary>
+    /// Queries an objective to determine what its current progress is.
+    /// </summary>
+    public void RefreshObjectiveProgress(Entity<ESObjectiveComponent?> ent)
     {
-        InitializeTargetValue(ent);
-    }
-
-    private void InitializeTargetValue(Entity<ESObjectiveComponent> ent)
-    {
-        // No variation in target, no further logic needed
-        if (ent.Comp.MaxTarget is not { } maxTarget)
+        if (!Resolve(ent, ref ent.Comp))
             return;
 
-        // Generate a random value on [target, maxTarget] in chunks of targetIncrement
-        var range = maxTarget - ent.Comp.Target;
-        var incrementCount = (int) Math.Ceiling((range / ent.Comp.TargetIncrement).Float());
-        var blend = _random.Next(0, incrementCount + 1); // non-inclusive right bound adjustment
-        ent.Comp.Target = FixedPoint2.Clamp(ent.Comp.Target + blend * ent.Comp.TargetIncrement, ent.Comp.Target, maxTarget);
+        var ev = new ESGetObjectiveProgressEvent();
+        RaiseLocalEvent(ent, ref ev);
+
+        ent.Comp.Progress = Math.Clamp(ev.Progress, 0, 1);
         Dirty(ent);
     }
 
     /// <summary>
-    /// Attempts to create and initialize an objective.
+    /// Gets the current progress of an objective on [0, 1]
     /// </summary>
-    /// <param name="protoId">Prototype for the objective</param>
-    /// <param name="objective">Objective entity out param</param>
-    /// <param name="holder">Optional argument for an objective holder. Can be used in assignment to exclude entities as targets</param>
-    public bool TryCreateObjective(
-        EntProtoId<ESObjectiveComponent> protoId,
-        [NotNullWhen(true)] out Entity<ESObjectiveComponent>? objective,
-        Entity<ESObjectiveHolderComponent?>? holder = null)
+    public float GetProgress(Entity<ESObjectiveComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return 0;
+        return ent.Comp.Progress;
+    }
+
+    /// <summary>
+    /// Checks if a given objective is completed.
+    /// </summary>
+    public bool IsCompleted(Entity<ESObjectiveComponent?> ent)
+    {
+        return GetProgress(ent) >= 1;
+    }
+
+    /// <summary>
+    /// <inheritdoc cref="CanAddObjective(Robust.Shared.GameObjects.Entity{Content.Shared._ES.Objectives.Components.ESObjectiveComponent?},Robust.Shared.GameObjects.Entity{Content.Shared._ES.Objectives.Components.ESObjectiveHolderComponent?})"/>
+    /// </summary>
+    [PublicAPI]
+    public bool CanAddObjective(EntProtoId<ESObjectiveComponent> protoId, Entity<ESObjectiveHolderComponent?> holder)
     {
         var objectiveUid = EntityManager.PredictedSpawn(protoId, MapCoordinates.Nullspace);
         var objectiveComp = Comp<ESObjectiveComponent>(objectiveUid);
-        objective = (objectiveUid, objectiveComp);
+        var objectiveEnt = (objectiveUid, objectiveComp);
 
-        if (false)
-        {
-            Del(objective);
-            return false;
-        }
+        var val = CanAddObjective(objectiveEnt, holder);
 
-        return true;
+        // always destroy objectives created in this method.
+        Del(objectiveUid);
+        return val;
     }
 
-    public bool TryAssignObjective(
-        Entity<ESObjectiveHolderComponent?> ent,
-        Entity<ESObjectiveComponent>? objective)
+    /// <summary>
+    /// Checks if a given objective can be added
+    /// </summary>
+    public bool CanAddObjective(Entity<ESObjectiveComponent> ent, Entity<ESObjectiveHolderComponent?> holder)
     {
-        return false;
+        // STUB: add events
+
+        return true;
     }
 
     /// <summary>
@@ -78,25 +88,28 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
     /// <param name="ent">The entity that will be assigned the objective</param>
     /// <param name="protoId">Prototype for the objective</param>
     /// <param name="objective">The newly created objective entity</param>
-    public bool TryCreateAndAssignObjective(
+    public bool TryAddObjective(
         Entity<ESObjectiveHolderComponent?> ent,
         EntProtoId<ESObjectiveComponent> protoId,
         [NotNullWhen(true)] out Entity<ESObjectiveComponent>? objective)
     {
         objective = null;
 
-        if (Resolve(ent, ref ent.Comp))
+        if (!Resolve(ent, ref ent.Comp))
             return false;
 
-        if (!TryCreateObjective(protoId, out objective, holder: ent))
-            return false;
+        var objectiveUid = EntityManager.PredictedSpawn(protoId, MapCoordinates.Nullspace);
+        var objectiveComp = Comp<ESObjectiveComponent>(objectiveUid);
+        objective = (objectiveUid, objectiveComp);
 
-        if (!TryAssignObjective(ent, objective))
+        if (!CanAddObjective(objective.Value, ent))
         {
             Del(objective);
             return false;
         }
 
+        ent.Comp.Objectives.Add(objective.Value);
+        RefreshObjectiveProgress(objective.Value.AsNullable());
         return true;
     }
 }
