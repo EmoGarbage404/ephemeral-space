@@ -8,3 +8,6 @@
     containers:
       mind_roles: !type:Container
         ents: []
+# ES START
+  - type: ESObjectiveHolder
+# ESE ND

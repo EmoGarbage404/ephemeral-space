@@ -1,7 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Shared._ES.Objectives.Components;
+using Content.Shared.EntityTable;
+using Content.Shared.EntityTable.EntitySelectors;
 using JetBrains.Annotations;
-using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -14,7 +16,7 @@ namespace Content.Shared._ES.Objectives;
 public abstract partial class ESSharedObjectiveSystem : EntitySystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedPvsOverrideSystem _pvsOverride = default!;
+    [Dependency] private readonly EntityTableSystem _entityTable = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -56,10 +58,41 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
     }
 
     /// <summary>
+    /// Returns all objectives on an entity
+    /// </summary>
+    [PublicAPI]
+    public List<Entity<ESObjectiveComponent>> GetObjectives(Entity<ESObjectiveHolderComponent?> ent)
+    {
+        return GetObjectives<ESObjectiveComponent>(ent);
+    }
+
+    /// <summary>
+    /// Returns all objectives on an entity which have a given component
+    /// </summary>
+    public List<Entity<T>> GetObjectives<T>(Entity<ESObjectiveHolderComponent?> ent) where T : Component
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return [];
+
+        var objectives = new List<Entity<T>>();
+        foreach (var objective in ent.Comp.Objectives)
+        {
+            if (!TryComp<T>(objective, out var comp))
+                continue;
+
+            objectives.Add((objective, comp));
+        }
+
+        // TODO: eventify.
+
+        return objectives;
+    }
+
+    /// <summary>
     /// <inheritdoc cref="CanAddObjective(Robust.Shared.GameObjects.Entity{Content.Shared._ES.Objectives.Components.ESObjectiveComponent?},Robust.Shared.GameObjects.Entity{Content.Shared._ES.Objectives.Components.ESObjectiveHolderComponent?})"/>
     /// </summary>
     [PublicAPI]
-    public bool CanAddObjective(EntProtoId<ESObjectiveComponent> protoId, Entity<ESObjectiveHolderComponent?> holder)
+    public bool CanAddObjective(EntProtoId protoId, Entity<ESObjectiveHolderComponent?> holder)
     {
         var objectiveUid = EntityManager.PredictedSpawn(protoId, MapCoordinates.Nullspace);
         var objectiveComp = Comp<ESObjectiveComponent>(objectiveUid);
@@ -83,6 +116,24 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
     }
 
     /// <summary>
+    /// <inheritdoc cref="TryAddObjective(Robust.Shared.GameObjects.Entity{Content.Shared._ES.Objectives.Components.ESObjectiveHolderComponent?},Robust.Shared.Prototypes.EntProtoId,out Robust.Shared.GameObjects.Entity{Content.Shared._ES.Objectives.Components.ESObjectiveComponent}?)"/>
+    /// </summary>
+    public bool TryAddObjective(Entity<ESObjectiveHolderComponent?> ent, EntProtoId protoId)
+    {
+        return TryAddObjective(ent, protoId, out _);
+    }
+
+    /// <summary>
+    /// Attempts to create and add multiple objectives
+    /// </summary>
+    /// <returns>Returns true if all objectives succeed</returns>
+    public bool TryAddObjective(Entity<ESObjectiveHolderComponent?> ent, EntityTableSelector table)
+    {
+        var spawns = _entityTable.GetSpawns(table);
+        return spawns.All(e => TryAddObjective(ent, e));
+    }
+
+    /// <summary>
     /// Attempts to create and assign an objective to an entity
     /// </summary>
     /// <param name="ent">The entity that will be assigned the objective</param>
@@ -90,7 +141,7 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
     /// <param name="objective">The newly created objective entity</param>
     public bool TryAddObjective(
         Entity<ESObjectiveHolderComponent?> ent,
-        EntProtoId<ESObjectiveComponent> protoId,
+        EntProtoId protoId,
         [NotNullWhen(true)] out Entity<ESObjectiveComponent>? objective)
     {
         objective = null;

@@ -1,5 +1,13 @@
 - type: entity
   parent: BaseGameRule
+  id: ESBaseTroupeRule
+  abstract: true
+  components:
+  - type: ESTroupeRule
+  - type: ESObjectiveHolder # necessary for troupe objectives
+
+- type: entity
+  parent: ESBaseTroupeRule
   id: ESTroupeRuleCrew
   components:
   - type: ESTroupeRule
@@ -9,7 +17,7 @@
     playersPerTargetMember: 1
 
 - type: entity
-  parent: BaseGameRule
+  parent: ESBaseTroupeRule
   id: ESTroupeRuleTraitor
   components:
   - type: ESTroupeRule

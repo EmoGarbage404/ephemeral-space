@@ -1,7 +1,8 @@
 - type: entity
-  parent: ESBaseMaskObjective
   id: ESBaseTraitorObjective
   abstract: true
+  components:
+  - type: ESObjective
 
 - type: entity
   parent: ESBaseTraitorObjective

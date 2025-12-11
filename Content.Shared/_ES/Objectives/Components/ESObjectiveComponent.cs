@@ -1,4 +1,5 @@
 using Robust.Shared.GameStates;
+using Robust.Shared.Utility;
 
 namespace Content.Shared._ES.Objectives.Components;
 
@@ -14,6 +15,12 @@ public sealed partial class ESObjectiveComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float Progress;
+
+    /// <summary>
+    /// Icon displayed for this objective in the UI.
+    /// </summary>
+    [DataField]
+    public SpriteSpecifier? Icon;
 }
 
 [ByRefEvent]
