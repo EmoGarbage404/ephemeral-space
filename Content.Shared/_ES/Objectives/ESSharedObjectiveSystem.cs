@@ -3,8 +3,11 @@ using System.Linq;
 using Content.Shared._ES.Objectives.Components;
 using Content.Shared.EntityTable;
 using Content.Shared.EntityTable.EntitySelectors;
+using Content.Shared.Mind;
 using JetBrains.Annotations;
+using Robust.Shared.GameStates;
 using Robust.Shared.Map;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -15,8 +18,10 @@ namespace Content.Shared._ES.Objectives;
 /// </summary>
 public abstract partial class ESSharedObjectiveSystem : EntitySystem
 {
+    [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly EntityTableSystem _entityTable = default!;
+    [Dependency] private readonly SharedPvsOverrideSystem _pvsOverride = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -90,13 +95,24 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
         if (added.Count == 0 && removed.Count == 0)
             return;
 
-        var changedEv = new ESObjectivesChangedEvent(newObjectives, added, removed);
-        RaiseLocalEvent(ent, ref changedEv);
-
-        // TODO: ensure new objectives are networked to the client, remove old objectives
+        // If this holder has a player occupying it, update network status of objectives.
+        if (TryComp<MindComponent>(ent, out var mind) && _player.TryGetSessionById(mind.UserId, out var session))
+        {
+            foreach (var obj in added)
+            {
+                _pvsOverride.AddSessionOverride(obj, session);
+            }
+            foreach (var obj in removed)
+            {
+                _pvsOverride.RemoveSessionOverride(obj, session);
+            }
+        }
 
         ent.Comp.Objectives = newObjectives;
         Dirty(ent);
+
+        var changedEv = new ESObjectivesChangedEvent(newObjectives, added, removed);
+        RaiseLocalEvent(ent, ref changedEv);
     }
 
     /// <summary>
