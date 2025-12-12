@@ -30,10 +30,7 @@ public sealed partial class InventoryComponent : Component
     [DataField, AutoNetworkedField]
     public string? SpeciesId;
 
-    [ViewVariables]
     public SlotDefinition[] Slots = Array.Empty<SlotDefinition>();
-
-    [ViewVariables]
     public ContainerSlot[] Containers = Array.Empty<ContainerSlot>();
 
     [DataField, AutoNetworkedField]

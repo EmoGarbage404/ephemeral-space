@@ -1,16 +1,13 @@
 using System.Linq;
 using Content.Shared.Chemistry;
+using Content.Shared.Damage.Components;
 using Content.Shared.Explosion.EntitySystems;
-using Content.Shared.Inventory;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameStates;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-// ES START
-using Content.Shared.Damage.Components;
-// ES END
 
 namespace Content.Shared.Damage.Systems;
 
@@ -23,9 +20,6 @@ public sealed partial class DamageableSystem : EntitySystem
     [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly SharedChemistryGuideDataSystem _chemistryGuideData = default!;
     [Dependency] private readonly SharedExplosionSystem _explosion = default!;
-// ES START
-    [Dependency] private readonly InventorySystem _inventory = default!;
-// ES END
 
     private EntityQuery<AppearanceComponent> _appearanceQuery;
     private EntityQuery<DamageableComponent> _damageableQuery;

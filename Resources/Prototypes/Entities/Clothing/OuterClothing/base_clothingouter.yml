@@ -8,10 +8,6 @@
     - outerClothing
   - type: Sprite
     state: icon
-# ES START
-  - type: Damageable
-    damageContainer: Inorganic
-# ES END
 
 - type: entity
   abstract: true

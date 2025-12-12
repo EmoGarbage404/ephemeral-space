@@ -138,22 +138,6 @@ public sealed partial class DamageableSystem
         if (before.Cancelled)
             return damageDone;
 
-        // ES START
-
-        // Hit anything the target is wearing, too. But on recursive hits, only pass positive values. Healing the
-        // player shouldn't also fix their hardsuit.
-        // TODO: The player drinking acid shouldn't deal heat damage to worn items. However, DamageSystem doesn't
-        // currently support this kind of modeling.
-        var dp = DamageSpecifier.GetPositive(damage);
-        var e = _inventory.GetSlotEnumerator(ent.Owner);
-        while (e.NextItem(out var item))
-        {
-            // We're recursing on a different uid, so don't pass the DamageableComponent in.
-            TryChangeDamage(item, dp, out _, ignoreResistances, interruptsDoAfters, origin: origin);
-        }
-
-        // ES END
-
         // Apply resistances
         if (!ignoreResistances)
         {
