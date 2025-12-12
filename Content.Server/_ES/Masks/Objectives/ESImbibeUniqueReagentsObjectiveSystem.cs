@@ -1,7 +1,7 @@
 using Content.Server._ES.Masks.Objectives.Components;
 using Content.Server._ES.Masks.Objectives.Relays;
 using Content.Server._ES.Masks.Objectives.Relays.Components;
-using Content.Shared.Objectives.Components;
+using Content.Shared._ES.Objectives;
 
 namespace Content.Server._ES.Masks.Objectives;
 
@@ -30,12 +30,7 @@ public sealed class ESImbibeUniqueReagentsObjectiveSystem : ESBaseObjectiveSyste
         {
             ent.Comp.SeenReagents.Add(reagent.Reagent);
         }
-    }
 
-    protected override void GetObjectiveProgress(Entity<ESImbibeUniqueReagentsObjectiveComponent> ent, ref ObjectiveGetProgressEvent args)
-    {
-        var target = NumberObjectivesSys.GetTarget(ent);
-
-        args.Progress = Math.Clamp(((float)ent.Comp.SeenReagents.Count) / (float)target, 0, 1);
+        ObjectivesSys.SetObjectiveCounter(ent.Owner, ent.Comp.SeenReagents.Count);
     }
 }

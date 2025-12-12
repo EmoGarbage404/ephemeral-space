@@ -14,12 +14,6 @@ namespace Content.Server._ES.Masks.Objectives.Components;
 public sealed partial class ESKillTroupeObjectiveComponent : Component
 {
     /// <summary>
-    ///     Number of kills accumulated
-    /// </summary>
-    [DataField]
-    public int Kills;
-
-    /// <summary>
     ///     The troupe the victim must be a part of
     /// </summary>
     [DataField]

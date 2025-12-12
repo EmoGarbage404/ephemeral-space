@@ -11,12 +11,6 @@ namespace Content.Shared._ES.Masks.Traitor.Components;
 public sealed partial class ESSabotageConditionComponent : Component
 {
     /// <summary>
-    /// Marked if this objective has been finished.
-    /// </summary>
-    [DataField]
-    public bool Completed;
-
-    /// <summary>
     /// Whitelist that determines if a given sabotaged entity is valid for this objective.
     /// </summary>
     [DataField(required: true)]

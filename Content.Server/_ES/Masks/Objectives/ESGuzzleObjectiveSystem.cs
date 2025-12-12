@@ -1,8 +1,7 @@
 using Content.Server._ES.Masks.Objectives.Components;
 using Content.Server._ES.Masks.Objectives.Relays;
 using Content.Server._ES.Masks.Objectives.Relays.Components;
-using Content.Shared.Objectives.Components;
-using Robust.Shared.Random;
+using Content.Shared._ES.Objectives;
 
 namespace Content.Server._ES.Masks.Objectives;
 
@@ -22,19 +21,12 @@ public sealed class ESGuzzleObjectiveSystem : ESBaseObjectiveSystem<ESGuzzleObje
         SubscribeLocalEvent<ESGuzzleObjectiveComponent, BodyIngestingEvent>(OnBodyIngesting);
     }
 
-    protected override void GetObjectiveProgress(Entity<ESGuzzleObjectiveComponent> ent, ref ObjectiveGetProgressEvent args)
-    {
-        var target = NumberObjectivesSys.GetTarget(ent);
-
-        args.Progress = Math.Clamp(ent.Comp.ReagentsConsumed.Float() / target, 0, 1);
-    }
-
     private void OnBodyIngesting(Entity<ESGuzzleObjectiveComponent> ent, ref BodyIngestingEvent args)
     {
         if (!args.IsDrink)
             return; // We're NOT guzzling.
 
         // Tally our guzzling.
-        ent.Comp.ReagentsConsumed += args.FoodSolution.Volume;
+        ObjectivesSys.AdjustObjectiveCounter(ent.Owner, args.FoodSolution.Volume.Float());
     }
 }

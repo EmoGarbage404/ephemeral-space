@@ -1,13 +1,11 @@
 using System.Linq;
-using Content.Server.Mind;
-using Content.Server.Objectives;
-using Content.Server.Objectives.Systems;
+using Content.Shared._ES.Objectives.Components;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Objectives.Components;
 using Robust.Shared.Utility;
 
-namespace Content.Server._ES.Masks.Objectives;
+namespace Content.Shared._ES.Objectives;
 
 /// <summary>
 ///     This is a base class for objectives that need certain common behavior like relays.
@@ -16,9 +14,8 @@ namespace Content.Server._ES.Masks.Objectives;
 public abstract class ESBaseObjectiveSystem<TComponent> : EntitySystem
     where TComponent: Component
 {
-    [Dependency] protected readonly MindSystem MindSys = default!;
-    [Dependency] protected readonly ObjectivesSystem ObjectivesSys = default!;
-    [Dependency] protected readonly NumberObjectiveSystem NumberObjectivesSys = default!;
+    [Dependency] protected readonly SharedMindSystem MindSys = default!;
+    [Dependency] protected readonly ESSharedObjectiveSystem ObjectivesSys = default!;
 
     /// <summary>
     ///     A list of all the relays this objective relies on existing.
@@ -40,8 +37,9 @@ public abstract class ESBaseObjectiveSystem<TComponent> : EntitySystem
 
         SubscribeLocalEvent<TComponent, MindGotRemovedEvent>(OnMindGotRemoved);
         SubscribeLocalEvent<TComponent, MindGotAddedEvent>(OnMindGotAdded);
-        SubscribeLocalEvent<TComponent, ObjectiveAfterAssignEvent>(OnObjectiveAfterAssign);
-        SubscribeLocalEvent<TComponent, ObjectiveGetProgressEvent>(GetObjectiveProgress);
+        SubscribeLocalEvent<TComponent, ObjectiveAfterAssignEvent>(OnObjectiveAfterAssign); // TODO: doesn't work.
+        SubscribeLocalEvent<TComponent, ESGetObjectiveProgressEvent>(GetObjectiveProgress);
+        SubscribeLocalEvent<TComponent, ESInitializeObjectiveEvent>(InitializeObjective);
     }
 
     /// <summary>
@@ -60,7 +58,15 @@ public abstract class ESBaseObjectiveSystem<TComponent> : EntitySystem
     /// <remarks>
     ///     This is just an event subscription, made mandatory so you don't forget.
     /// </remarks>
-    protected abstract void GetObjectiveProgress(Entity<TComponent> ent, ref ObjectiveGetProgressEvent args);
+    protected virtual void GetObjectiveProgress(Entity<TComponent> ent, ref ESGetObjectiveProgressEvent args)
+    {
+
+    }
+
+    protected virtual void InitializeObjective(Entity<TComponent> ent, ref ESInitializeObjectiveEvent args)
+    {
+
+    }
 
     /// <summary>
     ///     Implements some necessary logic for managing relays/etc, should call base before your own logic.

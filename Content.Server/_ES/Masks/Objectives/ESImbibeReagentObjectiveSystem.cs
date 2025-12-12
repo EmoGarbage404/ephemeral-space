@@ -2,8 +2,8 @@ using System.Linq;
 using Content.Server._ES.Masks.Objectives.Components;
 using Content.Server._ES.Masks.Objectives.Relays;
 using Content.Server._ES.Masks.Objectives.Relays.Components;
-using Content.Shared.Chemistry.Reagent;
-using Content.Shared.Objectives.Components;
+using Content.Shared._ES.Objectives;
+using Content.Shared._ES.Objectives.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -29,23 +29,15 @@ public sealed class ESImbibeReagentObjectiveSystem : ESBaseObjectiveSystem<ESImb
         SubscribeLocalEvent<ESImbibeReagentObjectiveComponent, BodyIngestingEvent>(OnBodyIngesting);
     }
 
-    protected override void OnObjectiveAfterAssign(Entity<ESImbibeReagentObjectiveComponent> ent, ref ObjectiveAfterAssignEvent args)
+    protected override void InitializeObjective(Entity<ESImbibeReagentObjectiveComponent> ent, ref ESInitializeObjectiveEvent args)
     {
-        base.OnObjectiveAfterAssign(ent, ref args);
+        base.InitializeObjective(ent, ref args);
 
-        // TODO: This probably should avoid picking the same one between duplicates?
         ent.Comp.ConsumeTarget = _random.Pick(ent.Comp.PossibleConsumeTargets);
 
         var reagentName = _proto.Index(ent.Comp.ConsumeTarget).LocalizedName;
 
         _meta.SetEntityDescription(ent, Loc.GetString(ent.Comp.DescriptionLoc, ("reagent", reagentName)));
-    }
-
-    protected override void GetObjectiveProgress(Entity<ESImbibeReagentObjectiveComponent> ent, ref ObjectiveGetProgressEvent args)
-    {
-        var target = NumberObjectivesSys.GetTarget(ent);
-
-        args.Progress = Math.Clamp(ent.Comp.ConsumedAmount.Float() / target, 0, 1);
     }
 
     private void OnBodyIngesting(Entity<ESImbibeReagentObjectiveComponent> ent, ref BodyIngestingEvent args)
@@ -61,6 +53,6 @@ public sealed class ESImbibeReagentObjectiveSystem : ESBaseObjectiveSystem<ESImb
 
         // can't use Sum() on FixedPoint2, and Aggregate yells about empty lists.
         if (reagents.Count > 0)
-            ent.Comp.ConsumedAmount += reagents.Aggregate(static (x, y) => x + y);
+            ObjectivesSys.AdjustObjectiveCounter(ent.Owner, reagents.Aggregate(static (x, y) => x + y).Float());
     }
 }

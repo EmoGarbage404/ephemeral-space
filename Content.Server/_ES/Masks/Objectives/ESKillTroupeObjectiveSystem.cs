@@ -1,8 +1,6 @@
 using Content.Server._ES.Masks.Objectives.Components;
 using Content.Server.KillTracking;
-using Content.Server.Mind;
-using Content.Server.Objectives.Systems;
-using Content.Shared.Objectives.Components;
+using Content.Shared._ES.Objectives;
 
 namespace Content.Server._ES.Masks.Objectives;
 
@@ -22,27 +20,19 @@ public sealed class ESKillTroupeObjectiveSystem : ESBaseObjectiveSystem<ESKillTr
         SubscribeLocalEvent<KillReportedEvent>(OnKillReported);
     }
 
-    protected override void GetObjectiveProgress(Entity<ESKillTroupeObjectiveComponent> ent, ref ObjectiveGetProgressEvent args)
-    {
-        var target = NumberObjectivesSys.GetTarget(ent);
-        if (target == 0)
-            return;
-        args.Progress = Math.Clamp((float) ent.Comp.Kills / target, 0, 1);
-    }
-
     private void OnKillReported(ref KillReportedEvent args)
     {
         if (args.Primary is not KillPlayerSource source ||
             !MindSys.TryGetMind(source.PlayerId, out var mind))
             return;
 
-        foreach (var objective in MindSys.ESGetObjectivesComp<ESKillTroupeObjectiveComponent>(mind.Value.AsNullable()))
+        foreach (var objective in ObjectivesSys.GetObjectives<ESKillTroupeObjectiveComponent>(mind.Value.Owner))
         {
             if (!_mask.TryGetTroupe(args.Entity, out var troupe))
                 return;
 
             if ((troupe == objective.Comp.Troupe) ^ objective.Comp.Invert)
-                objective.Comp.Kills += 1;
+                ObjectivesSys.AdjustObjectiveCounter(objective.Owner);
         }
     }
 }

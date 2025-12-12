@@ -1,6 +1,5 @@
 using Content.Server.Objectives.Components;
 using Content.Shared.Chemistry.Reagent;
-using Content.Shared.FixedPoint;
 
 namespace Content.Server._ES.Masks.Objectives.Components;
 

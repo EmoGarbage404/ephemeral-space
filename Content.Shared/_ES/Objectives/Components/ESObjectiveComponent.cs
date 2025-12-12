@@ -25,3 +25,6 @@ public sealed partial class ESObjectiveComponent : Component
 
 [ByRefEvent]
 public record struct ESGetObjectiveProgressEvent(float Progress = 0);
+
+[ByRefEvent]
+public readonly record struct ESInitializeObjectiveEvent;

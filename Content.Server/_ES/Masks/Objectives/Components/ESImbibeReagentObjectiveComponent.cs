@@ -1,6 +1,5 @@
 using Content.Server.Objectives.Components;
 using Content.Shared.Chemistry.Reagent;
-using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 
 
@@ -33,12 +32,6 @@ public sealed partial class ESImbibeReagentObjectiveComponent : Component
     /// </summary>
     [DataField]
     public ProtoId<ReagentPrototype> ConsumeTarget { get; set; } = "Water"; // Tests demand a default.
-
-    /// <summary>
-    ///     How much of our target we've consumed.
-    /// </summary>
-    [DataField]
-    public FixedPoint2 ConsumedAmount { get; set; }
 
     /// <summary>
     ///     Whether we count consuming it from food, and not just drinking.

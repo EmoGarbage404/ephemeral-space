@@ -21,6 +21,7 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly EntityTableSystem _entityTable = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly SharedPvsOverrideSystem _pvsOverride = default!;
 
     /// <inheritdoc/>
@@ -71,7 +72,9 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
     /// </summary>
     public bool IsCompleted(Entity<ESObjectiveComponent?> ent)
     {
-        return GetProgress(ent) >= 1;
+        if (!Resolve(ent, ref ent.Comp))
+            return false;
+        return GetProgress(ent) >= 1 || MathHelper.CloseTo(GetProgress(ent), 1);
     }
 
     public void RefreshObjectives(Entity<ESObjectiveHolderComponent?> ent)
@@ -101,10 +104,14 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
             foreach (var obj in added)
             {
                 _pvsOverride.AddSessionOverride(obj, session);
+
+                // TODO: objective added event
             }
             foreach (var obj in removed)
             {
                 _pvsOverride.RemoveSessionOverride(obj, session);
+
+                // TODO: objective removed event
             }
         }
 
@@ -205,7 +212,7 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
         var spawns = _entityTable.GetSpawns(table);
 
         var val = spawns.All(e => TryAddObjective(ent, e, false));
-        if (refreshObjectives)
+        if (refreshObjectives) // refresh all the objectives at once
             RefreshObjectives(ent);
         return val;
     }
@@ -237,6 +244,9 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
             Del(objective);
             return false;
         }
+
+        var ev = new ESInitializeObjectiveEvent();
+        RaiseLocalEvent(objectiveUid, ref ev);
 
         ent.Comp.OwnedObjectives.Add(objective.Value);
         if (refreshObjectives)

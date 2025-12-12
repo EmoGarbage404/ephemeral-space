@@ -1,6 +1,6 @@
 using Content.Shared._ES.Masks.Traitor.Components;
+using Content.Shared._ES.Objectives;
 using Content.Shared.Mind;
-using Content.Shared.Objectives.Components;
 using Content.Shared.Whitelist;
 
 namespace Content.Shared._ES.Masks.Traitor;
@@ -8,7 +8,7 @@ namespace Content.Shared._ES.Masks.Traitor;
 /// <summary>
 /// This handles <see cref="ESSabotageConditionComponent"/>
 /// </summary>
-public sealed class ESSabotageConditionSystem : EntitySystem
+public sealed class ESSabotageConditionSystem : ESBaseObjectiveSystem<ESSabotageConditionComponent>
 {
     [Dependency] private readonly EntityWhitelistSystem _entityWhitelist = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
@@ -16,28 +16,21 @@ public sealed class ESSabotageConditionSystem : EntitySystem
     /// <inheritdoc/>
     public override void Initialize()
     {
-        SubscribeLocalEvent<ESSabotageConditionComponent, ObjectiveGetProgressEvent>(OnGetProgress);
-        SubscribeLocalEvent<ESSabotageCompletedEvent>(OnSabotageCompleted);
-    }
+        base.Initialize();
 
-    private void OnGetProgress(Entity<ESSabotageConditionComponent> ent, ref ObjectiveGetProgressEvent args)
-    {
-        args.Progress = ent.Comp.Completed ? 1f : 0f;
+        SubscribeLocalEvent<ESSabotageCompletedEvent>(OnSabotageCompleted);
     }
 
     private void OnSabotageCompleted(ref ESSabotageCompletedEvent args)
     {
-        if (!_mind.TryGetMind(args.User, out var mindUid, out var mindComp))
+        if (!_mind.TryGetMind(args.User, out var mindUid, out _))
             return;
-        foreach (var objective in _mind.ESGetObjectivesComp<ESSabotageConditionComponent>((mindUid, mindComp)))
+        foreach (var objective in ObjectivesSys.GetObjectives<ESSabotageConditionComponent>(mindUid))
         {
-            if (objective.Comp.Completed)
-                continue;
-
             if (_entityWhitelist.IsWhitelistFail(objective.Comp.Whitelist, args.Target))
                 continue;
 
-            objective.Comp.Completed = true;
+            ObjectivesSys.AdjustObjectiveCounter(objective.Owner);
         }
     }
 }

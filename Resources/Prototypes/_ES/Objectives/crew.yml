@@ -41,9 +41,8 @@
   - type: ESKillTroupeObjective
     troupe: ESCrew
     invert: true
-  - type: NumberObjective
-    min: 1
-    max: 2 # non-inclusive
+  - type: ESCounterObjective
+    target: 1
 
 - type: entity
   parent: ESBaseMaskObjective
@@ -56,10 +55,11 @@
       sprite: Objects/Tools/bucket.rsi
       state: icon
   - type: ESGuzzleObjective
-  - type: NumberObjective
+  - type: ESCounterObjective
     title: es-guzzle-objective-title
-    min: 1000
-    max: 2001 # non-inclusive, a space odyssey.
+    target: 1000
+    maxTarget: 2000
+    targetIncrement: 100
 
 - type: entity
   parent: ESBaseMaskObjective
@@ -92,10 +92,11 @@
     - SoapReagent
     - SpaceCleaner
     - SpaceLube
-  - type: NumberObjective
+  - type: ESCounterObjective
     title: es-guzzle-specific-objective-title
-    min: 100
-    max: 201 # non-inclusive, a spce odysey.
+    target: 100
+    maxTarget: 200
+    targetIncrement: 10
 
 - type: entity
   parent: ESBaseMaskObjective
@@ -109,7 +110,7 @@
       state: icon
   - type: ESImbibeUniqueReagentsObjective
     canBeFromFood: false
-  - type: NumberObjective
+  - type: ESCounterObjective
     title: es-guzzle-unique-reagents-objective-title
-    min: 15
-    max: 25 # non-inclusive, non-space non-odyssey.
+    target: 15
+    maxTarget: 25

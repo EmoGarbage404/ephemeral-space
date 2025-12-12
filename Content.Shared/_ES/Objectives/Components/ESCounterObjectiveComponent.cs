@@ -34,4 +34,16 @@ public sealed partial class ESCounterObjectiveComponent : Component
     /// </summary>
     [DataField]
     public float TargetIncrement = 1;
+
+    /// <summary>
+    /// Optional title locale id, passed "count" with <see cref="Target"/>.
+    /// </summary>
+    [DataField]
+    public LocId? Title;
+
+    /// <summary>
+    /// Optional description locale id, passed "count" with <see cref="Target"/>.
+    /// </summary>
+    [DataField]
+    public LocId? Description;
 }
