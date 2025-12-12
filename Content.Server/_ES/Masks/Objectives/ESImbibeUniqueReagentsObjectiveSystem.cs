@@ -18,10 +18,10 @@ public sealed class ESImbibeUniqueReagentsObjectiveSystem : ESBaseObjectiveSyste
     {
         base.Initialize();
 
-        SubscribeLocalEvent<ESImbibeUniqueReagentsObjectiveComponent, BodyIngestingEvent>(OnBodyIngesting);
+        SubscribeLocalEvent<ESImbibeUniqueReagentsObjectiveComponent, ESBodyIngestingEvent>(OnBodyIngesting);
     }
 
-    private void OnBodyIngesting(Entity<ESImbibeUniqueReagentsObjectiveComponent> ent, ref BodyIngestingEvent args)
+    private void OnBodyIngesting(Entity<ESImbibeUniqueReagentsObjectiveComponent> ent, ref ESBodyIngestingEvent args)
     {
         if (!ent.Comp.CanBeFromFood && !args.IsDrink)
             return;

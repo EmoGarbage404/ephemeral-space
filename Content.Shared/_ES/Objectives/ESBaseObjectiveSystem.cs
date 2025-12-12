@@ -2,7 +2,6 @@ using System.Linq;
 using Content.Shared._ES.Objectives.Components;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
-using Content.Shared.Objectives.Components;
 using Robust.Shared.Utility;
 
 namespace Content.Shared._ES.Objectives;
@@ -35,10 +34,9 @@ public abstract class ESBaseObjectiveSystem<TComponent> : EntitySystem
             $"One or more relay components on {GetType()} aren't actual components. Check for typos."
             );
 
-        // TODO: these are unexpectedly fragile WRT mindswapping. may need a better solution
         SubscribeLocalEvent<TComponent, MindGotRemovedEvent>(OnMindGotRemoved);
         SubscribeLocalEvent<TComponent, MindGotAddedEvent>(OnMindGotAdded);
-        SubscribeLocalEvent<TComponent, ObjectiveAfterAssignEvent>(OnObjectiveAfterAssign); // TODO: doesn't work.
+        SubscribeLocalEvent<TComponent, ESObjectiveAddedEvent>(OnObjectiveAfterAssign);
 
         SubscribeLocalEvent<TComponent, ESGetObjectiveProgressEvent>(GetObjectiveProgress);
         SubscribeLocalEvent<TComponent, ESInitializeObjectiveEvent>(InitializeObjective);
@@ -49,9 +47,9 @@ public abstract class ESBaseObjectiveSystem<TComponent> : EntitySystem
     ///     necessary logic for managing relays/etc.
     /// </summary>
     [MustCallBase]
-    protected virtual void OnObjectiveAfterAssign(Entity<TComponent> ent, ref ObjectiveAfterAssignEvent args)
+    protected virtual void OnObjectiveAfterAssign(Entity<TComponent> ent, ref ESObjectiveAddedEvent args)
     {
-        EnsureRelaysOnMind((args.MindId, args.Mind));
+        EnsureRelaysOnMind(args.Holder);
     }
 
     /// <summary>
@@ -76,11 +74,15 @@ public abstract class ESBaseObjectiveSystem<TComponent> : EntitySystem
     [MustCallBase]
     protected virtual void OnMindGotAdded(Entity<TComponent> ent, ref MindGotAddedEvent args)
     {
-        EnsureRelaysOnMind(args.Mind);
+        EnsureRelaysOnMind(args.Mind.AsNullable());
     }
 
-    private void EnsureRelaysOnMind(Entity<MindComponent> mind)
+    private void EnsureRelaysOnMind(Entity<MindComponent?> mind)
     {
+        // Not everything holding objectives is a mind.
+        if (!Resolve(mind, ref mind.Comp, false))
+            return;
+
         if (mind.Comp.CurrentEntity is {} body)
         {
             foreach (var relayType in RelayComponents)

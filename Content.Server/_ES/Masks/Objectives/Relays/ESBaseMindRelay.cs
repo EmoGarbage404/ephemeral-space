@@ -1,3 +1,4 @@
+using Content.Shared._ES.Objectives;
 using Content.Shared.Mind;
 
 namespace Content.Server._ES.Masks.Objectives.Relays;
@@ -7,6 +8,8 @@ namespace Content.Server._ES.Masks.Objectives.Relays;
 /// </summary>
 public abstract class ESBaseMindRelay : EntitySystem
 {
+    [Dependency] private readonly ESSharedObjectiveSystem _objective = default!;
+
     /// <summary>
     ///     Raises the given by-ref event on the mind, and all of its objectives.
     /// </summary>
@@ -14,7 +17,7 @@ public abstract class ESBaseMindRelay : EntitySystem
     {
         RaiseLocalEvent(mind, ref ev);
 
-        foreach (var objective in mind.Comp.Objectives)
+        foreach (var objective in _objective.GetObjectives(mind.Owner))
         {
             RaiseLocalEvent(objective, ref ev);
         }
@@ -27,7 +30,7 @@ public abstract class ESBaseMindRelay : EntitySystem
     {
         RaiseLocalEvent(mind, ev);
 
-        foreach (var objective in mind.Comp.Objectives)
+        foreach (var objective in _objective.GetObjectives(mind.Owner))
         {
             RaiseLocalEvent(objective, ev);
         }

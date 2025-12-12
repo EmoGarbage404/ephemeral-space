@@ -18,10 +18,10 @@ public sealed class ESGuzzleObjectiveSystem : ESBaseObjectiveSystem<ESGuzzleObje
     {
         base.Initialize();
 
-        SubscribeLocalEvent<ESGuzzleObjectiveComponent, BodyIngestingEvent>(OnBodyIngesting);
+        SubscribeLocalEvent<ESGuzzleObjectiveComponent, ESBodyIngestingEvent>(OnBodyIngesting);
     }
 
-    private void OnBodyIngesting(Entity<ESGuzzleObjectiveComponent> ent, ref BodyIngestingEvent args)
+    private void OnBodyIngesting(Entity<ESGuzzleObjectiveComponent> ent, ref ESBodyIngestingEvent args)
     {
         if (!args.IsDrink)
             return; // We're NOT guzzling.

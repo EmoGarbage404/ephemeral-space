@@ -26,7 +26,7 @@ public sealed class ESImbibeReagentObjectiveSystem : ESBaseObjectiveSystem<ESImb
     {
         base.Initialize();
 
-        SubscribeLocalEvent<ESImbibeReagentObjectiveComponent, BodyIngestingEvent>(OnBodyIngesting);
+        SubscribeLocalEvent<ESImbibeReagentObjectiveComponent, ESBodyIngestingEvent>(OnBodyIngesting);
     }
 
     protected override void InitializeObjective(Entity<ESImbibeReagentObjectiveComponent> ent, ref ESInitializeObjectiveEvent args)
@@ -40,7 +40,7 @@ public sealed class ESImbibeReagentObjectiveSystem : ESBaseObjectiveSystem<ESImb
         _meta.SetEntityDescription(ent, Loc.GetString(ent.Comp.DescriptionLoc, ("reagent", reagentName)));
     }
 
-    private void OnBodyIngesting(Entity<ESImbibeReagentObjectiveComponent> ent, ref BodyIngestingEvent args)
+    private void OnBodyIngesting(Entity<ESImbibeReagentObjectiveComponent> ent, ref ESBodyIngestingEvent args)
     {
         if (!args.IsDrink)
             return;

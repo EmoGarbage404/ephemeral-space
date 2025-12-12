@@ -4,6 +4,7 @@ using Content.Shared._ES.Objectives.Components;
 using Content.Shared.EntityTable;
 using Content.Shared.EntityTable.EntitySelectors;
 using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using JetBrains.Annotations;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
@@ -28,6 +29,25 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
     public override void Initialize()
     {
         InitializeCounter();
+
+        SubscribeLocalEvent<ESObjectiveHolderComponent, MindGotAddedEvent>(OnMindGotAdded);
+        SubscribeLocalEvent<ESObjectiveHolderComponent, MindGotRemovedEvent>(OnMindGotRemoved);
+    }
+
+    private void OnMindGotAdded(Entity<ESObjectiveHolderComponent> ent, ref MindGotAddedEvent args)
+    {
+        foreach (var objective in GetObjectives(ent.AsNullable()))
+        {
+            RaiseLocalEvent(objective, args);
+        }
+    }
+
+    private void OnMindGotRemoved(Entity<ESObjectiveHolderComponent> ent, ref MindGotRemovedEvent args)
+    {
+        foreach (var objective in GetObjectives(ent.AsNullable()))
+        {
+            RaiseLocalEvent(objective, args);
+        }
     }
 
     /// <summary>
