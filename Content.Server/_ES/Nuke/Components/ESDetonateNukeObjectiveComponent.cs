@@ -5,8 +5,4 @@ namespace Content.Server._ES.Nuke.Components;
 /// </summary>
 [RegisterComponent]
 [Access(typeof(ESDetonateNukeObjectiveSystem))]
-public sealed partial class ESDetonateNukeObjectiveComponent : Component
-{
-    [DataField]
-    public bool Detonated;
-}
+public sealed partial class ESDetonateNukeObjectiveComponent : Component;

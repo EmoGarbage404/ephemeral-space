@@ -98,25 +98,28 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
         if (added.Count == 0 && removed.Count == 0)
             return;
 
+        ent.Comp.Objectives = newObjectives;
+        Dirty(ent);
+
         // If this holder has a player occupying it, update network status of objectives.
+        // TODO: maybe make this an ESObjectivesChangedEvent sub?
         if (TryComp<MindComponent>(ent, out var mind) && _player.TryGetSessionById(mind.UserId, out var session))
         {
             foreach (var obj in added)
             {
                 _pvsOverride.AddSessionOverride(obj, session);
 
-                // TODO: objective added event
+                var addedEv = new ESObjectiveAddedEvent(ent, obj);
+                RaiseLocalEvent(obj, ref addedEv);
             }
             foreach (var obj in removed)
             {
                 _pvsOverride.RemoveSessionOverride(obj, session);
 
-                // TODO: objective removed event
+                var removedEv = new ESObjectiveRemovedEvent(ent, obj);
+                RaiseLocalEvent(obj, ref removedEv);
             }
         }
-
-        ent.Comp.Objectives = newObjectives;
-        Dirty(ent);
 
         var changedEv = new ESObjectivesChangedEvent(newObjectives, added, removed);
         RaiseLocalEvent(ent, ref changedEv);
@@ -245,7 +248,7 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
             return false;
         }
 
-        var ev = new ESInitializeObjectiveEvent();
+        var ev = new ESInitializeObjectiveEvent((ent, ent.Comp));
         RaiseLocalEvent(objectiveUid, ref ev);
 
         ent.Comp.OwnedObjectives.Add(objective.Value);

@@ -35,9 +35,11 @@ public abstract class ESBaseObjectiveSystem<TComponent> : EntitySystem
             $"One or more relay components on {GetType()} aren't actual components. Check for typos."
             );
 
+        // TODO: these are unexpectedly fragile WRT mindswapping. may need a better solution
         SubscribeLocalEvent<TComponent, MindGotRemovedEvent>(OnMindGotRemoved);
         SubscribeLocalEvent<TComponent, MindGotAddedEvent>(OnMindGotAdded);
         SubscribeLocalEvent<TComponent, ObjectiveAfterAssignEvent>(OnObjectiveAfterAssign); // TODO: doesn't work.
+
         SubscribeLocalEvent<TComponent, ESGetObjectiveProgressEvent>(GetObjectiveProgress);
         SubscribeLocalEvent<TComponent, ESInitializeObjectiveEvent>(InitializeObjective);
     }

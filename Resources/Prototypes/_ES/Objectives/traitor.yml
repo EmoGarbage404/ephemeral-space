@@ -139,4 +139,5 @@
     icon:
       sprite: Objects/Devices/nuke.rsi
       state: nuclearbomb_base
+  - type: ESCounterObjective
   - type: ESDetonateNukeObjective
