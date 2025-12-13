@@ -7,6 +7,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
+using Robust.Shared.Utility;
 
 namespace Content.Shared._ES.Masks.Traitor;
 
@@ -24,11 +25,21 @@ public abstract class ESSharedMaskCacheSystem : EntitySystem
     /// <inheritdoc/>
     public override void Initialize()
     {
+        SubscribeLocalEvent<ESMaskCacheSpawnerComponent, ESGetCharacterInfoBlurbEvent>(OnGetCharacterInfoBlurb);
+
         SubscribeLocalEvent<ESCeilingCacheComponent, StartCollideEvent>(OnStartCollide);
         SubscribeLocalEvent<ESCeilingCacheComponent, EndCollideEvent>(OnEndCollide);
         SubscribeLocalEvent<ESCeilingCacheComponent, ESRevealCacheDoAfterEvent>(OnRevealCacheDoAfter);
 
         SubscribeLocalEvent<ESCeilingCacheContactingComponent, ESRevealCacheAlertEvent>(OnRevealCacheAlert);
+    }
+
+    private void OnGetCharacterInfoBlurb(Entity<ESMaskCacheSpawnerComponent> ent, ref ESGetCharacterInfoBlurbEvent args)
+    {
+        args.Info.Add(FormattedMessage.FromMarkupOrThrow(Loc.GetString("es-ceiling-cache-location-briefing",
+            ("location", ent.Comp.LocationString),
+            ("x", ent.Comp.Location.X),
+            ("y", ent.Comp.Location.Y))));
     }
 
     private void OnStartCollide(Entity<ESCeilingCacheComponent> ent, ref StartCollideEvent args)

@@ -1,9 +1,10 @@
 using Content.Shared._ES.SpawnRegion;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._ES.Masks.Traitor.Components;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(ESSharedMaskCacheSystem))]
 public sealed partial class ESMaskCacheSpawnerComponent : Component
 {
@@ -13,6 +14,9 @@ public sealed partial class ESMaskCacheSpawnerComponent : Component
     [DataField(required: true)]
     public EntProtoId CacheProto;
 
-    [DataField]
-    public string LocationBriefing = string.Empty;
+    [DataField, AutoNetworkedField]
+    public Vector2i Location = Vector2i.Zero;
+
+    [DataField, AutoNetworkedField]
+    public string LocationString = string.Empty;
 }

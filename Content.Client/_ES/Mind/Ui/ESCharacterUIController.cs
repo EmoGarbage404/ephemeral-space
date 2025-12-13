@@ -59,6 +59,11 @@ public sealed class ESCharacterUIController : UIController, IOnStateEntered<Game
         CharacterButton?.SetClickPressed(true);
     }
 
+    private void CharacterButtonPressed(BaseButton.ButtonEventArgs obj)
+    {
+        ToggleWindow();
+    }
+
     private void OnLocalPlayerAttached(EntityUid obj)
     {
         _window?.Update();
@@ -80,5 +85,21 @@ public sealed class ESCharacterUIController : UIController, IOnStateEntered<Game
             _window.Update();
             _window.Open();
         }
+    }
+
+    public void UnloadButton()
+    {
+        if (CharacterButton == null)
+            return;
+
+        CharacterButton.OnPressed -= CharacterButtonPressed;
+    }
+
+    public void LoadButton()
+    {
+        if (CharacterButton == null)
+            return;
+
+        CharacterButton.OnPressed += CharacterButtonPressed;
     }
 }

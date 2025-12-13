@@ -3,7 +3,8 @@
     xmlns:controls="clr-namespace:Content.Client._ES.Mind.Ui"
     xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
     Title="{Loc 'character-info-title'}"
-    MinSize="650 475">
+    MinSize="675 425"
+    SetWidth="650">
     <BoxContainer Orientation="Horizontal" Margin="10 5 10 10">
         <BoxContainer Orientation="Vertical" Margin="5" VerticalAlignment="Center" SetWidth="250">
             <BoxContainer Orientation="Vertical" HorizontalAlignment="Center">
@@ -17,10 +18,10 @@
         </BoxContainer>
         <customControls:VSeparator Margin="5"/>
         <BoxContainer HorizontalExpand="True" Orientation="Vertical" Margin="5">
-            <RichTextLabel Text="{Loc 'es-character-window-info-title'}"/>
-
-
-            <RichTextLabel Text="{Loc 'es-character-window-objective-title'}"/>
+            <BoxContainer>
+                <RichTextLabel Name="InfoBlurbText" HorizontalExpand="False"/>
+            </BoxContainer>
+            <RichTextLabel Text="{Loc 'es-character-window-objective-title'}" Margin="0 0 0 5"/>
             <PanelContainer HorizontalExpand="True" VerticalExpand="True" StyleClasses="PanelDark">
                 <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
                     <GridContainer Name="ObjectivesContainer" Columns="1" RectClipContent="True" Margin="10 10"/>

@@ -15,6 +15,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Shared._ES.Masks;
 
@@ -258,4 +259,23 @@ public abstract class ESSharedMaskSystem : EntitySystem
     {
         // No Op
     }
+
+    public List<FormattedMessage> GetCharacterInfoBlurb(Entity<MindComponent> mind)
+    {
+        var ev = new ESGetCharacterInfoBlurbEvent();
+        RaiseLocalEvent(mind, ref ev);
+
+        foreach (var role in mind.Comp.MindRoleContainer.ContainedEntities)
+        {
+            RaiseLocalEvent(role, ref ev);
+        }
+
+        return ev.Info;
+    }
+}
+
+[ByRefEvent]
+public record struct ESGetCharacterInfoBlurbEvent()
+{
+    public List<FormattedMessage> Info = new();
 }

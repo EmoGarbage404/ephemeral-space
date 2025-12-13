@@ -1,5 +1,4 @@
 using Content.Server.Pinpointer;
-using Content.Server.Roles;
 using Content.Shared._ES.Auditions.Components;
 using Content.Shared._ES.Masks.Traitor;
 using Content.Shared._ES.Masks.Traitor.Components;
@@ -19,7 +18,6 @@ public sealed class ESMaskCacheSystem : ESSharedMaskCacheSystem
         base.Initialize();
 
         SubscribeLocalEvent<ESMaskCacheSpawnerComponent, MapInitEvent>(OnMapInit);
-        SubscribeLocalEvent<ESMaskCacheSpawnerComponent, GetBriefingEvent>(OnGetBriefing);
     }
 
     private void OnMapInit(Entity<ESMaskCacheSpawnerComponent> ent, ref MapInitEvent args)
@@ -44,15 +42,10 @@ public sealed class ESMaskCacheSystem : ESSharedMaskCacheSystem
         comp.CacheLoot = ent.Comp.CacheProto;
 
         var mapCoords = TransformSystem.ToMapCoordinates(coords.Value);
-        var locationStr = FormattedMessage.RemoveMarkupOrThrow(_navMap.GetNearestBeaconString(mapCoords));
-        var (x, y) = mapCoords.Position.Rounded();
-        ent.Comp.LocationBriefing = Loc.GetString("es-ceiling-cache-location-briefing", ("location", locationStr), ("x", (int) x), ("y", (int) y));
+        ent.Comp.LocationString = FormattedMessage.RemoveMarkupOrThrow(_navMap.GetNearestBeaconString(mapCoords));
+        ent.Comp.Location = (Vector2i) mapCoords.Position.Rounded();
+        Dirty(ent);
 
         Dirty(spawner, comp);
-    }
-
-    private void OnGetBriefing(Entity<ESMaskCacheSpawnerComponent> ent, ref GetBriefingEvent args)
-    {
-        args.Append(ent.Comp.LocationBriefing);
     }
 }

@@ -2,11 +2,13 @@
   id: ESCrew
   name: es-troupe-crew-name
   color: yellow
+  briefing: es-troupe-crew-briefing
 
 - type: esTroupe
   id: ESTraitor
   name: es-troupe-traitor-name
   color: darkred
+  briefing: es-troupe-traitor-briefing
   prohibitedJobs:
   # Command
   - Captain
