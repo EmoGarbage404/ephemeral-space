@@ -21,6 +21,7 @@ public sealed class ESTargetObjectiveSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<ESTargetObjectiveComponent, ESInitializeObjectiveEvent>(OnInitializeObjective);
+        SubscribeLocalEvent<ESObjectiveTargetComponent, ComponentShutdown>(OnTargetShutdown);
     }
 
     private void OnInitializeObjective(Entity<ESTargetObjectiveComponent> ent, ref ESInitializeObjectiveEvent args)
@@ -28,6 +29,7 @@ public sealed class ESTargetObjectiveSystem : EntitySystem
         if (!TryGetCandidate(args.Holder, ent, out var candidate))
             return;
 
+        // TODO: pull out into a SetTarget method, probably.
         ent.Comp.Target = candidate;
 
         if (ent.Comp.Title != null)
@@ -45,7 +47,19 @@ public sealed class ESTargetObjectiveSystem : EntitySystem
             _metaData.SetEntityName(ent, title);
         }
 
+        var comp = EnsureComp<ESObjectiveTargetComponent>(ent.Comp.Target.Value);
+        comp.Objectives.Add(ent);
+
         // TODO: raise event on target selected. for additional setup
+    }
+
+    private void OnTargetShutdown(Entity<ESObjectiveTargetComponent> ent, ref ComponentShutdown args)
+    {
+        foreach (var objective in ent.Comp.Objectives)
+        {
+            if (TryComp<ESTargetObjectiveComponent>(objective, out var comp))
+                comp.Target = null;
+        }
     }
 
     public bool TryGetCandidate(

@@ -70,7 +70,6 @@
     icon:
       sprite: Objects/Tools/bucket.rsi
       state: icon
-    unique: false
   - type: ESImbibeReagentObjective
     canBeFromFood: false # you're GUZZLING not MUNCHING.
     descriptionLoc: es-imbibe-reagent-guzzler-desc

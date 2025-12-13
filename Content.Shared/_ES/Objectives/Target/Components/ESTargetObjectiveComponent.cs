@@ -4,7 +4,7 @@ using Robust.Shared.GameStates;
 namespace Content.Shared._ES.Objectives.Target.Components;
 
 /// <summary>
-/// General component that
+/// General component that manages objectives which target a given entity.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 [Access(typeof(ESTargetObjectiveSystem), Other = AccessPermissions.None)]
