@@ -273,4 +273,15 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
         RefreshObjectiveProgress(objective.Value.AsNullable());
         return true;
     }
+
+    public string GetObjectiveString(Entity<ESObjectiveComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return string.Empty;
+
+        return Loc.GetString("es-objective-summary-fmt",
+            ("name", Name(ent)),
+            ("success", IsCompleted(ent)),
+            ("percent", (int) (GetProgress(ent) * 100)));
+    }
 }

@@ -4,6 +4,7 @@ using Content.Server._ES.Auditions;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Roles.Jobs;
+using Content.Shared._ES.Auditions.Components;
 using Content.Shared._ES.Core.Entity;
 using Content.Shared._ES.Masks;
 using Content.Shared._ES.Masks.Components;
@@ -36,10 +37,70 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndTextAppend);
+
         SubscribeLocalEvent<ESTroupeRuleComponent, MapInitEvent>(OnMapInit);
 
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawnComplete);
         SubscribeLocalEvent<RulePlayerJobsAssignedEvent>(OnRulePlayerJobsAssigned);
+    }
+
+    private void OnRoundEndTextAppend(RoundEndTextAppendEvent ev)
+    {
+        var troupes = GetOrderedTroupes();
+
+        ev.AddLine(Loc.GetString("es-roundend-mask-count-troupe"));
+        foreach (var troupe in troupes)
+        {
+            var troupeProto = PrototypeManager.Index(troupe.Comp.Troupe);
+            ev.AddLine(Loc.GetString("es-roundend-mask-troupe-list", ("name", Loc.GetString(troupeProto.Name))));
+            foreach (var objective in Objective.GetObjectives(troupe.Owner))
+            {
+                ev.AddLine(Loc.GetString("es-roundend-mask-objective-fmt",
+                    ("text", Objective.GetObjectiveString(objective.AsNullable()))));
+            }
+        }
+
+        ev.AddLine(string.Empty);
+        ev.AddLine(Loc.GetString("es-roundend-mask-player-summary-header"));
+        foreach (var troupe in troupes)
+        {
+            var troupeProto = PrototypeManager.Index(troupe.Comp.Troupe);
+
+            ev.AddLine(Loc.GetString("es-roundend-mask-player-group", ("name", Loc.GetString(troupeProto.Name))));
+            foreach (var mind in troupe.Comp.TroupeMemberMinds)
+            {
+                if (!TryComp<MindComponent>(mind, out var mindComp) ||
+                    !TryComp<ESCharacterComponent>(mind, out var character))
+                    continue;
+
+                var username = mindComp.OriginalOwnerUserId != null
+                    ? _player.GetPlayerData(mindComp.OriginalOwnerUserId.Value).UserName
+                    : Loc.GetString("generic-unknown-title");
+
+                var maskName = TryGetMask((mind, mindComp), out var mask)
+                    ? Loc.GetString(PrototypeManager.Index(mask.Value).Name)
+                    : Loc.GetString("generic-unknown-title");
+
+                // get mask-specific objectives
+                var objectives = Objective.GetObjectives(mind)
+                    .Except(Objective.GetObjectives(troupe.Owner))
+                    .ToList();
+
+                ev.AddLine(Loc.GetString("es-roundend-mask-player-summary",
+                    ("name", character.Name),
+                    ("username", username),
+                    ("maskName", maskName),
+                    ("objCount", objectives.Count)));
+
+                foreach (var objective in objectives)
+                {
+                    ev.AddLine(Loc.GetString("es-roundend-mask-objective-fmt",
+                        ("text", Objective.GetObjectiveString(objective.AsNullable()))));
+                }
+            }
+            ev.AddLine(string.Empty);
+        }
     }
 
     private void OnMapInit(Entity<ESTroupeRuleComponent> ent, ref MapInitEvent args)
