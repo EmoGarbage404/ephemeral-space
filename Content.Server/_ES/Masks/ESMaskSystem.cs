@@ -178,7 +178,7 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
         roleComp.Mask = maskId;
         Dirty(role.Value, roleComp);
 
-        Objective.TryAddObjective(mind.Owner, mask.Objectives, refreshObjectives: false);
+        Objective.TryAddObjective(mind.Owner, mask.Objectives);
 
         var msg = Loc.GetString("es-mask-selected-chat-message",
             ("role", Loc.GetString(mask.Name)),

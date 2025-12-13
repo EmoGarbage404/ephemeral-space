@@ -1,7 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared._ES.Auditions.Components;
 using Content.Shared._ES.Objectives.Components;
 using Content.Shared._ES.Objectives.Target.Components;
+using Content.Shared.Mind;
+using Content.Shared.Roles.Jobs;
 using Robust.Shared.Random;
 
 namespace Content.Shared._ES.Objectives.Target;
@@ -9,6 +12,9 @@ namespace Content.Shared._ES.Objectives.Target;
 public sealed class ESTargetObjectiveSystem : EntitySystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedJobSystem _job = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly ESSharedObjectiveSystem _objective = default!;
 
     /// <inheritdoc/>
@@ -23,8 +29,23 @@ public sealed class ESTargetObjectiveSystem : EntitySystem
             return;
 
         ent.Comp.Target = candidate;
-        // TODO: more setup for targets.
-        // TODO: raise event on target selected.
+
+        if (ent.Comp.Title != null)
+        {
+            var name = Name(ent.Comp.Target.Value);
+            var job = string.Empty;
+            if (_mind.TryGetMind(ent.Comp.Target.Value, out var mind, out _))
+            {
+                if (TryComp<ESCharacterComponent>(mind, out var characterComponent))
+                    name = characterComponent.Name;
+                _job.MindTryGetJobName(mind, out job);
+            }
+
+            var title = Loc.GetString(ent.Comp.Title, ("targetName", name), ("job", job));
+            _metaData.SetEntityName(ent, title);
+        }
+
+        // TODO: raise event on target selected. for additional setup
     }
 
     public bool TryGetCandidate(
@@ -46,8 +67,8 @@ public sealed class ESTargetObjectiveSystem : EntitySystem
         var otherTargets = new HashSet<EntityUid>();
         foreach (var objective in _objective.GetObjectives<ESTargetObjectiveComponent>(holder.AsNullable()))
         {
-            if (TryGetTarget(objective.AsNullable(), out var candidate))
-                otherTargets.Add(candidate.Value);
+            if (objective.Comp.Target is { } target)
+                otherTargets.Add(target);
         }
 
         var ev = new ESGetObjectiveTargetCandidates(holder, []);

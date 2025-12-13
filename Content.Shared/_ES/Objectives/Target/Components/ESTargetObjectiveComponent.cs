@@ -12,6 +12,9 @@ public sealed partial class ESTargetObjectiveComponent : Component
 {
     [DataField]
     public EntityUid? Target;
+
+    [DataField]
+    public LocId? Title;
 }
 
 /// <summary>

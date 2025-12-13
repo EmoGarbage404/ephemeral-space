@@ -20,12 +20,12 @@
       sprite: Objects/Weapons/Melee/kitchen_knife.rsi
       state: icon
   - type: ESTargetObjective
+    title: es-objective-condition-crewmember-kill-title
   - type: ESTargetPlayersObjective
   - type: ESTargetTroupeObjective
     troupe: ESTraitor
     invert: true
-#  - type: KillPersonCondition
-#    requireDead: true
+  - type: ESKillTargetObjective
 
 - type: entity
   parent: ESBaseTraitorObjectiveMinor

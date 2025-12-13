@@ -224,23 +224,19 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
     /// <summary>
     /// <inheritdoc cref="TryAddObjective(Robust.Shared.GameObjects.Entity{Content.Shared._ES.Objectives.Components.ESObjectiveHolderComponent?},Robust.Shared.Prototypes.EntProtoId,out Robust.Shared.GameObjects.Entity{Content.Shared._ES.Objectives.Components.ESObjectiveComponent}?,bool)"/>
     /// </summary>
-    public bool TryAddObjective(Entity<ESObjectiveHolderComponent?> ent, EntProtoId protoId, bool refreshObjectives = true)
+    public bool TryAddObjective(Entity<ESObjectiveHolderComponent?> ent, EntProtoId protoId)
     {
-        return TryAddObjective(ent, protoId, out _, refreshObjectives: refreshObjectives);
+        return TryAddObjective(ent, protoId, out _);
     }
 
     /// <summary>
     /// Attempts to create and add multiple objectives
     /// </summary>
     /// <returns>Returns true if all objectives succeed</returns>
-    public bool TryAddObjective(Entity<ESObjectiveHolderComponent?> ent, EntityTableSelector table, bool refreshObjectives = true)
+    public bool TryAddObjective(Entity<ESObjectiveHolderComponent?> ent, EntityTableSelector table)
     {
         var spawns = _entityTable.GetSpawns(table);
-
-        var val = spawns.All(e => TryAddObjective(ent, e, false));
-        if (refreshObjectives) // refresh all the objectives at once
-            RefreshObjectives(ent);
-        return val;
+        return spawns.All(e => TryAddObjective(ent, e));
     }
 
     /// <summary>
@@ -249,12 +245,10 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
     /// <param name="ent">The entity that will be assigned the objective</param>
     /// <param name="protoId">Prototype for the objective</param>
     /// <param name="objective">The newly created objective entity</param>
-    /// <param name="refreshObjectives"></param>
     public bool TryAddObjective(
         Entity<ESObjectiveHolderComponent?> ent,
         EntProtoId protoId,
-        [NotNullWhen(true)] out Entity<ESObjectiveComponent>? objective,
-        bool refreshObjectives = true)
+        [NotNullWhen(true)] out Entity<ESObjectiveComponent>? objective)
     {
         objective = null;
 
@@ -275,8 +269,7 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
         RaiseLocalEvent(objectiveUid, ref ev);
 
         ent.Comp.OwnedObjectives.Add(objective.Value);
-        if (refreshObjectives)
-            RefreshObjectives(ent);
+        RefreshObjectives(ent);
         RefreshObjectiveProgress(objective.Value.AsNullable());
         return true;
     }
