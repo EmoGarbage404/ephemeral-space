@@ -1,53 +1,75 @@
 using Content.Server._ES.Masks.Summonable.Components;
-using Content.Server.Mind;
-using Content.Server.Objectives.Systems;
 using Content.Shared._ES.Masks.Summonable.Components;
-using Content.Shared.Objectives.Components;
+using Content.Shared._ES.Objectives;
 using Robust.Server.Containers;
+using Robust.Shared.Containers;
 
 namespace Content.Server._ES.Masks.Summonable;
 
 /// <summary>
 /// This handles <see cref="ESHoldSummonableObjectiveComponent"/>
 /// </summary>
-public sealed class ESHoldSummonableObjectiveSystem : EntitySystem
+public sealed class ESHoldSummonableObjectiveSystem : ESBaseObjectiveSystem<ESHoldSummonableObjectiveComponent>
 {
     [Dependency] private readonly ContainerSystem _container = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly NumberObjectiveSystem _number = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
     {
-        SubscribeLocalEvent<ESHoldSummonableObjectiveComponent, ObjectiveGetProgressEvent>(OnGetProgress);
+        base.Initialize();
+
+        SubscribeLocalEvent<ESMaskSummonedComponent, EntGotInsertedIntoContainerMessage>(OnGotInserted);
+        SubscribeLocalEvent<ESMaskSummonedComponent, EntGotRemovedFromContainerMessage>(OnGotRemoved);
     }
 
-    private void OnGetProgress(Entity<ESHoldSummonableObjectiveComponent> ent, ref ObjectiveGetProgressEvent args)
+    private void OnGotInserted(Entity<ESMaskSummonedComponent> ent, ref EntGotInsertedIntoContainerMessage args)
     {
-        var target = _number.GetTarget(ent);
-        if (target == 0)
+        if (ent.Comp.OwnerMind is not { } mind)
             return;
 
+        foreach (var objective in ObjectivesSys.GetObjectives<ESHoldSummonableObjectiveComponent>(mind))
+        {
+            RefreshHeldCount(objective);
+        }
+    }
+
+    private void OnGotRemoved(Entity<ESMaskSummonedComponent> ent, ref EntGotRemovedFromContainerMessage args)
+    {
+        if (ent.Comp.OwnerMind is not { } mind)
+            return;
+
+        foreach (var objective in ObjectivesSys.GetObjectives<ESHoldSummonableObjectiveComponent>(mind))
+        {
+            RefreshHeldCount(objective);
+        }
+    }
+
+    private void RefreshHeldCount(Entity<ESHoldSummonableObjectiveComponent> ent)
+    {
         var held = 0;
 
         var query = EntityQueryEnumerator<ESMaskSummonedComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var summoned, out var xform))
         {
-            if (summoned.OwnerMind != args.MindId)
+            if (summoned.OwnerMind == null)
                 continue;
 
-            if (IsHeld((uid, xform), args.MindId))
+            if (!ObjectivesSys.GetObjectives<ESHoldSummonableObjectiveComponent>(summoned.OwnerMind.Value).Contains(ent))
+                continue;
+
+            if (IsHeld((uid, xform), ent))
                 held += 1;
         }
 
-        args.Progress = Math.Clamp((float) held / target, 0, 1);
+        ObjectivesSys.SetObjectiveCounter(ent.Owner, held);
     }
 
-    private bool IsHeld(Entity<TransformComponent> ent, EntityUid? excludedMind = null)
+    private bool IsHeld(Entity<TransformComponent> ent, Entity<ESHoldSummonableObjectiveComponent> objective)
     {
         foreach (var container in _container.GetContainingContainers(ent.AsNullable()))
         {
-            if (_mind.TryGetMind(container.Owner, out var containerMind, out _) && containerMind != excludedMind)
+            if (MindSys.TryGetMind(container.Owner, out var containerMind, out _) &&
+                !ObjectivesSys.GetObjectives<ESHoldSummonableObjectiveComponent>(containerMind).Contains(objective))
                 return true;
         }
 

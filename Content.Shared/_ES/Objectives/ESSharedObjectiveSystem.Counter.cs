@@ -58,8 +58,12 @@ public abstract partial class ESSharedObjectiveSystem
         if (!Resolve(ent, ref ent.Comp1, ref ent.Comp2))
             return;
 
+        var clampedVal = Math.Max(val, 0f);
+        if (MathHelper.CloseTo(clampedVal, ent.Comp2.Counter)) // Same value
+            return;
+
         // Don't allow counters to go into the negatives.
-        ent.Comp2.Counter = Math.Max(val, 0f);
+        ent.Comp2.Counter = clampedVal;
         Dirty(ent, ent.Comp2);
 
         RefreshObjectiveProgress((ent, ent));

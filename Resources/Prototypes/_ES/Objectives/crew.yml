@@ -23,10 +23,10 @@
       sprite: _ES/Objects/Weapons/Guns/shotgun.rsi
       state: icon
   - type: ESHoldSummonableObjective
-  - type: NumberObjective
+  - type: ESCounterObjective
     title: es-arms-dealer-objective-title
-    min: 5
-    max: 8
+    target: 5
+    maxTarget: 8
 
 - type: entity
   parent: ESBaseMaskObjective
