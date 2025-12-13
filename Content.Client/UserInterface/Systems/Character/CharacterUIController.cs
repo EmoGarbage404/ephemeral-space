@@ -46,6 +46,9 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
 
     public void OnStateEntered(GameplayState state)
     {
+// ES START
+        return;
+// ES END
         DebugTools.Assert(_window == null);
 
         _window = UIManager.CreateWindow<CharacterWindow>();

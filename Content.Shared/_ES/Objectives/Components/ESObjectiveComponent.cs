@@ -7,7 +7,7 @@ namespace Content.Shared._ES.Objectives.Components;
 /// <summary>
 /// Denotes a general objective that is associated with a <see cref="ESObjectiveHolderComponent"/>
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 [Access(typeof(ESSharedObjectiveSystem), Other = AccessPermissions.None)]
 [EntityCategory("Objectives")]
 public sealed partial class ESObjectiveComponent : Component
