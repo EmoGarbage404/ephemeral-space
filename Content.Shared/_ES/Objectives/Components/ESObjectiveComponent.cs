@@ -1,4 +1,5 @@
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Shared._ES.Objectives.Components;
@@ -8,6 +9,7 @@ namespace Content.Shared._ES.Objectives.Components;
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(ESSharedObjectiveSystem), Other = AccessPermissions.None)]
+[EntityCategory("Objectives")]
 public sealed partial class ESObjectiveComponent : Component
 {
     /// <summary>
