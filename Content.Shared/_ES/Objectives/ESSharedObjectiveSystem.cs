@@ -214,6 +214,9 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
     public bool CanAddObjective(Entity<ESObjectiveComponent> ent, Entity<ESObjectiveHolderComponent?> holder)
     {
         // STUB: add events
+        // TODO: the reason this isn't blocked out is because EntityTable selection (what we use objectives)
+        // doesn't have real remedial behavior when deciding what objectives to select. So, at least for right now,
+        // an objective failing to assign doesnt really mean anything and it just kinda results in Nothing occuring.
 
         return true;
     }
