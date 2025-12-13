@@ -1,10 +1,12 @@
 - type: esTroupe
   id: ESCrew
   name: es-troupe-crew-name
+  color: yellow
 
 - type: esTroupe
   id: ESTraitor
   name: es-troupe-traitor-name
+  color: darkred
   prohibitedJobs:
   # Command
   - Captain

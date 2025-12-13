@@ -11,6 +11,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Utility;
 
 namespace Content.Shared._ES.Objectives;
 
@@ -95,6 +96,13 @@ public abstract partial class ESSharedObjectiveSystem : EntitySystem
         if (!Resolve(ent, ref ent.Comp))
             return false;
         return GetProgress(ent) >= 1 || MathHelper.CloseTo(GetProgress(ent), 1);
+    }
+
+    public SpriteSpecifier GetIcon(Entity<ESObjectiveComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return SpriteSpecifier.Invalid;
+        return ent.Comp.Icon ?? SpriteSpecifier.Invalid;
     }
 
     public void RefreshObjectives(Entity<ESObjectiveHolderComponent?> ent)

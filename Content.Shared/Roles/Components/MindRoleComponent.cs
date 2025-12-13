@@ -8,6 +8,9 @@ namespace Content.Shared.Roles.Components;
 /// This holds data for, and indicates, a Mind Role entity
 /// </summary>
 [RegisterComponent, NetworkedComponent]
+// ES START - networking
+[AutoGenerateComponentState]
+// ES END
 public sealed partial class MindRoleComponent : BaseMindRoleComponent
 {
     /// <summary>
@@ -45,6 +48,9 @@ public sealed partial class MindRoleComponent : BaseMindRoleComponent
     /// The Job prototype of this role.
     /// </summary>
     [DataField]
+// ES START
+    [AutoNetworkedField]
+// ES END
     public ProtoId<JobPrototype>? JobPrototype;
 
     /// <summary>

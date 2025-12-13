@@ -25,6 +25,12 @@ public sealed partial class ESTroupePrototype : IPrototype, IInheritingPrototype
     public LocId Name;
 
     /// <summary>
+    /// Color used in UI
+    /// </summary>
+    [DataField]
+    public Color Color = Color.White;
+
+    /// <summary>
     /// Players with any of these jobs will be ineligible for being members of this troupe
     /// </summary>
     [DataField]

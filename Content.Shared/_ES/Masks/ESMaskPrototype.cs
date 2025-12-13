@@ -34,6 +34,13 @@ public sealed partial class ESMaskPrototype : IPrototype, IInheritingPrototype
     [DataField]
     public LocId Name;
 
+    /// <summary>
+    /// UI Color
+    /// TODO: consider standardizing this per archetype?
+    /// </summary>
+    [DataField]
+    public Color Color = Color.White;
+
     [DataField]
     public ProtoId<ESTroupePrototype> Troupe;
 

@@ -119,6 +119,9 @@ public abstract class SharedRoleSystem : EntitySystem
                 $"Job Role of {ToPrettyString(mind.OwnedEntity)} changed from '{jobRole.Value.Comp1.JobPrototype}' to '{jobPrototype}'");
 
             jobRole.Value.Comp1.JobPrototype = jobPrototype;
+// ES START
+            Dirty(jobRole.Value, jobRole.Value.Comp1);
+// ES END
         }
         else
             MindAddRoleDo(mindId, "MindRoleJob", mind, silent, jobPrototype);
@@ -161,6 +164,9 @@ public abstract class SharedRoleSystem : EntitySystem
         {
             mindRoleComp.JobPrototype = jobPrototype;
             EnsureComp<JobRoleComponent>(mindRoleId.Value);
+// ES START
+            Dirty(mindRoleId.Value, mindRoleComp);
+// ES END
             DebugTools.AssertNull(mindRoleComp.AntagPrototype);
             DebugTools.Assert(!mindRoleComp.Antag);
             DebugTools.Assert(!mindRoleComp.ExclusiveAntag);
