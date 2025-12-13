@@ -27,4 +27,14 @@ public record struct ESGetObjectiveTargetCandidates(Entity<ESObjectiveHolderComp
 /// Event raised on an objective entity to check if a given
 /// </summary>
 [ByRefEvent]
-public record struct ESValidateObjectiveTargetCandidates(Entity<ESObjectiveHolderComponent> Holder, EntityUid Candidate, bool Valid = true);
+public record struct ESValidateObjectiveTargetCandidates(Entity<ESObjectiveHolderComponent> Holder, EntityUid Candidate)
+{
+    public readonly Entity<ESObjectiveHolderComponent> Holder = Holder;
+    public readonly EntityUid Candidate = Candidate;
+    public bool Valid { get; private set; } = true;
+
+    public void Invalidate()
+    {
+        Valid = false;
+    }
+}

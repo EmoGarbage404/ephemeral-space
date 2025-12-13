@@ -13,6 +13,7 @@
 - type: entity
   parent: ESBaseTraitorObjectiveMinor
   id: ESObjectiveTraitorKillRandom
+  name: Kill...
   description: The syndicate needs to make sure they don't interfere with our plans.
   components:
   - type: ESObjective

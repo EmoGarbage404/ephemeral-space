@@ -35,8 +35,8 @@ es-mask-marauder-desc = Aid your fellow traitors & complete your objectives to d
 # Meta
 es-objective-issuer-mask = Mask
 
-es-objective-condition-crewmember-kill-title = Kill {$targetName}, {CAPITALIZE($job)}.
-es-objective-condition-crewmember-alive-title = Ensure {$targetName}, {CAPITALIZE($job)} stays alive.
+es-objective-condition-crewmember-kill-title = Kill {$targetName}, {CAPITALIZE($job)}
+es-objective-condition-crewmember-alive-title = Ensure {$targetName}, {CAPITALIZE($job)} stays alive
 
 es-mask-gear-cache-messsage = Your gear can be found in {$cacheLocation}.
 

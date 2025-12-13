@@ -15,9 +15,7 @@ public sealed class ESTargetTroupeObjectiveSystem : EntitySystem
 
     private void OnValidateTarget(Entity<ESTargetTroupeObjectiveComponent> ent, ref ESValidateObjectiveTargetCandidates args)
     {
-        if (!args.Valid)
-            return;
-
-        args.Valid = (_mask.GetTroupeOrNull(args.Candidate) == ent.Comp.Troupe) ^ ent.Comp.Invert;
+        if ((_mask.GetTroupeOrNull(args.Candidate) != ent.Comp.Troupe) ^ ent.Comp.Invert)
+            args.Invalidate();
     }
 }
