@@ -53,7 +53,9 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
         foreach (var troupe in troupes)
         {
             var troupeProto = PrototypeManager.Index(troupe.Comp.Troupe);
-            ev.AddLine(Loc.GetString("es-roundend-mask-troupe-list", ("name", Loc.GetString(troupeProto.Name))));
+            ev.AddLine(Loc.GetString("es-roundend-mask-troupe-list",
+                ("name", Loc.GetString(troupeProto.Name)),
+                ("color", troupeProto.Color)));
             foreach (var objective in Objective.GetObjectives(troupe.Owner))
             {
                 ev.AddLine(Loc.GetString("es-roundend-mask-objective-fmt",
@@ -67,7 +69,9 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
         {
             var troupeProto = PrototypeManager.Index(troupe.Comp.Troupe);
 
-            ev.AddLine(Loc.GetString("es-roundend-mask-player-group", ("name", Loc.GetString(troupeProto.Name))));
+            ev.AddLine(Loc.GetString("es-roundend-mask-player-group",
+                ("name", Loc.GetString(troupeProto.Name)),
+                ("color", troupeProto.Color)));
             foreach (var mind in troupe.Comp.TroupeMemberMinds)
             {
                 if (!TryComp<MindComponent>(mind, out var mindComp) ||
@@ -82,6 +86,10 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
                     ? Loc.GetString(PrototypeManager.Index(mask.Value).Name)
                     : Loc.GetString("generic-unknown-title");
 
+                var maskColor = mask == null
+                    ? Color.White
+                    : PrototypeManager.Index(mask).Color;
+
                 // get mask-specific objectives
                 var objectives = Objective.GetObjectives(mind)
                     .Except(Objective.GetObjectives(troupe.Owner))
@@ -90,6 +98,7 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
                 ev.AddLine(Loc.GetString("es-roundend-mask-player-summary",
                     ("name", character.Name),
                     ("username", username),
+                    ("maskColor", maskColor),
                     ("maskName", maskName),
                     ("objCount", objectives.Count)));
 
