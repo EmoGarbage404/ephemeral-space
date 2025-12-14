@@ -15,14 +15,14 @@
     - ESActionMaskSummonGun
 
 - type: esMask
-  id: ESCitizen
-  name: es-mask-citizen-name
+  id: ESVIP
+  name: es-mask-vip-name
   troupe: ESCrew
-  description: es-mask-citizen-desc
+  description: es-mask-vip-desc
   color: gold
   weight: 0.5
   gear:
-    id: ESItemCardCitizenship
+    id: ESItemCardVIP
 
 - type: esMask
   id: ESFruitVendor
