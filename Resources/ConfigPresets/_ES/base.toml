@@ -14,6 +14,7 @@ range = 10 # APCs
 map_pool = "ESMapPool"
 defaultpreset = "ESTraitors"
 fallbackpreset = "ESTraitors,ESExtended"
+role_timers = false
 
 # No mob crawling + mob push tweaks
 [movement]
