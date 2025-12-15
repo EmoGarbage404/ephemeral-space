@@ -106,9 +106,11 @@ public sealed partial class MindTests
         Assert.Multiple(() =>
         {
             Assert.That(mind, Is.EqualTo(GetMind(pair)));
-            Assert.That(mind.Comp.CurrentEntity, Is.EqualTo(original));
+// ES START
+            Assert.That(mind.Comp.CurrentEntity, Is.EqualTo(ghost));
             Assert.That(entMan.Deleted(original), Is.False);
-            Assert.That(entMan.Deleted(ghost));
+            Assert.That(entMan.Deleted(ghost), Is.False);
+// ES END
         });
 
         await pair.CleanReturnAsync();
