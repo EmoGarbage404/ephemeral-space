@@ -28,7 +28,9 @@ public sealed partial class MindTests
         Assert.Multiple(() =>
         {
             Assert.That(GetMind(pair), Is.EqualTo(mind));
-            Assert.That(entMan.Deleted(ghost));
+// ES START
+            Assert.That(entMan.Deleted(ghost), Is.False);
+// ES END
             Assert.That(entMan.HasComponent<GhostComponent>(mind.Comp.OwnedEntity));
             Assert.That(mind.Comp.VisitingEntity, Is.Null);
         });
