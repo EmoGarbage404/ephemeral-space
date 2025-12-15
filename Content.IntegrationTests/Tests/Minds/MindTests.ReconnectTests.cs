@@ -28,9 +28,7 @@ public sealed partial class MindTests
         Assert.Multiple(() =>
         {
             Assert.That(GetMind(pair), Is.EqualTo(mind));
-// ES START
-            Assert.That(entMan.Deleted(ghost), Is.False);
-// ES END
+            Assert.That(entMan.Deleted(ghost));
             Assert.That(entMan.HasComponent<GhostComponent>(mind.Comp.OwnedEntity));
             Assert.That(mind.Comp.VisitingEntity, Is.Null);
         });
@@ -108,11 +106,9 @@ public sealed partial class MindTests
         Assert.Multiple(() =>
         {
             Assert.That(mind, Is.EqualTo(GetMind(pair)));
-// ES START
-            Assert.That(mind.Comp.CurrentEntity, Is.EqualTo(ghost));
+            Assert.That(mind.Comp.CurrentEntity, Is.EqualTo(original));
             Assert.That(entMan.Deleted(original), Is.False);
-            Assert.That(entMan.Deleted(ghost), Is.False);
-// ES END
+            Assert.That(entMan.Deleted(ghost));
         });
 
         await pair.CleanReturnAsync();

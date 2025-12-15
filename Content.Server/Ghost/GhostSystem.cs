@@ -265,8 +265,8 @@ namespace Content.Server.Ghost
         private void OnPlayerDetached(EntityUid uid, GhostComponent component, PlayerDetachedEvent args)
         {
 // ES START
-            // Don't let people jailbreak stagehands
-            //DeleteEntity(uid);
+            if (component.DeleteOnDetach)
+                DeleteEntity(uid);
 // ES END
         }
 
