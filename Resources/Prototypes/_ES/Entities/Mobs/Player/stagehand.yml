@@ -29,6 +29,7 @@
     toggleFoVAction: ESActionStagehandToggleFOV
   - type: ESStagehand
   - type: ESUsernameEntityName
+  - type: ESMindVisuals
   - type: ESBlockInteraction
   - type: ShowElectrocutionHUD
   - type: ShowAntagIcons
