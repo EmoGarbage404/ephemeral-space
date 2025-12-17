@@ -101,6 +101,7 @@
   objectives:
     all:
     - id: ESObjectiveEatUniqueFoods
+    - id: ESObjectiveEatFood
 
 # Traitor Masks
 - type: esMask
