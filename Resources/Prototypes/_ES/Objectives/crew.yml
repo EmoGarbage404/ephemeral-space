@@ -176,3 +176,20 @@
     target: 750
     maxTarget: 1250
     targetIncrement: 50
+
+- type: entity
+  parent: ESBaseMaskObjective
+  id: ESObjectiveEatUniqueFoods
+  name: Eat unique foods
+  description: Your stomach yearns for the unknown, seek out all the different tastes of the world!
+  components:
+  - type: ESObjective
+    icon:
+      sprite: Mobs/Species/Human/organs.rsi
+      state: stomach
+  - type: ESEatUniqueFoodsObjective
+  - type: ESCounterObjective
+    title: es-eat-unique-foods-objective-title
+    target: 25
+    maxTarget: 40
+    targetIncrement: 5

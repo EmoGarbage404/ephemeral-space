@@ -98,6 +98,9 @@
   troupe: ESCrew
   description: es-mask-glutton-desc
   color: yellowgreen
+  objectives:
+    all:
+    - id: ESObjectiveEatUniqueFoods
 
 # Traitor Masks
 - type: esMask
