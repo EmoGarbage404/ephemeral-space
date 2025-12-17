@@ -92,6 +92,13 @@
     actions:
     - ESActionMaskAdrenalinePump
 
+- type: esMask
+  id: ESGlutton
+  name: es-mask-glutton-name
+  troupe: ESCrew
+  description: es-mask-glutton-desc
+  color: yellowgreen
+
 # Traitor Masks
 - type: esMask
   id: ESBaseTraitor
