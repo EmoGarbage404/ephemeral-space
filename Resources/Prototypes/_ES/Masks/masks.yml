@@ -80,7 +80,7 @@
   name: es-mask-daredevil-name
   troupe: ESCrew
   description: es-mask-daredevil-desc
-  color: maroon
+  color: orangered
   weight: 1
   objectives:
     all:
@@ -95,10 +95,9 @@
 # Traitor Masks
 - type: esMask
   id: ESBaseTraitor
-  abstract: true
   troupe: ESTraitor
-  color: red
   weight: 1
+  abstract: true
   components:
   - type: ESTroupeFactionIcon
     icon: ESTraitor
@@ -110,6 +109,7 @@
   id: ESMarauder
   name: es-mask-marauder-name
   description: es-mask-marauder-desc
+  color: coral
   mindComponents:
   - type: ESMaskCacheSpawner
     cacheProto: ESCrateCacheTraitorMarauder
@@ -119,6 +119,7 @@
   id: ESAssassin
   name: es-mask-assassin-name
   description: es-mask-assassin-desc
+  color: hotpink
   mindComponents:
   - type: ESMaskCacheSpawner
     cacheProto: ESCrateCacheTraitorAssassin
@@ -128,6 +129,7 @@
   id: ESInfiltrator
   name: es-mask-infiltrator-name
   description: es-mask-infiltrator-desc
+  color: yellow
   mindComponents:
   - type: ESMaskCacheSpawner
     cacheProto: ESCrateCacheTraitorInfiltrator
