@@ -1,0 +1,42 @@
+- type: entity
+  id: ESMobPhantom
+  parent:
+  - Incorporeal
+  - BaseMob
+  - ESBaseMob
+  name: vengeful phantom
+  description: A vengeful phantom who walks this station seeking retribution.
+  components:
+  - type: Sprite
+    sprite: Mobs/Ghosts/ghost_human.rsi
+    layers:
+    - state: animated
+      color: "#fff8"
+      shader: unshaded
+  - type: Hands
+    hands:
+      hand_right:
+        location: Right
+      hand_left:
+        location: Left
+    sortedHands:
+    - hand_right
+    - hand_left
+  - type: StatusEffects
+    allowed:
+    - Corporeal
+  - type: Damageable
+    damageContainer: ManifestedSpirit
+    damageModifierSet: ManifestedSpirit
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 6
+    baseSprintSpeed: 4
+  - type: NoSlip
+  - type: Eye
+    drawFov: false
+  - type: Speech
+    speechVerb: Ghost
+  - type: Tag
+    tags:
+    - SlowImmune
+    - KnockdownImmune
