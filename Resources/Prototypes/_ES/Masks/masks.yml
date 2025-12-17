@@ -98,6 +98,8 @@
   troupe: ESCrew
   description: es-mask-phantom-desc
   color: lavender
+  objectives:
+    id: ESObjectivePhantomDie
 
 # Traitor Masks
 - type: esMask

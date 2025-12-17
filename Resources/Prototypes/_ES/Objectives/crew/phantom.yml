@@ -1,0 +1,13 @@
+- type: entity
+  parent: ESBaseMaskObjective
+  id: ESObjectivePhantomDie
+  name: Be killed
+  description: Die, preferably at someone else's hand.
+  components:
+  - type: ESObjective
+    icon:
+      sprite: Mobs/Ghosts/ghost_human.rsi
+      state: icon
+  - type: ESTargetObjective
+  - type: ESTargetSelfObjective
+  - type: ESKillTargetObjective
