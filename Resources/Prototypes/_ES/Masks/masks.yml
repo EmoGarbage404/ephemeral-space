@@ -92,6 +92,13 @@
     actions:
     - ESActionMaskAdrenalinePump
 
+- type: esMask
+  id: ESPhantom
+  name: es-mask-phantom-name
+  troupe: ESCrew
+  description: es-mask-phantom-desc
+  color: lavender
+
 # Traitor Masks
 - type: esMask
   id: ESBaseTraitor
