@@ -1,6 +1,5 @@
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes;
 
 namespace Content.Shared._ES.Sparks.Components;
 
@@ -8,36 +7,12 @@ namespace Content.Shared._ES.Sparks.Components;
 /// An entity that sparks when damaged by something
 /// </summary>
 [RegisterComponent, NetworkedComponent]
-[Access(typeof(ESSparkOnHitSystem))]
-public sealed partial class ESSparkOnHitComponent : Component
+[Access(typeof(ESSparksSystem))]
+public sealed partial class ESSparkOnHitComponent : ESBaseSparkConfigurationComponent
 {
     /// <summary>
     /// Amount of damage that needs to be dealt to cause sparks
     /// </summary>
     [DataField]
     public FixedPoint2 Threshold = 1;
-
-    /// <summary>
-    /// Number of sparks
-    /// </summary>
-    [DataField]
-    public int Count = 3;
-
-    /// <summary>
-    /// Chance for sparks to occur
-    /// </summary>
-    [DataField]
-    public float Prob = 1f;
-
-    /// <summary>
-    /// Chance a successful spark hit will also spawn a tile fire
-    /// </summary>
-    [DataField]
-    public float TileFireChance;
-
-    /// <summary>
-    /// Spark prototypes
-    /// </summary>
-    [DataField]
-    public EntProtoId SparkPrototype = ESSparksSystem.DefaultSparks;
 }
