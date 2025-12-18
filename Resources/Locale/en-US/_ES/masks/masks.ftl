@@ -11,6 +11,9 @@ es-mask-vip-desc = Confirm your innocence with the assistance of your fancy VIP 
 es-mask-daredevil-name = Daredevil
 es-mask-daredevil-desc = You live an intense lifestyle, constantly seeking new ways to kill yourself faster.
 
+es-mask-empath-name = Empath
+es-mask-empath-desc = Use your tuned-in emotional connection to read the auras of others.
+
 es-mask-fruit-vendor-name = Fruit Vendor
 es-mask-fruit-vendor-desc = Dispense delicious fruits to aid in the completion of the station objective.
 
