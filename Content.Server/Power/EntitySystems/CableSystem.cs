@@ -2,13 +2,17 @@ using Content.Server.Administration.Logs;
 using Content.Server.Electrocution;
 using Content.Server.Power.Components;
 using Content.Server.Stack;
-using Content.Shared._ES.Sparks;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Robust.Shared.Map;
 using CableCuttingFinishedEvent = Content.Shared.Tools.Systems.CableCuttingFinishedEvent;
 using SharedToolSystem = Content.Shared.Tools.Systems.SharedToolSystem;
+// ES START
+using Content.Shared._ES.TileFires;
+using Content.Shared.Electrocution;
+using Robust.Shared.Random;
+// ES END
 
 namespace Content.Server.Power.EntitySystems;
 
@@ -19,7 +23,8 @@ public sealed partial class CableSystem : EntitySystem
     [Dependency] private readonly StackSystem _stack = default!;
     [Dependency] private readonly ElectrocutionSystem _electrocutionSystem = default!;
 // ES START
-    [Dependency] private readonly ESSparksSystem _sparks = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly ESSharedTileFireSystem _tileFire = default!;
 // ES END
 
     public override void Initialize()
@@ -53,6 +58,11 @@ public sealed partial class CableSystem : EntitySystem
         var xform = Transform(uid);
         var ev = new CableAnchorStateChangedEvent(xform);
         RaiseLocalEvent(uid, ref ev);
+        // ES START
+        var electrified = CompOrNull<ElectrifiedComponent>(uid)?.Enabled ?? false;
+        if (electrified && _random.Prob(0.5f))
+            _tileFire.TryDoTileFire(uid, args.User);
+        // ES END
 
         if (_electrocutionSystem.TryDoElectrifiedAct(uid, args.User))
             return;
