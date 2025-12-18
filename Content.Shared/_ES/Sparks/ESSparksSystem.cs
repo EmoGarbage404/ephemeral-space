@@ -32,11 +32,12 @@ public sealed partial class ESSparksSystem : EntitySystem
     /// <param name="ent">Entity that the sparks are originating from. Additionally, holds YAML configuration for spark effect</param>
     /// <param name="user">A "user" who triggered the sparks</param>
     /// <param name="cooldown">If true, will check the cooldown on <see cref="ESSparkCooldownComponent"/> before spawning sparks</param>
-    public void DoSparks<T>(Entity<T?> ent, EntityUid? user = null, bool cooldown = true) where T : ESBaseSparkConfigurationComponent
+    public void DoSparks<T>(
+        Entity<T> ent,
+        EntityUid? user = null,
+        bool cooldown = true)
+        where T : ESBaseSparkConfigurationComponent
     {
-        if (!Resolve(ent, ref ent.Comp))
-            return;
-
         if (!_random.Prob(ent.Comp.Prob))
             return;
 
