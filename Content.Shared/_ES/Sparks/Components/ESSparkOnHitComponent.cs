@@ -1,14 +1,13 @@
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._ES.Sparks.Components;
 
 /// <summary>
 /// An entity that sparks when damaged by something
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent]
 [Access(typeof(ESSparkOnHitSystem))]
 public sealed partial class ESSparkOnHitComponent : Component
 {
@@ -34,20 +33,7 @@ public sealed partial class ESSparkOnHitComponent : Component
     /// Chance a successful spark hit will also spawn a tile fire
     /// </summary>
     [DataField]
-    public float TileFireChance = 0f;
-
-    /// <summary>
-    /// Minimum time inbetween sparks occuring from hits.
-    /// Used to reduce spark spam.
-    /// </summary>
-    [DataField]
-    public TimeSpan SparkDelay = TimeSpan.FromSeconds(0.1f);
-
-    /// <summary>
-    /// The last time that a spark occured.
-    /// </summary>
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
-    public TimeSpan LastSparkTime;
+    public float TileFireChance;
 
     /// <summary>
     /// Spark prototypes
