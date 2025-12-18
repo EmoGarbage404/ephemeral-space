@@ -33,6 +33,12 @@ public sealed partial class ESAuraPrototype : IPrototype
     public EntityWhitelist? ObjectiveWhitelist;
 
     /// <summary>
+    /// These masks will always be valid for this aura
+    /// </summary>
+    [DataField]
+    public HashSet<ProtoId<ESMaskPrototype>> MaskOverrides = new();
+
+    /// <summary>
     /// If multiple auras are detected, the one with the highest priority will be shown.
     /// </summary>
     [DataField]

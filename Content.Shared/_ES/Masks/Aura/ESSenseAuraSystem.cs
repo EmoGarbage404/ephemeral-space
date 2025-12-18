@@ -12,6 +12,7 @@ public sealed class ESSenseAuraSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly EntityWhitelistSystem _entityWhitelist = default!;
+    [Dependency] private readonly ESSharedMaskSystem _mask = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly ESSharedObjectiveSystem _objective = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -25,7 +26,8 @@ public sealed class ESSenseAuraSystem : EntitySystem
     private void OnSenseAuraEvent(ESSenseAuraEvent args)
     {
         // This can't be predicted but there's no harm in having it in shared.
-        if (!_mind.TryGetMind(args.Target, out var mind, out _))
+        if (!_mind.TryGetMind(args.Target, out var mind, out var mindComp) ||
+            !_mask.TryGetMask((mind, mindComp), out var mask))
             return;
 
         var auras = _prototype.EnumeratePrototypes<ESAuraPrototype>().ToList();
@@ -35,7 +37,8 @@ public sealed class ESSenseAuraSystem : EntitySystem
         {
             foreach (var aura in auras)
             {
-                if (_entityWhitelist.IsWhitelistPass(aura.ObjectiveWhitelist, objective))
+                if (aura.MaskOverrides.Contains(mask.Value) ||
+                    _entityWhitelist.IsWhitelistPass(aura.ObjectiveWhitelist, objective))
                     candidateAuras.Add(aura);
             }
         }
