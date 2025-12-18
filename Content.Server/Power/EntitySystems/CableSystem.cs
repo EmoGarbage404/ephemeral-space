@@ -2,6 +2,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Electrocution;
 using Content.Server.Power.Components;
 using Content.Server.Stack;
+using Content.Shared._ES.Sparks;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
@@ -17,6 +18,9 @@ public sealed partial class CableSystem : EntitySystem
     [Dependency] private readonly SharedToolSystem _toolSystem = default!;
     [Dependency] private readonly StackSystem _stack = default!;
     [Dependency] private readonly ElectrocutionSystem _electrocutionSystem = default!;
+// ES START
+    [Dependency] private readonly ESSparksSystem _sparks = default!;
+// ES END
 
     public override void Initialize()
     {
