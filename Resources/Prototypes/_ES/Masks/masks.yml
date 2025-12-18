@@ -68,6 +68,10 @@
   troupe: ESCrew
   description: es-mask-empath-desc
   color: plum
+  components:
+  - type: ActionGrant
+    actions:
+    - ESActionMaskDetectAura
 
 - type: esMask
   id: ESGuzzler
