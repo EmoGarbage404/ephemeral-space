@@ -1,6 +1,6 @@
+using Content.Shared._ES.Physics.PreventCollide;
 using Content.Shared._ES.Sparks.Components;
 using Content.Shared._ES.TileFires;
-using Content.Shared.Physics;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.Throwing;
@@ -19,6 +19,7 @@ public sealed partial class ESSparksSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedPowerReceiverSystem _powerReceiver = default!;
+    [Dependency] private readonly ESPreventCollideSystem _preventCollide = default!;
     [Dependency] private readonly ESSharedTileFireSystem _tileFire = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -112,19 +113,10 @@ public sealed partial class ESSparksSystem : EntitySystem
             var sparks = Spawn(sparksPrototype, _transform.ToMapCoordinates(coordinates), rotation: angle);
             angle += angleDelta;
             _throwing.TryThrow(sparks, angle.ToVec(), 2f, animated: false);
-            PreventCollide(sparks, ignored);
+            _preventCollide.PreventCollide(sparks, ignored);
         }
 
         if (_random.Prob(tileFireChance))
             _tileFire.TryDoTileFire(coordinates, user, _random.Next(1, 4));
-    }
-
-    private void PreventCollide(EntityUid sparks, EntityUid? ignored)
-    {
-        if (!ignored.HasValue || TerminatingOrDeleted(ignored) || EntityManager.IsQueuedForDeletion(ignored.Value))
-            return;
-        var comp = EnsureComp<PreventCollideComponent>(sparks);
-        comp.Uid = ignored.Value;
-        Dirty(sparks, comp);
     }
 }
