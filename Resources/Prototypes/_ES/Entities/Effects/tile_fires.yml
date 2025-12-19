@@ -28,6 +28,7 @@
     layers:
     - map: [ "base" ]
       state: red_1
+      shader: unshaded
   - type: ESTileFire
   - type: ActiveEdgeSpreader
   - type: EdgeSpreader
@@ -61,8 +62,7 @@
       path: /Audio/Ambience/Objects/fireplace.ogg
   - type: Appearance
   - type: TileEmission
-    range: 0.5
-    color: "#bf6d02"
+    color: "#fc9003"
   - type: GenericVisualizer
     visuals:
       enum.FireVisuals.FireStacks:
