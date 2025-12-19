@@ -15,11 +15,8 @@ using Robust.Shared.Replays;
 using Robust.Shared.Utility;
 // ES START
 using Content.Server._ES.Radio;
-using Content.Server.Animals.Systems;
 using Content.Shared._ES.Degradation;
-using Content.Shared._ES.Masks.Traitor;
 using Content.Shared.Animals.Components;
-
 // ES END
 
 namespace Content.Server.Radio.EntitySystems;
@@ -77,6 +74,8 @@ public sealed class RadioSystem : EntitySystem
         {
             SendRadioMessage(ent.Owner, msg, channel, ent.Owner);
         }
+
+        args.Handled = true;
     }
 
     private void OnTransformServerName(EntityUid uid, TelecomServerComponent component, TransformSpeakerNameEvent args)
