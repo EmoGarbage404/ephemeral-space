@@ -1,4 +1,5 @@
 using Content.Shared._ES.Physics.PreventCollide.Components;
+using Robust.Shared.Physics.Events;
 
 namespace Content.Shared._ES.Physics.PreventCollide;
 
@@ -9,6 +10,8 @@ public sealed class ESPreventCollideSystem : EntitySystem
     {
         SubscribeLocalEvent<ESPreventCollideComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<ESPreventCollideMarkerComponent, ComponentShutdown>(OnMarkerShutdown);
+
+        SubscribeLocalEvent<ESPreventCollideComponent, PreventCollideEvent>(OnPreventCollide);
     }
 
     private void OnShutdown(Entity<ESPreventCollideComponent> ent, ref ComponentShutdown args)
@@ -47,6 +50,15 @@ public sealed class ESPreventCollideSystem : EntitySystem
                 Dirty(uid, comp);
             }
         }
+    }
+
+    private void OnPreventCollide(Entity<ESPreventCollideComponent> ent, ref PreventCollideEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (ent.Comp.Entities.Contains(args.OtherEntity))
+            args.Cancelled = true;
     }
 
     /// <summary>
