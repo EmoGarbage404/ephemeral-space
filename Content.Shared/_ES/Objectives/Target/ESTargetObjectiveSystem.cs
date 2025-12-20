@@ -6,6 +6,7 @@ using Content.Shared._ES.Objectives.Target.Components;
 using Content.Shared.Mind;
 using Content.Shared.Roles.Jobs;
 using Robust.Shared.Random;
+using Robust.Shared.Utility;
 
 namespace Content.Shared._ES.Objectives.Target;
 
@@ -102,31 +103,33 @@ public sealed class ESTargetObjectiveSystem : EntitySystem
             return;
 
         // TODO: if we already have a target, remove the linked stuff
+        // We assert for now so that people fix it later.
+        DebugTools.Assert(!ent.Comp.Target.HasValue, "Changing targets for Target Objective Component is not supported!");
 
         ent.Comp.Target = target;
 
-        if (ent.Comp.Target == null)
-            return;
-
-        if (ent.Comp.Title != null)
+        if (ent.Comp.Target != null)
         {
-            var name = Name(ent.Comp.Target.Value);
-            var job = string.Empty;
-            if (_mind.TryGetMind(ent.Comp.Target.Value, out var mind, out _))
+            if (ent.Comp.Title != null)
             {
-                if (TryComp<ESCharacterComponent>(mind, out var characterComponent))
-                    name = characterComponent.Name;
-                _job.MindTryGetJobName(mind, out job);
+                var name = Name(ent.Comp.Target.Value);
+                var job = string.Empty;
+                if (_mind.TryGetMind(ent.Comp.Target.Value, out var mind, out _))
+                {
+                    if (TryComp<ESCharacterComponent>(mind, out var characterComponent))
+                        name = characterComponent.Name;
+                    _job.MindTryGetJobName(mind, out job);
+                }
+
+                var title = Loc.GetString(ent.Comp.Title, ("targetName", name), ("job", job));
+                _metaData.SetEntityName(ent, title);
             }
 
-            var title = Loc.GetString(ent.Comp.Title, ("targetName", name), ("job", job));
-            _metaData.SetEntityName(ent, title);
+            var comp = EnsureComp<ESObjectiveTargetComponent>(ent.Comp.Target.Value);
+            comp.Objectives.Add(ent);
+
+            // TODO: raise event on target selected. for additional setup
         }
-
-        var comp = EnsureComp<ESObjectiveTargetComponent>(ent.Comp.Target.Value);
-        comp.Objectives.Add(ent);
-
-        // TODO: raise event on target selected. for additional setup
 
         _objective.RefreshObjectiveProgress(ent.Owner);
     }
