@@ -59,6 +59,10 @@
     drawFov: false
   - type: Speech
     speechVerb: Ghost
+  - type: Grammar
+    attributes:
+      proper: true
+      gender: epicene
   - type: Tag
     tags:
     - SlowImmune
