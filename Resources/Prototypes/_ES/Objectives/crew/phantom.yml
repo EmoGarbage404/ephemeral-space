@@ -11,3 +11,17 @@
   - type: ESTargetObjective
   - type: ESTargetSelfObjective
   - type: ESKillTargetObjective
+
+- type: entity
+  parent: ESBaseMaskObjective
+  id: ESObjectivePhantomAvenge
+  name: Avenge yourself
+  description: After death, kill your murderer and find peace.
+  components:
+  - type: ESObjective
+    icon:
+      sprite: Objects/Weapons/Melee/kitchen_knife.rsi
+      state: icon
+  - type: ESTargetObjective
+  - type: ESKillTargetObjective
+    defaultProgress: 0 # if no one kills you, then you LOSE

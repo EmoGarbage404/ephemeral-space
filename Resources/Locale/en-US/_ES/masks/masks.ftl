@@ -19,8 +19,6 @@ es-mask-mercenary-desc = Utilize your dubiously-legal gear to aid in the complet
 
 es-mask-phantom-name = Phantom
 es-mask-phantom-desc = Reincarnate as a vengeful spirit on death and haunt your murder until they also die.
-es-phantom-name-fmt = {$name}'s vengeful phantom
-es-phantom-materialize-fail = Can't materialize inside object!
 
 es-mask-veteran-name = Veteran
 es-mask-veteran-desc = Help the station by using your trusty sidearm to take care of anybody who isn't aligned with the crew.

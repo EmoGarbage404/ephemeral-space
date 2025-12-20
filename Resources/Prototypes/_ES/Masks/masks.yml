@@ -102,7 +102,9 @@
   mindComponents:
   - type: ESReincarnateMind
   objectives:
-    id: ESObjectivePhantomDie
+    all:
+    - id: ESObjectivePhantomDie
+    - id: ESObjectivePhantomAvenge
 
 # Traitor Masks
 - type: esMask

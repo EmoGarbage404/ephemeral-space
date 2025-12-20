@@ -29,28 +29,7 @@ public sealed class ESTargetObjectiveSystem : EntitySystem
         if (!TryGetCandidate(args.Holder, ent, out var candidate))
             return;
 
-        // TODO: pull out into a SetTarget method, probably.
-        ent.Comp.Target = candidate;
-
-        if (ent.Comp.Title != null)
-        {
-            var name = Name(ent.Comp.Target.Value);
-            var job = string.Empty;
-            if (_mind.TryGetMind(ent.Comp.Target.Value, out var mind, out _))
-            {
-                if (TryComp<ESCharacterComponent>(mind, out var characterComponent))
-                    name = characterComponent.Name;
-                _job.MindTryGetJobName(mind, out job);
-            }
-
-            var title = Loc.GetString(ent.Comp.Title, ("targetName", name), ("job", job));
-            _metaData.SetEntityName(ent, title);
-        }
-
-        var comp = EnsureComp<ESObjectiveTargetComponent>(ent.Comp.Target.Value);
-        comp.Objectives.Add(ent);
-
-        // TODO: raise event on target selected. for additional setup
+        SetTarget(ent.AsNullable(), candidate);
     }
 
     private void OnTargetShutdown(Entity<ESObjectiveTargetComponent> ent, ref ComponentShutdown args)
@@ -112,5 +91,37 @@ public sealed class ESTargetObjectiveSystem : EntitySystem
 
         candidate = ent.Comp.Target;
         return candidate != null;
+    }
+
+    public void SetTarget(Entity<ESTargetObjectiveComponent?> ent, EntityUid? target)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return;
+
+        // TODO: pull out into a SetTarget method, probably.
+        ent.Comp.Target = target;
+
+        if (ent.Comp.Target == null)
+            return;
+
+        if (ent.Comp.Title != null)
+        {
+            var name = Name(ent.Comp.Target.Value);
+            var job = string.Empty;
+            if (_mind.TryGetMind(ent.Comp.Target.Value, out var mind, out _))
+            {
+                if (TryComp<ESCharacterComponent>(mind, out var characterComponent))
+                    name = characterComponent.Name;
+                _job.MindTryGetJobName(mind, out job);
+            }
+
+            var title = Loc.GetString(ent.Comp.Title, ("targetName", name), ("job", job));
+            _metaData.SetEntityName(ent, title);
+        }
+
+        var comp = EnsureComp<ESObjectiveTargetComponent>(ent.Comp.Target.Value);
+        comp.Objectives.Add(ent);
+
+        // TODO: raise event on target selected. for additional setup
     }
 }
