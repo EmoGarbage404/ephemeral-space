@@ -12,19 +12,19 @@
     layers:
     - state: animated
       map: ["base"]
-      color: "#e9ebff44"
+      color: "#691f1faa"
       shader: unshaded
   - type: GenericVisualizer
     visuals:
       enum.ESPhantomVisuals.Materialized:
         base:
-          True: { color: "#fffa" }
-          False: { color: "#e9ebff44" }
+          True: { color: "#f00a" }
+          False: { color: "#691f1faa" }
   - type: PointLight
     energy: 5
     radius: 1.75
     falloff: 6
-    color: "#989fbd"
+    color: "#f00"
     castShadows: false
     netsync: false
   - type: ESGenericPointLightVisualizer
@@ -46,6 +46,8 @@
     sortedHands:
     - hand_right
     - hand_left
+  - type: ComplexInteraction
+  - type: ESBlockInteraction
   - type: Damageable
     damageContainer: ManifestedSpirit
     damageModifierSet: ManifestedSpirit
