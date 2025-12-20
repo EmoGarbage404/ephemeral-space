@@ -98,7 +98,6 @@ public sealed class ESTargetObjectiveSystem : EntitySystem
         if (!Resolve(ent, ref ent.Comp))
             return;
 
-        // TODO: pull out into a SetTarget method, probably.
         ent.Comp.Target = target;
 
         if (ent.Comp.Target == null)
