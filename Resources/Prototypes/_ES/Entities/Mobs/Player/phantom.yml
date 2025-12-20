@@ -11,8 +11,32 @@
     sprite: Mobs/Ghosts/ghost_human.rsi
     layers:
     - state: animated
-      color: "#fff8"
+      map: ["base"]
+      color: "#e9ebff44"
       shader: unshaded
+  - type: GenericVisualizer
+    visuals:
+      enum.ESPhantomVisuals.Materialized:
+        base:
+          True: { color: "#fffa" }
+          False: { color: "#e9ebff44" }
+  - type: PointLight
+    energy: 5
+    radius: 1.75
+    falloff: 6
+    color: "#989fbd"
+    castShadows: false
+    netsync: false
+  - type: ESGenericPointLightVisualizer
+    visuals:
+      enum.ESPhantomVisuals.Materialized:
+        True:
+          energy: 8
+          radius: 2
+        False:
+          energy: 5
+          radius: 1.75
+  - type: ESPhantom
   - type: Hands
     hands:
       hand_right:
@@ -22,15 +46,12 @@
     sortedHands:
     - hand_right
     - hand_left
-  - type: StatusEffects
-    allowed:
-    - Corporeal
   - type: Damageable
     damageContainer: ManifestedSpirit
     damageModifierSet: ManifestedSpirit
   - type: MovementSpeedModifier
-    baseWalkSpeed: 6
-    baseSprintSpeed: 4
+    baseSprintSpeed: 6
+    baseWalkSpeed: 4
   - type: NoSlip
   - type: Eye
     drawFov: false
@@ -40,3 +61,16 @@
     tags:
     - SlowImmune
     - KnockdownImmune
+
+- type: entity
+  parent: BaseMentalAction
+  id: ESActionPhantomMaterialize
+  name: Materialize
+  description: Take physical form and terrorize the station!
+  components:
+  - type: Action
+    icon:
+      sprite: _ES/Actions/masks/phantom.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:ESPhantomMaterializeActionEvent
