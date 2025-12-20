@@ -98,6 +98,7 @@
   troupe: ESCrew
   description: es-mask-phantom-desc
   color: lavender
+  weight: 0.5
   objectives:
     id: ESObjectivePhantomDie
 
