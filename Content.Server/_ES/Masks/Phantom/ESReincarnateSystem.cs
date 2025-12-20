@@ -42,6 +42,7 @@ public sealed class ESReincarnateSystem : EntitySystem
 
         if (HasComp<MobStateComponent>(mindComp.OwnedEntity))
         {
+            // arbitrary standard threshold for player death state.
             FixedPoint2 dealtDamage = 200;
 
             if (TryComp<DamageableComponent>(mindComp.OwnedEntity, out var damageable)

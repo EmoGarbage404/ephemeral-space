@@ -1,4 +1,3 @@
-using Content.Server._ES.Mind;
 using Content.Server.NPC.HTN;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -19,10 +18,7 @@ public sealed class KillTrackingSystem : EntitySystem
     {
         // Add damage to LifetimeDamage before MobStateChangedEvent gets raised
         SubscribeLocalEvent<KillTrackerComponent, DamageChangedEvent>(OnDamageChanged, before: [ typeof(MobThresholdSystem) ]);
-// ES START
-        // handle this before we ghost the player
-        SubscribeLocalEvent<KillTrackerComponent, MobStateChangedEvent>(OnMobStateChanged, before: [ typeof(ESAutoGhostSystem) ]);
-// ES END
+        SubscribeLocalEvent<KillTrackerComponent, MobStateChangedEvent>(OnMobStateChanged);
     }
 
     private void OnDamageChanged(EntityUid uid, KillTrackerComponent component, DamageChangedEvent args)

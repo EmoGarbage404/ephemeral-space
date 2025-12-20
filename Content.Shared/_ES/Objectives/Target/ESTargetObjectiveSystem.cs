@@ -93,10 +93,15 @@ public sealed class ESTargetObjectiveSystem : EntitySystem
         return candidate != null;
     }
 
+    /// <summary>
+    /// Sets the target for a given <see cref="ESTargetObjectiveComponent"/>
+    /// </summary>
     public void SetTarget(Entity<ESTargetObjectiveComponent?> ent, EntityUid? target)
     {
         if (!Resolve(ent, ref ent.Comp))
             return;
+
+        // TODO: if we already have a target, remove the linked stuff
 
         ent.Comp.Target = target;
 
