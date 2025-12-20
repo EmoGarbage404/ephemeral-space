@@ -55,8 +55,6 @@
     baseSprintSpeed: 6
     baseWalkSpeed: 4
   - type: NoSlip
-  - type: Eye
-    drawFov: false
   - type: Speech
     speechVerb: Ghost
   - type: Grammar
