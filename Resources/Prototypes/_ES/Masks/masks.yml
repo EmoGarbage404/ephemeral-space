@@ -63,6 +63,17 @@
     cacheProto: ESCrateCacheCrewVeteran
 
 - type: esMask
+  id: ESEmpath
+  name: es-mask-empath-name
+  troupe: ESCrew
+  description: es-mask-empath-desc
+  color: plum
+  components:
+  - type: ActionGrant
+    actions:
+    - ESActionMaskDetectAura
+
+- type: esMask
   id: ESGuzzler
   name: es-mask-guzzler-name
   troupe: ESCrew
@@ -105,6 +116,32 @@
     all:
     - id: ESObjectivePhantomDie
     - id: ESObjectivePhantomAvenge
+
+- type: esMask
+  id: ESGlutton
+  name: es-mask-glutton-name
+  troupe: ESCrew
+  description: es-mask-glutton-desc
+  color: yellowgreen
+  objectives:
+    all:
+    - id: ESObjectiveEatUniqueFoods
+    - id: ESObjectiveEatFood
+
+- type: esMask
+  id: ESSurvivalist
+  name: es-mask-survivalist-name
+  troupe: ESCrew
+  description: es-mask-survivalist-desc
+  color: forestgreen
+  components:
+  - type: ESMedAlertRadioAnnouncer
+  mindComponents:
+  - type: ESMaskCacheSpawner
+    cacheProto: ESCrateCacheCrewSurvivalist
+  objectives:
+    all:
+    - id: ESObjectiveSurvive
 
 # Traitor Masks
 - type: esMask
