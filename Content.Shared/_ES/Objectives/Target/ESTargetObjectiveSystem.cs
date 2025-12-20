@@ -123,5 +123,7 @@ public sealed class ESTargetObjectiveSystem : EntitySystem
         comp.Objectives.Add(ent);
 
         // TODO: raise event on target selected. for additional setup
+
+        _objective.RefreshObjectiveProgress(ent.Owner);
     }
 }
