@@ -1,6 +1,7 @@
 using Content.Server._ES.Masks.Objectives.Relays.Components;
 using Content.Server.KillTracking;
 using Content.Server.Mind;
+using Content.Shared._ES.Mind;
 
 namespace Content.Server._ES.Masks.Objectives.Relays;
 
