@@ -19,6 +19,17 @@
   - type: ESCargoRequestStation
 
 - type: entity
+  id: ESBaseStationTelesci
+  abstract: true
+  components:
+  - type: ESTelesciStation
+    stages:
+    - danger: 1
+    - danger: 2
+    - danger: 3
+    - danger: 0
+
+- type: entity
   id: ESBaseStationNeutral
   parent:
   - BaseStation
@@ -40,6 +51,7 @@
   - ESBaseStationArrivals
   - ESBaseStationEvacuation
   - ESBaseStationStoreroom
+  - ESBaseStationTelesci
   categories: [ HideSpawnMenu ]
   components:
   - type: Transform

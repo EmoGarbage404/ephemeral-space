@@ -2,6 +2,9 @@
   id: ESCrew
   name: es-troupe-crew-name
   color: yellow
+  objectives:
+    all:
+    - id: ESObjectiveResearchTelescience
 
 - type: esTroupe
   id: ESTraitor
