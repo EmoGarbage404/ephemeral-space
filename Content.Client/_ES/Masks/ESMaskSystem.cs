@@ -1,5 +1,7 @@
 using Content.Shared._ES.Masks;
 using Content.Shared._ES.Masks.Components;
+using Content.Shared._ES.Stagehand.Components;
+using Content.Shared.Mind.Components;
 using Content.Shared.StatusIcon.Components;
 using Robust.Client.Player;
 
@@ -13,7 +15,22 @@ public sealed class ESMaskSystem : ESSharedMaskSystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<MindContainerComponent, GetStatusIconsEvent>(OnGetStagehandStatusIcons);
         SubscribeLocalEvent<ESTroupeFactionIconComponent, GetStatusIconsEvent>(OnGetStatusIcons);
+    }
+
+    private void OnGetStagehandStatusIcons(Entity<MindContainerComponent> ent, ref GetStatusIconsEvent args)
+    {
+        // Only stagehands should see the meta troupe icons.
+        // Normal players will never receive the data anyways, but it prevents useless info
+        // from bloating up the screen since they have no need for them.
+        if (!HasComp<ESStagehandComponent>(_player.LocalEntity))
+            return;
+
+        if (!TryGetTroupe(ent, out var troupe))
+            return;
+
+        args.StatusIcons.Add(PrototypeManager.Index(PrototypeManager.Index(troupe.Value).MetaIcon));
     }
 
     private void OnGetStatusIcons(Entity<ESTroupeFactionIconComponent> ent, ref GetStatusIconsEvent args)
