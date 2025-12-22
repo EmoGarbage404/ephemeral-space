@@ -1,16 +1,51 @@
+using System.Linq;
 using Content.Server.Administration;
 using Content.Shared._ES.Telesci;
+using Content.Shared._ES.Telesci.Components;
 using Content.Shared.Administration;
+using Robust.Shared.Collections;
+using Robust.Shared.Random;
 using Robust.Shared.Toolshed;
 
 namespace Content.Server._ES.Telesci;
 
 public sealed class ESTelesciSystem : ESSharedTelesciSystem
 {
+    [Dependency] private readonly IRobustRandom _random = default!;
+
     /// <inheritdoc/>
     public override void Initialize()
     {
         base.Initialize();
+    }
+
+    protected override void SpawnRewards(Entity<ESTelesciStationComponent> ent, ESTelesciStage stage)
+    {
+        base.SpawnRewards(ent, stage);
+
+        var rewards = EntityTable.GetSpawns(stage.Rewards).ToList();
+
+        var pads = new ValueList<Entity<ESTelesciRewardPadComponent>>();
+
+        var query = EntityQueryEnumerator<ESTelesciRewardPadComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var comp, out var xform))
+        {
+            if (!xform.Anchored)
+                continue;
+
+            if (comp.Enabled)
+                pads.Add((uid, comp));
+        }
+
+        var rewardCount = rewards.Count / ent.Comp.RewardPads;
+        foreach (var pad in pads)
+        {
+            for (var i = 0; i < rewardCount; i++)
+            {
+                var item = _random.PickAndTake(rewards);
+                SpawnNextToOrDrop(item, pad);
+            }
+        }
     }
 }
 

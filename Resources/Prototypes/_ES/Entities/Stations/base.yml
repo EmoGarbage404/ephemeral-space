@@ -25,8 +25,14 @@
   - type: ESTelesciStation
     stages:
     - danger: 1
+      rewards:
+        tableId: ESTelesciRewards
     - danger: 2
+      rewards:
+        tableId: ESTelesciRewards
     - danger: 3
+      rewards:
+        tableId: ESTelesciRewards
     - danger: 0
 
 - type: entity

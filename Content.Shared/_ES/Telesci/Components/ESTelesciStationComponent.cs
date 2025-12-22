@@ -1,3 +1,4 @@
+using Content.Shared.EntityTable.EntitySelectors;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._ES.Telesci.Components;
@@ -17,6 +18,9 @@ public sealed partial class ESTelesciStationComponent : Component
 
     [DataField]
     public List<ESTelesciStage> Stages = [];
+
+    [DataField]
+    public int RewardPads = 4;
 }
 
 [DataDefinition]
@@ -24,4 +28,7 @@ public partial struct ESTelesciStage
 {
     [DataField]
     public int Danger;
+
+    [DataField]
+    public EntityTableSelector Rewards = new NoneSelector();
 }

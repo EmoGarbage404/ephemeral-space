@@ -1,11 +1,13 @@
 using Content.Shared._ES.Objectives;
 using Content.Shared._ES.Objectives.Components;
 using Content.Shared._ES.Telesci.Components;
+using Content.Shared.EntityTable;
 
 namespace Content.Shared._ES.Telesci;
 
 public abstract class ESSharedTelesciSystem : EntitySystem
 {
+    [Dependency] protected readonly EntityTableSystem EntityTable = default!;
     [Dependency] private readonly ESSharedObjectiveSystem _objective = default!;
 
     /// <inheritdoc/>
@@ -45,9 +47,16 @@ public abstract class ESSharedTelesciSystem : EntitySystem
         Log.Debug($"Advancing telesci stage: {stage.Danger}");
         // TODO: spawn events, etc.
 
+        SpawnRewards((ent, ent.Comp), stage);
+
         ent.Comp.Stage = stageIdx;
         Dirty(ent);
 
         _objective.RefreshObjectiveProgress<ESTelesciObjectiveComponent>();
+    }
+
+    protected virtual void SpawnRewards(Entity<ESTelesciStationComponent> ent, ESTelesciStage stage)
+    {
+
     }
 }

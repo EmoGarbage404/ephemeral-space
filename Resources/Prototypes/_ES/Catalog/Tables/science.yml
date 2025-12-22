@@ -1,0 +1,6 @@
+- type: entityTable
+  id: ESTelesciRewards
+  table:
+    group:
+    - id: DeviceQuantumSpinInverter
+      amount: 12
