@@ -176,3 +176,81 @@
     target: 750
     maxTarget: 1250
     targetIncrement: 50
+
+- type: entity
+  parent: ESBaseMaskObjective
+  id: ESObjectiveEatUniqueFoods
+  name: Eat unique foods
+  description: Your stomach yearns for the unknown, seek out all the different tastes of the world!
+  components:
+  - type: ESObjective
+    icon:
+      sprite: Mobs/Species/Human/organs.rsi
+      state: stomach
+  - type: ESEatUniqueFoodsObjective
+  - type: ESCounterObjective
+    title: es-eat-unique-foods-objective-title
+    target: 25
+    maxTarget: 40
+    targetIncrement: 5
+
+- type: entity
+  parent: ESBaseMaskObjective
+  id: ESObjectiveEatFood
+  name: Eat a food
+  description: You have a particularly exotic craving. Make sure you satiate it!
+  components:
+  - type: ESObjective
+    icon:
+      sprite: Objects/Consumable/Food/plates.rsi
+      state: plate
+  - type: ESEatFoodObjective
+    foods:
+    - FoodMeatCorgi
+    - MaterialSmileExtract
+    - FoodJellyAmanita
+    - FoodBurgerBear
+    - FoodSoupChiliClown
+    - FoodSoupMonkey
+    - FoodMeatAnomaly
+    - FoodBurgerClown
+    - FoodPizzaDank
+  - type: ESCounterObjective
+    target: 1
+
+- type: entity
+  parent: ESBaseMaskObjective
+  id: ESObjectiveSurvive
+  name: Survive
+  description: Survive until the end of the shift at all costs.
+  components:
+  - type: ESObjective
+    icon:
+      sprite: Interface/Alerts/human_alive.rsi
+      state: health0
+  - type: ESMobStateObjective
+    desiredStates: [Alive, Critical]
+  - type: ESCounterObjective
+    target: 1
+    counter: 1
+
+- type: entity
+  parent: ESBaseMaskObjective
+  id: ESObjectiveSacrificeHeal
+  name: Sacrifice yourself
+  description: Heal others by dying near them.
+  components:
+  - type: ESObjective
+    icon:
+      sprite: Interface/Alerts/human_dead.rsi
+      state: dead
+  - type: ESSacrificeHealObjective
+    sacrificeSolution:
+      maxVol: 40
+      reagents:
+      - ReagentId: Omnizine
+        Quantity: 40
+  - type: ESCounterObjective
+    title: es-sacrifice-objective-title
+    target: 2
+    maxTarget: 4
