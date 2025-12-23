@@ -187,6 +187,10 @@ Poweredlight: ESPoweredLightDepartment
 # ES nitrile gloves migration
 ClothingHandsGlovesNitrile: ClothingHandsGlovesColorBlue
 
+# 2025-12-23
+# New laser box prototype
+GlassBoxLaserFilled: ESDisplayCaseCaptainEnergyGun
+
 # ES END
 
 # 2023-07-03
