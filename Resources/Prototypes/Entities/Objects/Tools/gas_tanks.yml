@@ -142,14 +142,22 @@
   description: An easily portable tank for emergencies. Contains very little nitrogen, rated for survival use only. It can hold 0.66 L of gas.
   components:
   - type: Sprite
-    sprite: Objects/Tanks/emergency_red.rsi
+# ES START
+    sprite: _ES/Objects/Tanks/emergency_nitrogen.rsi
+# ES END
   - type: Item
-    sprite: Objects/Tanks/emergency_red.rsi
+# ES START
+    sprite: _ES/Objects/Tanks/emergency_nitrogen.rsi
+# ES END
     storedSprite:
       state: storage
-      sprite: Objects/Tanks/emergency_red.rsi
+# ES START
+      sprite: _ES/Objects/Tanks/emergency_nitrogen.rsi
+# ES END
   - type: Clothing
-    sprite: Objects/Tanks/emergency_red.rsi
+# ES START
+    sprite: _ES/Objects/Tanks/emergency_nitrogen.rsi
+# ES END
 
 - type: entity
   parent: EmergencyOxygenTank
