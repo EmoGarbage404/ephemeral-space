@@ -7,7 +7,11 @@
     sprite: Objects/Tanks/generic.rsi
     state: icon
   - type: Item
-    size: Normal
+# ES START
+    # Changes tanks to Large in order to reduce space efficiency of long-duration space gear.
+    size: Large
+    storedRotation: -90
+# ES END
     sprite: Objects/Tanks/generic.rsi
   - type: Clothing
     quickEquip: false
@@ -109,6 +113,7 @@
     size: Small
 # ES START
     sprite: _ES/Objects/Tanks/emergency_oxy.rsi
+    storedRotation: 0
 # ES END
     storedSprite:
       state: storage
@@ -298,13 +303,21 @@
   description: Contains dangerous plasma. Do not inhale. Extremely flammable. It can hold 5 L of gas.
   components:
   - type: Sprite
-    sprite: Objects/Tanks/plasma.rsi
+# ES START
+    sprite: _ES/Objects/Tanks/plasma.rsi
+# ES END
   - type: Item
-    sprite: Objects/Tanks/plasma.rsi
+# ES START
+    sprite: _ES/Objects/Tanks/plasma.rsi
+    shape:
+    - 0,0,1,2
+# ES END
   - type: GasTank
     outputPressure: 101.3
   - type: Clothing
-    sprite: Objects/Tanks/plasma.rsi
+# ES START
+    sprite: _ES/Objects/Tanks/plasma.rsi
+# ES END
     slots:
     - Belt
     - suitStorage
