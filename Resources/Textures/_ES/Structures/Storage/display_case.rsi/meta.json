@@ -8,7 +8,13 @@
   },
   "states": [
     {
-      "name": "glass"
+      "name": "back"
+    },
+    {
+      "name": "back-broken"
+    },
+    {
+      "name": "base"
     },
     {
       "name": "light"
@@ -17,7 +23,10 @@
       "name": "fill"
     },
     {
-      "name": "broken"
+      "name": "front"
+    },
+    {
+      "name": "front-broken"
     }
   ]
 }

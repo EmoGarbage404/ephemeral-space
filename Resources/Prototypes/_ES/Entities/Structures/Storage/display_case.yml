@@ -9,18 +9,24 @@
     sprite: _ES/Structures/Storage/display_case.rsi
     layers:
     - state: light
-      color: "#fff8"
+      color: "#fff5"
       map: ["light"]
+    - state: base
+    - state: back
+      map: ["glass-back"]
     - map: ["fill"]
-    - state: glass
-      map: ["base"]
+    - state: front
+      map: ["glass-front"]
   - type: Appearance
   - type: GenericVisualizer
     visuals:
       enum.ESDisplayCaseVisuals.Broken:
-        base:
-          True: { state: broken }
-          False: { state: glass }
+        glass-front:
+          True: { state: front-broken }
+          False: { state: front }
+        glass-back:
+          True: { state: back-broken }
+          False: { state: back }
         light:
           True: { visible: false }
           False: { visible: true }
