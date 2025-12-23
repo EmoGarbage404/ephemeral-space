@@ -31,4 +31,7 @@ public partial struct ESTelesciStage
 
     [DataField]
     public EntityTableSelector Rewards = new NoneSelector();
+
+    [DataField]
+    public EntityTableSelector Events = new NoneSelector();
 }

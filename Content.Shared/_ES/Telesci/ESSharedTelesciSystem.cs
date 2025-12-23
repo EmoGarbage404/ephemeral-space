@@ -47,12 +47,18 @@ public abstract class ESSharedTelesciSystem : EntitySystem
         Log.Debug($"Advancing telesci stage: {stage.Danger}");
         // TODO: spawn events, etc.
 
+        SpawnEvents((ent, ent.Comp), stage);
         SpawnRewards((ent, ent.Comp), stage);
 
         ent.Comp.Stage = stageIdx;
         Dirty(ent);
 
         _objective.RefreshObjectiveProgress<ESTelesciObjectiveComponent>();
+    }
+
+    protected virtual void SpawnEvents(Entity<ESTelesciStationComponent> ent, ESTelesciStage stage)
+    {
+
     }
 
     protected virtual void SpawnRewards(Entity<ESTelesciStationComponent> ent, ESTelesciStage stage)

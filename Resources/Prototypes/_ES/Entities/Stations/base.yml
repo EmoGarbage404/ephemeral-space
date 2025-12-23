@@ -27,12 +27,18 @@
     - danger: 1
       rewards:
         tableId: ESTelesciRewards
+      events:
+        id: ESStationEventElectricalFire
     - danger: 2
       rewards:
         tableId: ESTelesciRewards
+      events:
+        id: ESStationEventElectricalFire
     - danger: 3
       rewards:
         tableId: ESTelesciRewards
+      events:
+        id: ESStationEventElectricalFire
     - danger: 0
 
 - type: entity

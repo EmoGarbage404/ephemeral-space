@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.Administration;
+using Content.Server.GameTicking;
 using Content.Shared._ES.Telesci;
 using Content.Shared._ES.Telesci.Components;
 using Content.Shared.Administration;
@@ -12,11 +13,22 @@ namespace Content.Server._ES.Telesci;
 public sealed class ESTelesciSystem : ESSharedTelesciSystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
     {
         base.Initialize();
+    }
+
+    protected override void SpawnEvents(Entity<ESTelesciStationComponent> ent, ESTelesciStage stage)
+    {
+        base.SpawnEvents(ent, stage);
+
+        foreach (var eventId in EntityTable.GetSpawns(stage.Events))
+        {
+            _gameTicker.AddGameRule(eventId);
+        }
     }
 
     protected override void SpawnRewards(Entity<ESTelesciStationComponent> ent, ESTelesciStage stage)
