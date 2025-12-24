@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Administration;
 using Content.Server.GameTicking;
+using Content.Server.RoundEnd;
 using Content.Shared._ES.Telesci;
 using Content.Shared._ES.Telesci.Components;
 using Content.Shared.Administration;
@@ -14,6 +15,7 @@ public sealed class ESTelesciSystem : ESSharedTelesciSystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private readonly RoundEndSystem _roundEnd = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -58,6 +60,14 @@ public sealed class ESTelesciSystem : ESSharedTelesciSystem
                 SpawnNextToOrDrop(item, pad);
             }
         }
+    }
+
+    protected override bool TryCallShuttle(Entity<ESTelesciStationComponent> ent)
+    {
+        if (!base.TryCallShuttle(ent))
+            return false;
+        _roundEnd.RequestRoundEnd();
+        return true;
     }
 }
 

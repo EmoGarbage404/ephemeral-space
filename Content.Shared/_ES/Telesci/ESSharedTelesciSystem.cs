@@ -53,6 +53,8 @@ public abstract class ESSharedTelesciSystem : EntitySystem
         ent.Comp.Stage = stageIdx;
         Dirty(ent);
 
+        TryCallShuttle((ent, ent.Comp));
+
         _objective.RefreshObjectiveProgress<ESTelesciObjectiveComponent>();
     }
 
@@ -64,5 +66,10 @@ public abstract class ESSharedTelesciSystem : EntitySystem
     protected virtual void SpawnRewards(Entity<ESTelesciStationComponent> ent, ESTelesciStage stage)
     {
 
+    }
+
+    protected virtual bool TryCallShuttle(Entity<ESTelesciStationComponent> ent)
+    {
+        return ent.Comp.Stage >= ent.Comp.MaxStage;
     }
 }
