@@ -33,7 +33,7 @@ public sealed class ESStagehandSystem : EntitySystem
         if (msg.SenderSession.AttachedEntity is not { } entity)
             return;
 
-        if (_gameTicker.RunLevel != GameRunLevel.InRound)
+        if (_gameTicker.RunLevel == GameRunLevel.PreRoundLobby)
             return;
 
         if (!HasComp<ESTheatergoerMarkerComponent>(entity))
