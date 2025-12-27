@@ -4,11 +4,14 @@ using Content.Shared._ES.Telesci.Components;
 using Content.Shared.EntityTable;
 using Content.Shared.Gravity;
 using Content.Shared.Station;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._ES.Telesci;
 
 public abstract class ESSharedTelesciSystem : EntitySystem
 {
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] protected readonly EntityTableSystem EntityTable = default!;
     [Dependency] private readonly SharedGravitySystem _gravity = default!;
     [Dependency] private readonly ESSharedObjectiveSystem _objective = default!;
@@ -17,7 +20,14 @@ public abstract class ESSharedTelesciSystem : EntitySystem
     /// <inheritdoc/>
     public override void Initialize()
     {
+        SubscribeLocalEvent<ESPortalGeneratorComponent, MapInitEvent>(OnGeneratorMapInit);
+
         SubscribeLocalEvent<ESTelesciObjectiveComponent, ESGetObjectiveProgressEvent>(OnGetObjectiveProgress);
+    }
+
+    private void OnGeneratorMapInit(Entity<ESPortalGeneratorComponent> ent, ref MapInitEvent args)
+    {
+        ent.Comp.NextUpdateTime = _timing.CurTime + ent.Comp.NextUpdateTime;
     }
 
     private void OnGetObjectiveProgress(Entity<ESTelesciObjectiveComponent> ent, ref ESGetObjectiveProgressEvent args)
@@ -85,5 +95,39 @@ public abstract class ESSharedTelesciSystem : EntitySystem
     protected virtual bool TryCallShuttle(Entity<ESTelesciStationComponent> ent)
     {
         return ent.Comp.Stage >= ent.Comp.MaxStage;
+    }
+
+    public bool TryGetPortalGenerator(out Entity<ESPortalGeneratorComponent>? ent)
+    {
+        var query = EntityQueryEnumerator<ESPortalGeneratorComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            ent = (uid, comp);
+            return true;
+        }
+
+        ent = null;
+        return false;
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<ESPortalGeneratorComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (_timing.CurTime < comp.NextUpdateTime)
+                continue;
+            comp.NextUpdateTime += comp.UpdateDelay;
+
+            if (!comp.Powered)
+                continue;
+            comp.AccumulatedChargeTime += comp.UpdateDelay;
+            Dirty(uid, comp);
+
+            if (comp.Charged)
+                _appearance.SetData(uid, ESPortalGeneratorVisuals.Charged, comp.Charged);
+        }
     }
 }

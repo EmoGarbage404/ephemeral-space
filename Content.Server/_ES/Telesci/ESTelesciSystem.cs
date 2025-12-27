@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Administration;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
+using Content.Server.Power.EntitySystems;
 using Content.Server.RoundEnd;
 using Content.Shared._ES.Telesci;
 using Content.Shared._ES.Telesci.Components;
@@ -25,6 +26,14 @@ public sealed class ESTelesciSystem : ESSharedTelesciSystem
     public override void Initialize()
     {
         base.Initialize();
+
+        SubscribeLocalEvent<ESPortalGeneratorComponent, PowerConsumerReceivedChanged>(OnPowerConsumerReceivedChanged);
+    }
+
+    private void OnPowerConsumerReceivedChanged(Entity<ESPortalGeneratorComponent> ent, ref PowerConsumerReceivedChanged args)
+    {
+        ent.Comp.Powered = args.ReceivedPower >= args.DrawRate;
+        Dirty(ent);
     }
 
     protected override void SpawnEvents(Entity<ESTelesciStationComponent> ent, ESTelesciStage stage)
