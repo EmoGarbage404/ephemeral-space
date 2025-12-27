@@ -335,14 +335,14 @@
       state: teleport_key
     - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
       state: generic_panel_open
-  #- type: ESCryptoNukeConsole
+  - type: ESPortalGeneratorConsole
   - type: PointLight
     color: "#0099ff"
-  #- type: ActivatableUI
-  #  key: enum.ESCryptoNukeConsoleUiKey.Key
+  - type: ActivatableUI
+    key: enum.ESPortalGeneratorConsoleUiKey.Key
   - type: UserInterface
     interfaces:
-      #enum.ESCryptoNukeConsoleUiKey.Key:
-      #  type: ESCryptoNukeConsoleBui
+      enum.ESPortalGeneratorConsoleUiKey.Key:
+        type: ESPortalGeneratorConsoleBui
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface

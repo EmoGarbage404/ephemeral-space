@@ -6,8 +6,8 @@
   components:
   - type: ESObjective
     icon:
-      sprite: /Textures/Effects/portal.rsi
-      state: portal-blue
+      sprite: _ES/Structures/Machines/Telesci/portalgen.rsi
+      state: cube
   - type: ESTelesciObjective
 
 - type: entity

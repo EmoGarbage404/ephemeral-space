@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Content.Shared._ES.Objectives;
 using Content.Shared._ES.Objectives.Components;
 using Content.Shared._ES.Telesci.Components;
@@ -16,16 +17,24 @@ public abstract class ESSharedTelesciSystem : EntitySystem
     [Dependency] private readonly SharedGravitySystem _gravity = default!;
     [Dependency] private readonly ESSharedObjectiveSystem _objective = default!;
     [Dependency] private readonly SharedStationSystem _station = default!;
+    [Dependency] private readonly SharedUserInterfaceSystem _userInterface = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
     {
         SubscribeLocalEvent<ESPortalGeneratorComponent, MapInitEvent>(OnGeneratorMapInit);
+        SubscribeLocalEvent<ESPortalGeneratorConsoleComponent, MapInitEvent>(OnConsoleMapInit);
 
         SubscribeLocalEvent<ESTelesciObjectiveComponent, ESGetObjectiveProgressEvent>(OnGetObjectiveProgress);
     }
 
     private void OnGeneratorMapInit(Entity<ESPortalGeneratorComponent> ent, ref MapInitEvent args)
+    {
+        ent.Comp.NextUpdateTime = _timing.CurTime + ent.Comp.NextUpdateTime;
+        Dirty(ent);
+    }
+
+    private void OnConsoleMapInit(Entity<ESPortalGeneratorConsoleComponent> ent, ref MapInitEvent args)
     {
         ent.Comp.NextUpdateTime = _timing.CurTime + ent.Comp.NextUpdateTime;
     }
@@ -56,6 +65,9 @@ public abstract class ESSharedTelesciSystem : EntitySystem
 
         if (ent.Comp.Stage == stageIdx || stageIdx < 0 || stageIdx > ent.Comp.MaxStage)
             return;
+
+        if (TryGetPortalGenerator(out var gen))
+            ResetPortalGeneratorProgress(gen.Value);
 
         var stage = ent.Comp.Stages[stageIdx - 1];
 
@@ -97,7 +109,25 @@ public abstract class ESSharedTelesciSystem : EntitySystem
         return ent.Comp.Stage >= ent.Comp.MaxStage;
     }
 
-    public bool TryGetPortalGenerator(out Entity<ESPortalGeneratorComponent>? ent)
+    private void UpdateUiState(Entity<ESPortalGeneratorConsoleComponent, UserInterfaceComponent> ent)
+    {
+        if (_station.GetOwningStation(ent) is not { } station ||
+            !TryComp<ESTelesciStationComponent>(station, out var stationComp))
+            return;
+
+        if (!TryGetPortalGenerator(out var generator))
+            return;
+
+        var state = new ESPortalGeneratorConsoleBuiState
+        {
+            Charge = (float) Math.Clamp(generator.Value.Comp.AccumulatedChargeTime.TotalSeconds / generator.Value.Comp.ChargeDuration.TotalSeconds, 0, 1),
+            CurrentResearchStage = stationComp.Stage,
+            MaxResearchStage = stationComp.MaxStage,
+        };
+        _userInterface.SetUiState((ent, ent.Comp2), ESPortalGeneratorConsoleUiKey.Key, state);
+    }
+
+    public bool TryGetPortalGenerator([NotNullWhen(true)] out Entity<ESPortalGeneratorComponent>? ent)
     {
         var query = EntityQueryEnumerator<ESPortalGeneratorComponent>();
         while (query.MoveNext(out var uid, out var comp))
@@ -108,6 +138,12 @@ public abstract class ESSharedTelesciSystem : EntitySystem
 
         ent = null;
         return false;
+    }
+
+    public void ResetPortalGeneratorProgress(Entity<ESPortalGeneratorComponent> ent)
+    {
+        ent.Comp.AccumulatedChargeTime = TimeSpan.Zero;
+        Dirty(ent);
     }
 
     public override void Update(float frameTime)
@@ -128,6 +164,16 @@ public abstract class ESSharedTelesciSystem : EntitySystem
 
             if (comp.Charged)
                 _appearance.SetData(uid, ESPortalGeneratorVisuals.Charged, comp.Charged);
+        }
+
+        var consoleQuery = EntityQueryEnumerator<ESPortalGeneratorConsoleComponent, UserInterfaceComponent>();
+        while (consoleQuery.MoveNext(out var uid, out var comp, out var ui))
+        {
+            if (_timing.CurTime < comp.NextUpdateTime)
+                continue;
+            comp.NextUpdateTime += comp.UpdateDelay;
+
+            UpdateUiState((uid, comp, ui));
         }
     }
 }
