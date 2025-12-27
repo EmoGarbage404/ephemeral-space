@@ -24,6 +24,12 @@ public abstract class ESSharedTelesciSystem : EntitySystem
     {
         SubscribeLocalEvent<ESPortalGeneratorComponent, MapInitEvent>(OnGeneratorMapInit);
         SubscribeLocalEvent<ESPortalGeneratorConsoleComponent, MapInitEvent>(OnConsoleMapInit);
+        Subs.BuiEvents<ESPortalGeneratorConsoleComponent>(ESPortalGeneratorConsoleUiKey.Key,
+            subs =>
+            {
+                subs.Event<ESActivePortalGeneratorBuiMessage>(OnActivePortalGenerator);
+            }
+        );
 
         SubscribeLocalEvent<ESTelesciObjectiveComponent, ESGetObjectiveProgressEvent>(OnGetObjectiveProgress);
     }
@@ -37,6 +43,20 @@ public abstract class ESSharedTelesciSystem : EntitySystem
     private void OnConsoleMapInit(Entity<ESPortalGeneratorConsoleComponent> ent, ref MapInitEvent args)
     {
         ent.Comp.NextUpdateTime = _timing.CurTime + ent.Comp.NextUpdateTime;
+    }
+
+    private void OnActivePortalGenerator(Entity<ESPortalGeneratorConsoleComponent> ent, ref ESActivePortalGeneratorBuiMessage args)
+    {
+        if (!TryGetPortalGenerator(out var generator))
+            return;
+
+        if (!generator.Value.Comp.Charged)
+            return;
+
+        if (!_station.TryGetOwningStation<ESTelesciStationComponent>(ent, out var station))
+            return;
+
+        AdvanceTelesciStage(station.Value.AsNullable());
     }
 
     private void OnGetObjectiveProgress(Entity<ESTelesciObjectiveComponent> ent, ref ESGetObjectiveProgressEvent args)
@@ -144,6 +164,8 @@ public abstract class ESSharedTelesciSystem : EntitySystem
     {
         ent.Comp.AccumulatedChargeTime = TimeSpan.Zero;
         Dirty(ent);
+
+        _appearance.SetData(ent, ESPortalGeneratorVisuals.Charged, false);
     }
 
     public override void Update(float frameTime)
@@ -162,8 +184,7 @@ public abstract class ESSharedTelesciSystem : EntitySystem
             comp.AccumulatedChargeTime += comp.UpdateDelay;
             Dirty(uid, comp);
 
-            if (comp.Charged)
-                _appearance.SetData(uid, ESPortalGeneratorVisuals.Charged, comp.Charged);
+            _appearance.SetData(uid, ESPortalGeneratorVisuals.Charged, comp.Charged);
         }
 
         var consoleQuery = EntityQueryEnumerator<ESPortalGeneratorConsoleComponent, UserInterfaceComponent>();

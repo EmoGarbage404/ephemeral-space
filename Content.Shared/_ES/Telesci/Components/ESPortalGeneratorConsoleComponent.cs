@@ -34,3 +34,6 @@ public sealed class ESPortalGeneratorConsoleBuiState : BoundUserInterfaceState
     public int CurrentResearchStage;
     public int MaxResearchStage;
 }
+
+[Serializable, NetSerializable]
+public sealed class ESActivePortalGeneratorBuiMessage : BoundUserInterfaceMessage;

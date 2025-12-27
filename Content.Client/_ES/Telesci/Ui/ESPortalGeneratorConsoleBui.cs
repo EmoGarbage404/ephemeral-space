@@ -14,6 +14,11 @@ public sealed class ESPortalGeneratorConsoleBui(EntityUid owner, Enum uiKey) : B
         base.Open();
 
         _window = this.CreateWindow<ESPortalGeneratorConsoleWindow>();
+
+        _window.OnActivatePressed += () =>
+        {
+            SendMessage(new ESActivePortalGeneratorBuiMessage());
+        };
     }
 
     protected override void UpdateState(BoundUserInterfaceState msg)

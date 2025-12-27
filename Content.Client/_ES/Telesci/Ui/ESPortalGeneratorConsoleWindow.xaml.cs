@@ -10,12 +10,16 @@ namespace Content.Client._ES.Telesci.Ui;
 [GenerateTypedNameReferences]
 public sealed partial class ESPortalGeneratorConsoleWindow : FancyWindow
 {
+    public event Action? OnActivatePressed;
+
     public ESPortalGeneratorConsoleWindow()
     {
         RobustXamlLoader.Load(this);
 
         ChargeBar.ForegroundStyleBoxOverride = new StyleBoxFlat(Color.Yellow);
         ResearchBar.ForegroundStyleBoxOverride = new StyleBoxFlat(Color.Magenta);
+
+        ActivateButton.OnPressed += _ => OnActivatePressed?.Invoke();
     }
 
     public void Update(ESPortalGeneratorConsoleBuiState state)
