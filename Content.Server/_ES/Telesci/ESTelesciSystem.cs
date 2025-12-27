@@ -42,7 +42,7 @@ public sealed class ESTelesciSystem : ESSharedTelesciSystem
 
         foreach (var eventId in EntityTable.GetSpawns(stage.Events))
         {
-            _gameTicker.AddGameRule(eventId);
+            _gameTicker.StartGameRule(eventId);
         }
     }
 
