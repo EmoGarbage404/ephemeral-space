@@ -1,4 +1,5 @@
 using Content.Shared.EntityTable.EntitySelectors;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._ES.Telesci.Components;
@@ -21,13 +22,19 @@ public sealed partial class ESTelesciStationComponent : Component
 
     [DataField]
     public int RewardPads = 4;
+
+    [DataField]
+    public TimeSpan EvacTime = TimeSpan.FromMinutes(5);
 }
 
 [DataDefinition]
 public partial struct ESTelesciStage
 {
     [DataField]
-    public int Danger;
+    public LocId Announcement;
+
+    [DataField]
+    public SoundSpecifier? AnnouncementSound;
 
     [DataField]
     public EntityTableSelector Rewards = new NoneSelector();

@@ -2,13 +2,17 @@ using Content.Shared._ES.Objectives;
 using Content.Shared._ES.Objectives.Components;
 using Content.Shared._ES.Telesci.Components;
 using Content.Shared.EntityTable;
+using Content.Shared.Gravity;
+using Content.Shared.Station;
 
 namespace Content.Shared._ES.Telesci;
 
 public abstract class ESSharedTelesciSystem : EntitySystem
 {
     [Dependency] protected readonly EntityTableSystem EntityTable = default!;
+    [Dependency] private readonly SharedGravitySystem _gravity = default!;
     [Dependency] private readonly ESSharedObjectiveSystem _objective = default!;
+    [Dependency] private readonly SharedStationSystem _station = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -44,11 +48,16 @@ public abstract class ESSharedTelesciSystem : EntitySystem
             return;
 
         var stage = ent.Comp.Stages[stageIdx - 1];
-        Log.Debug($"Advancing telesci stage: {stage.Danger}");
-        // TODO: spawn events, etc.
 
         SpawnEvents((ent, ent.Comp), stage);
         SpawnRewards((ent, ent.Comp), stage);
+        SendAnnouncement(ent, stage);
+
+        // TODO: replace with real screen shake once we have it
+        foreach (var grid in _station.GetGrids(ent.Owner))
+        {
+            _gravity.StartGridShake(grid);
+        }
 
         ent.Comp.Stage = stageIdx;
         Dirty(ent);
@@ -64,6 +73,11 @@ public abstract class ESSharedTelesciSystem : EntitySystem
     }
 
     protected virtual void SpawnRewards(Entity<ESTelesciStationComponent> ent, ESTelesciStage stage)
+    {
+
+    }
+
+    protected virtual void SendAnnouncement(EntityUid ent, ESTelesciStage stage)
     {
 
     }

@@ -2,7 +2,7 @@
   parent: ESBaseMaskObjective
   id: ESObjectiveResearchTelescience
   name: Research telescience
-  description: Work with the science team to unlock the advanced technology on the station.
+  description: Work with the science team to teleport the station out of the way of the coming radiation storm.
   components:
   - type: ESObjective
     icon:

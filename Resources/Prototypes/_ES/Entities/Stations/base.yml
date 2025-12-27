@@ -24,22 +24,22 @@
   components:
   - type: ESTelesciStation
     stages:
-    - danger: 1
+    - announcement: es-telesci-announcement-stage-1
       rewards:
         tableId: ESTelesciRewards
       events:
         id: ESStationEventElectricalFire
-    - danger: 2
+    - announcement: es-telesci-announcement-stage-2
       rewards:
         tableId: ESTelesciRewards
       events:
         id: ESStationEventElectricalFire
-    - danger: 3
+    - announcement: es-telesci-announcement-stage-3
       rewards:
         tableId: ESTelesciRewards
       events:
         id: ESStationEventElectricalFire
-    - danger: 0
+    - announcement: es-telesci-announcement-stage-4
 
 - type: entity
   id: ESBaseStationNeutral

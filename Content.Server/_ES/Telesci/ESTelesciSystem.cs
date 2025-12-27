@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.Administration;
+using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Server.RoundEnd;
 using Content.Shared._ES.Telesci;
@@ -16,6 +17,7 @@ public sealed class ESTelesciSystem : ESSharedTelesciSystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly AudioSystem _audio = default!;
+    [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly RoundEndSystem _roundEnd = default!;
 
@@ -71,11 +73,20 @@ public sealed class ESTelesciSystem : ESSharedTelesciSystem
         }
     }
 
+    protected override void SendAnnouncement(EntityUid ent, ESTelesciStage stage)
+    {
+        _chat.DispatchStationAnnouncement(ent,
+            Loc.GetString(stage.Announcement),
+            Loc.GetString("es-telesci-announcement-sender"),
+            announcementSound: stage.AnnouncementSound,
+            colorOverride: Color.Magenta);
+    }
+
     protected override bool TryCallShuttle(Entity<ESTelesciStationComponent> ent)
     {
         if (!base.TryCallShuttle(ent))
             return false;
-        _roundEnd.RequestRoundEnd();
+        _roundEnd.RequestRoundEnd(ent.Comp.EvacTime, checkCooldown: false, cantRecall: true);
         return true;
     }
 }

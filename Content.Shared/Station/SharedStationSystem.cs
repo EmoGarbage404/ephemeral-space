@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._ES.Telesci.Components;
 using Content.Shared.Station.Components;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
@@ -179,4 +180,14 @@ public abstract partial class SharedStationSystem : EntitySystem
 
         return null;
     }
+
+// ES START
+    public IEnumerable<EntityUid> GetGrids(Entity<StationDataComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return [];
+
+        return ent.Comp.Grids;
+    }
+// ES END
 }
