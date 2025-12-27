@@ -61,6 +61,8 @@ public sealed class ESTelesciSystem : ESSharedTelesciSystem
         {
             for (var i = 0; i < rewardCount; i++)
             {
+                if (rewards.Count <= 0)
+                    break;
                 var item = _random.PickAndTake(rewards);
                 SpawnNextToOrDrop(item, pad);
             }
