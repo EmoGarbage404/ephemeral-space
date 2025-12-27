@@ -5,6 +5,7 @@ using Content.Server.RoundEnd;
 using Content.Shared._ES.Telesci;
 using Content.Shared._ES.Telesci.Components;
 using Content.Shared.Administration;
+using Robust.Server.Audio;
 using Robust.Shared.Collections;
 using Robust.Shared.Random;
 using Robust.Shared.Toolshed;
@@ -14,6 +15,7 @@ namespace Content.Server._ES.Telesci;
 public sealed class ESTelesciSystem : ESSharedTelesciSystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly RoundEndSystem _roundEnd = default!;
 
@@ -52,6 +54,9 @@ public sealed class ESTelesciSystem : ESSharedTelesciSystem
         }
 
         var rewardCount = rewards.Count / ent.Comp.RewardPads;
+        if (rewardCount <= 0)
+            return;
+
         foreach (var pad in pads)
         {
             for (var i = 0; i < rewardCount; i++)
@@ -59,6 +64,8 @@ public sealed class ESTelesciSystem : ESSharedTelesciSystem
                 var item = _random.PickAndTake(rewards);
                 SpawnNextToOrDrop(item, pad);
             }
+            _audio.PlayPvs(pad.Comp.TeleportSound, pad);
+            RaiseNetworkEvent(new ESAnimateTelesciRewardPadMessage(GetNetEntity(pad)));
         }
     }
 

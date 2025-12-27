@@ -3,6 +3,7 @@
   parent: BaseMachinePowered
   name: telepad
   description: Beam me up, Scotty!
+  suffix: ES
   components:
   - type: Sprite
     sprite: _ES/Structures/Machines/Telesci/telepad.rsi
